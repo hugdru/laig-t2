@@ -1,0 +1,70 @@
+<SCENE>
+  <INITIALS>
+    <frustum near="" far="" />
+    <rotation x="" y="" />
+    <rotation x="" y="" />
+    <rotation x="" y="" />
+    <scale sx="" sy="" sz="" />
+    <reference length="" />
+  </INITIALS>
+
+  <ILUMINATION>
+    <ambient r="" g="" b="" a="" />
+    <doubleside value="" />
+    <background r="" g="" b="" a="" />
+  </ILUMINATION>
+
+  <LIGHTS>
+    <LIGHT id="">
+      <enable value ="" />
+      <position x="" y="" z="" w="" />
+      <ambient r="" g="" b="" a="" />
+      <diuse r="" g="" b="" a="" />
+      <specular r="" g="" b="" a="" />
+    </LIGHT>
+  </LIGHTS>
+
+  <TEXTURES>
+    <TEXTURE id="">
+      <file path="" />
+      <amplif_factor s="" t="" />
+    </TEXTURE>
+  </TEXTURES>
+
+  <MATERIALS>
+    <MATERIAL id="">
+      <shinine value="" />
+      <specular r="" g="" b="" a="" />
+      <diuse r="" g="" b="" a="" />
+      <ambient r="" g="" b="" a="" />
+      <emon r="" g="" b="" a="" />
+    </MATERIAL>
+  </MATERIALS>
+
+  <LEAVES>
+    <LEAF id="" type="rectangle" args="" />
+    <LEAF id="" type="cylinder" args="" />
+    <LEAF id="" type="sphere" args="" />
+    <LEAF id="" type="triangle" args="" />
+  </LEAVES>
+
+  <NODES>
+    <ROOT id="" />
+
+    <NODE id="">
+      <MATERIAL id="" />
+
+      <TEXTURE id="" />
+
+      <TRANSLATION x="" y="" z="" />
+
+      <ROTATION axis="" angle="" />
+
+      <SCALE sx="" sy="" sz="" />
+
+      <DESCENDANTS>
+        <DESCENDANT id="" />
+      </DESCENDANTS>
+    </NODE>
+  </NODES>
+</SCENE>
