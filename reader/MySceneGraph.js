@@ -27,7 +27,7 @@ MySceneGraph.prototype.onXMLReady = function() {
   // Here should go the calls for different functions to parse the various blocks
   var error = this.parseGlobalsExample(rootElement);
 
-  if (error !== null) {
+  if (error != null) {
     this.onXMLError(error);
     return;
   }
@@ -46,7 +46,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {
 
   var elems = rootElement.getElementsByTagName('globals');
-  if (elems === null) {
+  if (elems == null) {
     return "globals element is missing.";
   }
 
@@ -65,7 +65,7 @@ MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {
 
   var tempList = rootElement.getElementsByTagName('list');
 
-  if (tempList === null) {
+  if (tempList == null || tempList.length == 0) {
     return "list element is missing.";
   }
 
@@ -78,7 +78,7 @@ MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {
     // process each element and store its information
     this.list[e.id] = e.attributes.getNamedItem("coords").value;
     console.log("Read list item id " + e.id + " with value " + this.list[e.id]);
-  }
+  };
 
 };
 
