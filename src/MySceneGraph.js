@@ -14,7 +14,7 @@ function MySceneGraph(filename, scene) {
    * If any error occurs, the reader calls onXMLError on this object, with an error message
    */
 
-  this.reader.open('scenes/' + filename, this);
+  this.reader.open('../scenes/' + filename, this);
 }
 
 /*
