@@ -1,70 +1,98 @@
 <SCENE>
+
   <INITIALS>
-    <frustum near="" far="" />
-    <rotation x="" y="" />
-    <rotation x="" y="" />
-    <rotation x="" y="" />
-    <scale sx="" sy="" sz="" />
-    <reference length="" />
+    <frustum near="0" far="0.1"/>
+    <translate x="1" y="1" z="-2" />
+    <rotation axis="x" angle="1" />
+    <rotation axis="y" angle="-3" />
+    <rotation axis="z" angle="2" />
+    <scale sx="ff" sy="ff" sz="ff" />
+    <reference length="ff" />
   </INITIALS>
 
   <ILUMINATION>
-    <ambient r="" g="" b="" a="" />
-    <doubleside value="" />
-    <background r="" g="" b="" a="" />
+    <ambient r="ff" g="ff" b="ff" a="ff" />
+    <doubleside value="tt" />
+    <background r="ff" g="ff" b="ff" a="ff" />
   </ILUMINATION>
 
   <LIGHTS>
-    <LIGHT id="">
-      <enable value ="" />
-      <position x="" y="" z="" w="" />
-      <ambient r="" g="" b="" a="" />
-      <diuse r="" g="" b="" a="" />
-      <specular r="" g="" b="" a="" />
+
+    <LIGHT id="ss">
+      <enable value ="tt" />
+      <position x="ff" y="ff" z="ff" w="ff" />
+      <ambient r="ff" g="ff" b="ff" a="ff" />
+      <diffuse r="ff" g="ff" b="ff" a="ff" />
+      <specular r="ff" g="ff" b="ff" a="ff" />
     </LIGHT>
+
+
+
   </LIGHTS>
 
   <TEXTURES>
-    <TEXTURE id="">
-      <file path="" />
-      <amplif_factor s="" t="" />
+
+    <TEXTURE id="ss">
+      <file path="ss" />
+      <amplif_factor s="ff" t="ff" />
     </TEXTURE>
+
+
+
   </TEXTURES>
 
   <MATERIALS>
-    <MATERIAL id="">
-      <shinine value="" />
-      <specular r="" g="" b="" a="" />
-      <diuse r="" g="" b="" a="" />
-      <ambient r="" g="" b="" a="" />
-      <emon r="" g="" b="" a="" />
+
+    <MATERIAL id="ss">
+      <shininess value="ff" />
+      <specular r="ff" g="ff" b="ff" a="ff" />
+      <diffuse r="ff" g="ff" b="ff" a="ff" />
+      <ambient r="ff" g="ff" b="ff" a="ff" />
+      <emission r="ff" g="ff" b="ff" a="ff" />
     </MATERIAL>
+
+
+
   </MATERIALS>
 
   <LEAVES>
-    <LEAF id="" type="rectangle" args="" />
-    <LEAF id="" type="cylinder" args="" />
-    <LEAF id="" type="sphere" args="" />
-    <LEAF id="" type="triangle" args="" />
+
+    <LEAF id="ss" type="rectangle" args="ff ff ff ff" />
+    <LEAF id="ss" type="cylinder" args="ff ff ff ii ii" />
+    <LEAF id="ss" type="sphere" args="ff ii ii" />
+    <LEAF id="ss" type="triangle" args="ff ff ff  ff ff ff  ff ff ff" />
+
   </LEAVES>
 
   <NODES>
-    <ROOT id="" />
 
-    <NODE id="">
-      <MATERIAL id="" />
+    <ROOT id="ss" />
 
-      <TEXTURE id="" />
 
-      <TRANSLATION x="" y="" z="" />
+    <NODE id="ss">
 
-      <ROTATION axis="" angle="" />
 
-      <SCALE sx="" sy="" sz="" />
+      <MATERIAL id="ss" />
+
+      <TEXTURE id="ss" />
+
+
+
+
+      <TRANSLATION x="ff" y="ff" z="ff" />
+      <ROTATION axis="cc" angle="ff" />
+      <SCALE sx="ff" sy="ff" sz="ff" />
+
 
       <DESCENDANTS>
-        <DESCENDANT id="" />
+
+        <DESCENDANT id="ss" />
+
+
       </DESCENDANTS>
+
     </NODE>
+
   </NODES>
+
 </SCENE>
