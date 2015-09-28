@@ -73,10 +73,12 @@ SceneGraph.prototype.parseInitials = function(rootElement) {
   if (errors !== undefined) return errors;
   errors = this.parseInitialsRotation(initials.getElementsByTagName('rotation'));
   if (errors !== undefined) return errors;
-  //errors = parseInitialsScale(initials.getElementsByTagName('scale'));
-  //if (errors !== undefined) return errors;
-  //errors = parseInitialsReference(initials.getElementsByTagName('reference'));
-  //if (errors !== undefined) return errors;
+  errors = this.parseInitialsScale(initials.getElementsByTagName('scale'));
+  if (errors !== undefined) return errors;
+  errors = this.parseInitialsReference(initials.getElementsByTagName('reference'));
+  if (errors !== undefined) return errors;
+
+  console.log(this.initials);
 
   // iterate over every element
   //var initialsLen = initials.children.length;
@@ -145,5 +147,22 @@ SceneGraph.prototype.parseInitialsRotation = function(rotationArray) {
     }
   }
 };
-//function parseInitialsScale();
-//function parseInitialsReference();
+SceneGraph.prototype.parseInitialsScale = function(scaleArray) {
+  if (scaleArray === null || scaleArray.length !== 1) return 'scale must exist and only once.';
+  this.initials.scale = {};
+  var coordinates = 'xyz';
+  for (var index in coordinates) {
+    this.initials.scale[coordinates[index]] = this.reader.getFloat(scaleArray[0], 's' + coordinates[index]);
+    if (this.initials.scale[coordinates[index]] === null || isNaN(this.initials.scale[coordinates[index]])) {
+      return 'scale must have a s' + coordinates[index] + ' attribute with a numeric value';
+    }
+  }
+};
+SceneGraph.prototype.parseInitialsReference = function(referenceArray) {
+  if (referenceArray === null || referenceArray.length !== 1) return 'reference must exist and only once.';
+
+  this.initials.reference = this.reader.getFloat(referenceArray[0], 'length');
+  if (this.initials.reference === null || isNaN(this.initials.reference) || this.initials.reference < 0) {
+    return 'reference must have a length attribute with a numeric value >= 0';
+  }
+};
