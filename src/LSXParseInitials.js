@@ -1,5 +1,4 @@
 LSXParser.prototype.parseInitials = function(rootElement) {
-  this.graph.background = [1, 0, 0, 1];
 
   var initialsArray = rootElement.getElementsByTagName('INITIALS');
   if (initialsArray === null || initialsArray.length !== 1) {

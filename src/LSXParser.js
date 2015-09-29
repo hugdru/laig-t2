@@ -9,16 +9,8 @@ LSXParser.prototype.read = function(rootElement) {
   error = this.parseInitials(rootElement);
   if (error !== undefined)
     return error;
-};
 
-LSXParser.prototype.parseIllumination = function() {
-};
-
-LSXParser.prototype.parseLights = function() {
-};
-
-LSXParser.prototype.parseTextures = function() {
-};
-
-LSXParser.prototype.parseMaterials = function() {
+  error = this.parseLights(rootElement);
+  if (error !== undefined)
+    return error;
 };
