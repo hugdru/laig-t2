@@ -6,6 +6,9 @@ LSXParser.prototype.parseIllumination = function(rootElement) {
 
   var illumination = illuminationArray[0];
 
+  if (illumination.children.length !== 3)
+    return 'Illumination must have exactly three children: ambient, doubleside and background';
+
   this.graph.illumination = {};
 
   var error;
