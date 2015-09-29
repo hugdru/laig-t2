@@ -1,6 +1,6 @@
 LSXParser.prototype.parseLights = function(rootElement) {
 
-  var lightsArray = rootElement.getElementsByTagName('lights');
+  var lightsArray = rootElement.getElementsByTagName('LIGHTS');
   if (lightsArray === null || lightsArray.length !== 1) {
     return 'There must be one and only one LIGHTS.';
   }
@@ -53,8 +53,8 @@ LSXParser.prototype.parseLightsEnable = function(tempLight, enableArray) {
 
   var enableElement = enableArray[0];
 
-  tempLight.enabled = this.reader.getString(enableElement, 'enable');
-  if (tempLight.enabled == null || (tempLight.enabled !== 1 && tempLight.enabled !== 0)) {
+  tempLight.enabled = this.reader.getBoolean(enableElement, 'enabled');
+  if (tempLight.enabled == null) {
     return 'Invalid value attribute for enable';
   }
 };
