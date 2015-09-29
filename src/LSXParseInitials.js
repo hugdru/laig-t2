@@ -2,9 +2,8 @@ LSXParser.prototype.parseInitials = function(rootElement) {
   this.graph.background = [1, 0, 0, 1];
 
   var initialsArray = rootElement.getElementsByTagName('INITIALS');
-  if (initialsArray === null || initialsArray.length !== 1) {
+  if (initialsArray === null || initialsArray.length !== 1)
     return 'There must be one and only one INITIALS.';
-  }
 
   var initials = initialsArray[0];
 
@@ -45,15 +44,12 @@ LSXParser.prototype.parseInitialsFrustum = function(frustumArray) {
   this.graph.initials.frustum = {};
 
   this.graph.initials.frustum.near = this.reader.getFloat(frustum, 'near');
-  if (this.graph.initials.frustum.near === null || isNaN(this.graph.initials.frustum.near)) {
+  if (this.graph.initials.frustum.near === null || isNaN(this.graph.initials.frustum.near))
     return 'Frustum must have a near attribute with a numeric value.';
-  }
 
   this.graph.initials.frustum.far = this.reader.getFloat(frustum, 'far');
-  if (this.graph.initials.frustum.far === null || isNaN(this.graph.initials.frustum.far)) {
+  if (this.graph.initials.frustum.far === null || isNaN(this.graph.initials.frustum.far))
     return 'Frustum must have a far attribute with a numeric value.';
-  }
-
 };
 
 LSXParser.prototype.parseInitialsTranslate = function(translateArray) {
@@ -90,7 +86,7 @@ LSXParser.prototype.parseInitialsRotation = function(rotationArray) {
   };
 
   for (var rotationIndex = 0; rotationIndex < rotationArray.length; rotationIndex++) {
-    if (rotationArray[rotationIndex].attributes.length !== 3)
+    if (rotationArray[rotationIndex].attributes.length !== 2)
       return 'Rotation must have exactly two attributes: axis and angle.';
 
     var coordinate = this.reader.getString(rotationArray[rotationIndex], 'axis');
