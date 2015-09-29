@@ -132,7 +132,7 @@ LSXParser.prototype.parseInitialsReference = function(referenceArray) {
   var reference = referenceArray[0];
 
   if (reference.attributes.length !== 1)
-    return 'Reference must have exactly one attributes: length.';
+    return 'Reference must have exactly one attribute: length.';
 
   this.graph.initials.reference = this.reader.getFloat(reference, 'length');
 

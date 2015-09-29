@@ -17,3 +17,4 @@ LSXParser.prototype.getRGBA = function(domElement, graphElement) {
 
   graphElement.rgba = [red, green, blue, alpha];
 };
+
