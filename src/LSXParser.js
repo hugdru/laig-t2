@@ -13,13 +13,8 @@ LSXParser.prototype.read = function(rootElement) {
   error = this.parseIllumination(rootElement);
   if (error !== undefined)
     return error;
-};
 
-LSXParser.prototype.parseLights = function() {
-};
-
-LSXParser.prototype.parseTextures = function() {
-};
-
-LSXParser.prototype.parseMaterials = function() {
+  error = this.parseLights(rootElement);
+  if (error !== undefined)
+    return error;
 };

@@ -42,7 +42,7 @@ function getUrlVars() {
   return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'SceneGraph.js', 'LSXParser.js', 'LSXParserUtils.js', 'LSXParseInitials.js', 'LSXParseIllumination.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'SceneGraph.js', 'LSXParser.js', 'LSXParserUtils.js', 'LSXParseInitials.js', 'LSXParseIllumination.js', 'LSXParseLights.js',
 
   main = function() {
     // Standard application, scene and interface setup
