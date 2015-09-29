@@ -10,11 +10,11 @@
     <reference length="ff" />                          <!-- axis length; "0" means no axis-->
   </INITIALS>
 
-  <ILUMINATION>
+  <ILLUMINATION>
     <ambient r="ff" g="ff" b="ff" a="ff" />            <!-- global ambient -->
     <doubleside value="tt" />                          <!-- double or single side illum. -->
     <background r="ff" g="ff" b="ff" a="ff" />         <!-- background color -->
-  </ILUMINATION>
+  </ILLUMINATION>
 
   <LIGHTS>
 
