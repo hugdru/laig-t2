@@ -68,7 +68,8 @@ LSXParser.prototype.parseLightsAmbient = function(tempLight, ambientArray) {
 
   var ambientElement = ambientArray[0];
 
-  if (var error = this.getRGBA(ambientElement, tempLight.ambient) != null) {
+  var error = this.getRGBA(ambientElement, tempLight.ambient);
+  if (error != null) {
     return error;
   }
 };
@@ -80,7 +81,8 @@ LSXParser.prototype.parseLightsDiffuse = function(tempLight, diffuseArray) {
 
   var difuseElement = difuseArray[0];
 
-  if (var error = this.getRGBA(difuseElement, tempLight.diffuse) != null) {
+  var error = this.getRGBA(difuseElement, tempLight.diffuse);
+  if (error != null) {
     return error;
   }
 
@@ -93,7 +95,8 @@ LSXParser.prototype.parseLightsSpecular = function(tempLight, specularArray) {
 
   var specularElement = specularArray[0];
 
-  if (var error = this.getRGBA(specularElement, tempLight.specular) != null) {
+  var error = this.getRGBA(specularElement, tempLight.specular);
+  if (error != null) {
     return error;
   }
 };
