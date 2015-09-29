@@ -47,6 +47,8 @@ XMLscene.prototype.setDefaultAppearance = function() {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function() {
+  //DEBUG
+  console.log(this.graph);
   this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
@@ -79,7 +81,7 @@ XMLscene.prototype.display = function() {
   // This is one possible way to do it
   if (this.graph.loadedOk) {
     this.lights[0].update();
-  };
+}
 
   this.shader.unbind();
 };
