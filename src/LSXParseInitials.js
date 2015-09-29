@@ -6,6 +6,9 @@ LSXParser.prototype.parseInitials = function(rootElement) {
 
   var initials = initialsArray[0];
 
+  if (initials.children.length !== 7)
+    return 'Initials must have exactly seven children: frustum, translate, three rotation, scale and reference.';
+
   this.graph.initials = {};
 
   var error;
