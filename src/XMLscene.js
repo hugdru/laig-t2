@@ -49,7 +49,8 @@ XMLscene.prototype.setDefaultAppearance = function() {
 XMLscene.prototype.onGraphLoaded = function() {
   //DEBUG
   console.log(this.graph);
-  this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+
+  this.gl.clearColor(this.graph.illumination.background.rgba[0], this.graph.illumination.background.rgba[1], this.graph.illumination.background.rgba[2], this.graph.illumination.background.rgba[3]);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
 };
