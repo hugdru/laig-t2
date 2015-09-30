@@ -18,6 +18,10 @@ LSXParser.prototype.read = function(rootElement) {
   if (error !== undefined)
     return error;
 
+  error = this.parseTextures(rootElement);
+  if (error !== undefined)
+    return error;
+
   error = this.parseMaterials(rootElement);
   if (error !== undefined)
     return error;

@@ -38,11 +38,9 @@
   <TEXTURES>
 
     <TEXTURE id="ss">
-      <file path="ss" />
-      <amplif_factor s="ff" t="ff" />
+      <file path="somePath" />
+      <amplif_factor s="0.1" t="0.2" />
     </TEXTURE>
-
-
 
   </TEXTURES>
 
