@@ -17,4 +17,8 @@ LSXParser.prototype.read = function(rootElement) {
   error = this.parseLights(rootElement);
   if (error !== undefined)
     return error;
+
+  error = this.parseMaterials(rootElement);
+  if (error !== undefined)
+    return error;
 };

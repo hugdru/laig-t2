@@ -105,7 +105,7 @@ LSXParser.prototype.parseLightsPosition = function(light, positionArray) {
 
 LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
   if (light == null || ambientArray == null || ambientArray.length != 1) {
-    return 'There must be only and only one ambient in a light';
+    return 'There must be one and only one ambient in a light';
   }
 
   var ambientElement = ambientArray[0];
@@ -124,13 +124,13 @@ LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
 
 LSXParser.prototype.parseLightsDiffuse = function(light, diffuseArray) {
   if (light == null || diffuseArray == null || diffuseArray.length != 1) {
-    return 'There must be only and only one diffuse in a light';
+    return 'There must be one and only one diffuse in a light';
   }
 
   var diffuseElement = diffuseArray[0];
 
   if (diffuseElement.attributes.length !== 4) {
-    return 'difuse element must have exactly four attributes: r, g, b, a.';
+    return 'diffuse element must have exactly four attributes: r, g, b, a.';
   }
 
   light.diffuse = {};
@@ -144,7 +144,7 @@ LSXParser.prototype.parseLightsDiffuse = function(light, diffuseArray) {
 
 LSXParser.prototype.parseLightsSpecular = function(light, specularArray) {
   if (light == null || specularArray == null || specularArray.length != 1) {
-    return 'There must be only and only one specular in a light';
+    return 'There must be one and only one specular in a light';
   }
 
   var specularElement = specularArray[0];
