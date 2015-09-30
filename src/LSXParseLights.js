@@ -67,7 +67,7 @@ LSXParser.prototype.parseLightsEnable = function(light, enableArray) {
 
   light.enabled = this.reader.getBoolean(enableElement, 'value');
   if (light.enabled == null) {
-    return 'Invalid value attribute for enable';
+    return 'Invalid value attribute for enable, must be either 0 or 1.';
   }
 };
 
@@ -83,24 +83,11 @@ LSXParser.prototype.parseLightsPosition = function(light, positionArray) {
     return 'position element must have exactly four attributes: x, y, z, w.';
   }
 
-  var x = this.reader.getFloat(positionElement, 'x');
-  if (x === null || isNaN(x))
-    return positionElement.nodeName + ' element must have a x attribute with a numeric value.';
-
-  var y = this.reader.getFloat(positionElement, 'y');
-  if (y === null || isNaN(y))
-    return positionElement.nodeName + ' element must have a y attribute with a numeric value.';
-
-  var z = this.reader.getFloat(positionElement, 'z');
-  if (z === null || isNaN(z))
-    return positionElement.nodeName + ' element must have a z attribute with a numeric value.';
-
-  var w = this.reader.getFloat(positionElement, 'w');
-  if (w === null || isNaN(w))
-    return positionElement.nodeName + ' element must have a w attribute with a numeric value.';
-
-  light.position = [x, y, z, w];
-
+  var temp = this.getAttributesFloat(positionElement, ['x', 'y', 'z', 'w']);
+  if (temp.constructor !== Array) {
+    return temp;
+  }
+  light.position = temp;
 };
 
 LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {

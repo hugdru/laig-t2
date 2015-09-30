@@ -51,13 +51,13 @@ LSXParser.prototype.parseIlluminationDoubleside = function(doublesideArray) {
   var doubleside = doublesideArray[0];
 
   if (doubleside.attributes.length !== 1)
-    return 'Doubleside must have exactly one attribute: value.';
+    return 'doubleside must have exactly one attribute: value.';
 
   this.graph.illumination.doubleside = {};
 
-  this.graph.illumination.doubleside.value = this.reader.getFloat(doubleside, 'value');
-  if (this.graph.illumination.doubleside.value === null || isNaN(this.graph.illumination.doubleside.value) || (this.graph.illumination.doubleside.value !== 0 && this.graph.illumination.doubleside.value !== 1))
-    return 'Doubleside must have a value attribute that is either a 0 or a 1.';
+  this.graph.illumination.doubleside.value = this.reader.getBoolean(doubleside, 'value');
+  if (this.graph.illumination.doubleside.value == null)
+    return 'doubleside must have a value attribute that is either a 0 or a 1.';
 };
 
 LSXParser.prototype.parseIlluminationBackground = function(backgroundArray) {
@@ -67,7 +67,7 @@ LSXParser.prototype.parseIlluminationBackground = function(backgroundArray) {
   var background = backgroundArray[0];
 
   if (background.attributes.length !== 4)
-    return 'Background must have exactly four attributes: r, g, b and a.';
+    return 'background must have exactly four attributes: r, g, b and a.';
 
   this.graph.illumination.background = {};
 
