@@ -42,4 +42,47 @@ LSXParser.prototype.getAttributesFloat = function(domElement, attributesArray) {
   }
 
   return arrayToReturn;
-}
+};
+
+LSXParser.prototype.getNumbers = function(stringOrArrayToParse, selectorString) {
+  if (stringOrArrayToParse == null || selectorString == null) {
+    return 'expecting a stringToParse and a selectorString';
+  }
+
+  var arrayOfStrings;
+  if (stringOrArrayToParse.constructor !== Array) {
+    arrayOfStrings = stringOrArrayToParse.split(/\s+/);
+  } else {
+    arrayOfStrings = stringOrArrayToParse;
+  }
+  var arrayOfSelectors = selectorString.split(/\s+/);
+
+  var length;
+  if ((length = arrayOfStrings.length) !== arrayOfSelectors.length) {
+    return 'number of space separated string and respective types have different lengths';
+  }
+
+  result = [];
+  for (var index = 0; index < length; ++index) {
+    switch (arrayOfSelectors[index]) {
+      case 'i':
+        var newInt = parseInt(arrayOfStrings[index].match(/^\d*$/));
+        if (isNaN(newInt)) {
+          return 'was expecting a int.';
+        }
+        result.push(newInt);
+        break;
+      case 'f':
+        var newFloat = parseFloat(arrayOfStrings[index]);
+        if (isNaN(newFloat)) {
+          return 'was expecting a float.';
+        }
+        result.push(newFloat);
+        break;
+      default:
+        return 'selector not supported';
+    }
+  }
+
+  return result;
+};

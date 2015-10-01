@@ -58,10 +58,10 @@
 
   <LEAVES>
 
-    <LEAF id="ss" type="rectangle" args="ff ff ff ff" />
-    <LEAF id="ss" type="cylinder" args="ff ff ff ii ii" />
-    <LEAF id="ss" type="sphere" args="ff ii ii" />
-    <LEAF id="ss" type="triangle" args="ff ff ff  ff ff ff  ff ff ff" />
+    <LEAF id="rect" type="rectangle" args="1 2 3 4" />
+    <LEAF id="cyli" type="cylinder" args="1.0 1.1 1.2 1 1" />
+    <LEAF id="sphe" type="sphere" args="1.2 10 11" />
+    <LEAF id="tria" type="triangle" args="1 2 3  4 5 6  7 8 9" />
 
   </LEAVES>
 

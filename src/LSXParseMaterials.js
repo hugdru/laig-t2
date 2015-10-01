@@ -19,7 +19,7 @@ LSXParser.prototype.parseMaterials = function(rootElement) {
     }
 
     if (materialElement.children.length != 5) {
-      return 'There must be exactly 5 elements under a material: shininess, specular, diffuse, ambient, emission';
+      return 'There must be exactly 5 elements under a MATERIAL: shininess, specular, diffuse, ambient, emission';
     }
 
     // Get ID
