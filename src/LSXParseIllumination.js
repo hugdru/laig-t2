@@ -6,18 +6,14 @@ LSXParser.prototype.parseIllumination = function(rootElement) {
 
   var illumination = illuminationArray[0];
 
-  if (illumination.children.length !== 3)
-    return 'Illumination must have exactly three children: ambient, doubleside and background';
+  if (illumination.children.length !== 2)
+    return 'Illumination must have exactly two children: ambient and background';
 
   this.graph.illumination = {};
 
   var error;
 
   error = this.parseIlluminationAmbient(illumination.getElementsByTagName('ambient'));
-  if (error !== undefined)
-    return error;
-
-  error = this.parseIlluminationDoubleside(illumination.getElementsByTagName('doubleside'));
   if (error !== undefined)
     return error;
 
@@ -35,29 +31,11 @@ LSXParser.prototype.parseIlluminationAmbient = function(ambientArray) {
   if (ambient.attributes.length !== 4)
     return 'Ambient must have exactly four attributes: r, g, b and a.';
 
-  this.graph.illumination.ambient = {};
-
-  var error = this.getRGBA(ambient, this.graph.illumination.ambient);
+  var error = this.getRGBA(ambient, this.graph.illumination.ambient = {});
 
   if (error !== undefined)
     return error;
 
-};
-
-LSXParser.prototype.parseIlluminationDoubleside = function(doublesideArray) {
-  if (doublesideArray === null || doublesideArray.length !== 1)
-    return 'There must be one and only one doubleside in ILLUMINATION.';
-
-  var doubleside = doublesideArray[0];
-
-  if (doubleside.attributes.length !== 1)
-    return 'doubleside must have exactly one attribute: value.';
-
-  this.graph.illumination.doubleside = {};
-
-  this.graph.illumination.doubleside.value = this.reader.getBoolean(doubleside, 'value');
-  if (this.graph.illumination.doubleside.value == null)
-    return 'doubleside must have a value attribute that is either a 0 or a 1.';
 };
 
 LSXParser.prototype.parseIlluminationBackground = function(backgroundArray) {
@@ -69,9 +47,7 @@ LSXParser.prototype.parseIlluminationBackground = function(backgroundArray) {
   if (background.attributes.length !== 4)
     return 'background must have exactly four attributes: r, g, b and a.';
 
-  this.graph.illumination.background = {};
-
-  var error = this.getRGBA(background, this.graph.illumination.background);
+  var error = this.getRGBA(background, this.graph.illumination.background = {});
 
   if (error !== undefined)
     return error;

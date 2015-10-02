@@ -56,8 +56,10 @@ LSXParser.prototype.parseTexturesFile = function(texture, fileArray) {
     return 'file element must have exactly one attribute: path.';
   }
 
-  texture.file = this.reader.getString(fileElement, 'path');
-  if (texture.file == null) {
+  texture.file = {};
+
+  texture.file.path = this.reader.getString(fileElement, 'path');
+  if (texture.file.path == null) {
     return 'Invalid path attribute for file, must be a string';
   }
 };
@@ -73,11 +75,9 @@ LSXParser.prototype.parseTexturesAmplif_factor = function(texture, Amplif_factor
     return 'amplif_factor element must have exactly 2 attributes: s, t.';
   }
 
-  var temp = this.getAttributesFloat(Amplif_factorElement, ['s', 't']);
-  if (temp.constructor !== Array) {
-    return temp;
+  var error = this.getAttributesFloat(Amplif_factorElement, ['s', 't'], texture.amplifFactor = {});
+  if (error != null) {
+    return error;
   }
-  texture.amplifFactor = temp;
-
 };
 

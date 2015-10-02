@@ -83,11 +83,10 @@ LSXParser.prototype.parseLightsPosition = function(light, positionArray) {
     return 'position element must have exactly four attributes: x, y, z, w.';
   }
 
-  var temp = this.getAttributesFloat(positionElement, ['x', 'y', 'z', 'w']);
-  if (temp.constructor !== Array) {
-    return temp;
+  var error = this.getAttributesFloat(positionElement, ['x', 'y', 'z', 'w'], light.position = {});
+  if (error != null) {
+    return error;
   }
-  light.position = temp;
 };
 
 LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
@@ -101,9 +100,7 @@ LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
     return 'ambient element must have exactly four attributes: r, g, b, a.';
   }
 
-  light.ambient = {};
-
-  var error = this.getRGBA(ambientElement, light.ambient);
+  var error = this.getRGBA(ambientElement, light.ambient = {});
   if (error != null) {
     return error;
   }
@@ -120,9 +117,7 @@ LSXParser.prototype.parseLightsDiffuse = function(light, diffuseArray) {
     return 'diffuse element must have exactly four attributes: r, g, b, a.';
   }
 
-  light.diffuse = {};
-
-  var error = this.getRGBA(diffuseElement, light.diffuse);
+  var error = this.getRGBA(diffuseElement, light.diffuse = {});
   if (error != null) {
     return error;
   }
@@ -140,9 +135,7 @@ LSXParser.prototype.parseLightsSpecular = function(light, specularArray) {
     return 'specular element must have exactly four attributes: r, g, b, a.';
   }
 
-  light.specular = {};
-
-  var error = this.getRGBA(specularElement, light.specular);
+  var error = this.getRGBA(specularElement, light.specular = {});
   if (error != null) {
     return error;
   }

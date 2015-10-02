@@ -50,7 +50,7 @@ XMLscene.prototype.onGraphLoaded = function() {
   //DEBUG
   console.log(this.graph);
 
-  this.gl.clearColor(this.graph.illumination.background.rgba[0], this.graph.illumination.background.rgba[1], this.graph.illumination.background.rgba[2], this.graph.illumination.background.rgba[3]);
+  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination.background.b, this.graph.illumination.background.a);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
 };

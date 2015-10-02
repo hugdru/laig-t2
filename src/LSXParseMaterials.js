@@ -82,9 +82,7 @@ LSXParser.prototype.parseMaterialsSpecular = function(material, specularArray) {
     return 'specular element must have exactly four attributes: r, g, b, a.';
   }
 
-  material.specular = {};
-
-  var error = this.getRGBA(specularElement, material.specular);
+  var error = this.getRGBA(specularElement, material.specular = {});
   if (error != null) {
     return error;
   }
@@ -101,9 +99,7 @@ LSXParser.prototype.parseMaterialsDiffuse = function(material, diffuseArray) {
     return 'difuse element must have exactly four attributes: r, g, b, a.';
   }
 
-  material.diffuse = {};
-
-  var error = this.getRGBA(diffuseElement, material.diffuse);
+  var error = this.getRGBA(diffuseElement, material.diffuse = {});
   if (error != null) {
     return error;
   }
@@ -121,9 +117,7 @@ LSXParser.prototype.parseMaterialsAmbient = function(material, ambientArray) {
     return 'ambient element must have exactly four attributes: r, g, b, a.';
   }
 
-  material.ambient = {};
-
-  var error = this.getRGBA(ambientElement, material.ambient);
+  var error = this.getRGBA(ambientElement, material.ambient = {});
   if (error != null) {
     return error;
   }
@@ -140,9 +134,7 @@ LSXParser.prototype.parseMaterialsEmission = function(material, emissionArray) {
     return 'emission element must have exactly four attributes: r, g, b, a.';
   }
 
-  material.emission = {};
-
-  var error = this.getRGBA(emissionElement, material.emission);
+  var error = this.getRGBA(emissionElement, material.emission = {});
   if (error != null) {
     return error;
   }
