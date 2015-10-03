@@ -79,6 +79,7 @@
       <DESCENDANTS>
 
         <DESCENDANT id="node1" />
+        <DESCENDANT id="node2" />
 
       </DESCENDANTS>
 
@@ -104,6 +105,20 @@
       </DESCENDANTS>
 
     </NODE>
+    <NODE id="node2">
+
+      <MATERIAL id="null" />
+
+      <TEXTURE id="clear" />
+
+      <DESCENDANTS>
+
+        <DESCENDANT id="aa" />
+
+
+      </DESCENDANTS>
+
+    </NODE>
 
     <NODE id="ss">
 
@@ -118,6 +133,21 @@
       <DESCENDANTS>
 
         <DESCENDANT id="rect" />
+
+      </DESCENDANTS>
+
+    </NODE>
+    <NODE id="aa">
+
+      <MATERIAL id="null" />
+
+      <TEXTURE id="ss" />
+
+      <SCALE sx="3" sy="2" sz="1" />
+
+      <DESCENDANTS>
+
+        <DESCENDANT id="tria" />
 
       </DESCENDANTS>
 
