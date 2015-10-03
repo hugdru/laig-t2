@@ -1,13 +1,18 @@
 LSXParser.prototype.parseInitials = function(rootElement) {
 
   var initialsArray = rootElement.getElementsByTagName('INITIALS');
-  if (initialsArray === null || initialsArray.length !== 1)
-    return 'There must be one and only one INITIALS.';
+  if (initialsArray === null || initialsArray.length !== 1) {
+    return 'There must be 1 and only 1 INITIALS.';
+  }
 
   var initials = initialsArray[0];
 
+  if (initials.attributes.length !== 0) {
+    return 'INITIALS, must not have attributes';
+  }
+
   if (initials.children.length !== 7)
-    return 'INITIALS must have exactly seven children: frustum, translate, three rotation, scale and reference.';
+    return 'INITIALS, must have exactly 7 children: frustum, translate, 3 rotations, scale and reference.';
 
   this.graph.initials = {};
 
@@ -15,33 +20,33 @@ LSXParser.prototype.parseInitials = function(rootElement) {
 
   error = this.parseInitialsFrustum(initials.getElementsByTagName('frustum'));
   if (error !== undefined)
-    return error;
+    return 'INITIALS, ' + error;
 
   error = this.parseInitialsTranslate(initials.getElementsByTagName('translate'));
   if (error !== undefined)
-    return error;
+    return 'INITIALS, ' + error;
 
   error = this.parseInitialsRotation(initials.getElementsByTagName('rotation'));
   if (error !== undefined)
-    return error;
+    return 'INITIALS, ' + error;
 
   error = this.parseInitialsScale(initials.getElementsByTagName('scale'));
   if (error !== undefined)
-    return error;
+    return 'INITIALS, ' + error;
 
   error = this.parseInitialsReference(initials.getElementsByTagName('reference'));
   if (error !== undefined)
-    return error;
+    return 'INITIALS, ' + error;
 };
 
 LSXParser.prototype.parseInitialsFrustum = function(frustumArray) {
   if (frustumArray === null || frustumArray.length !== 1)
-    return 'There must be one and only one frustum in INITIALS.';
+    return 'there must be 1 and only 1 frustum in INITIALS.';
 
   var frustum = frustumArray[0];
 
   if (frustum.attributes.length !== 2)
-    return 'frustum must have exactly two attributes: near and far.';
+    return 'frustum must have exactly 2 attributes: near and far.';
 
   this.graph.initials.frustum = {};
 
@@ -56,12 +61,12 @@ LSXParser.prototype.parseInitialsFrustum = function(frustumArray) {
 
 LSXParser.prototype.parseInitialsTranslate = function(translateArray) {
   if (translateArray === null || translateArray.length !== 1)
-    return 'There must be one and only one translate in INITIALS.';
+    return 'there must be 1 and only 1 translate in INITIALS.';
 
   var translate = translateArray[0];
 
   if (translate.attributes.length !== 3)
-    return 'translate must have exactly three attributes: x, y, z.';
+    return 'translate must have exactly 3 attributes: x, y, z.';
 
   var error = this.getXYZ(translate, this.graph.initials.translate = new Translate());
   if (error != null) {
@@ -71,7 +76,7 @@ LSXParser.prototype.parseInitialsTranslate = function(translateArray) {
 
 LSXParser.prototype.parseInitialsRotation = function(rotationArray) {
   if (rotationArray === null || rotationArray.length !== 3)
-    return 'There must be one and only one rotation for each coordinate: x, y and z in INITIALS.';
+    return 'there must be 1 and only 1 rotation for each coordinate: x, y and z in INITIALS.';
 
   this.graph.initials.rotation = {};
 
@@ -83,14 +88,15 @@ LSXParser.prototype.parseInitialsRotation = function(rotationArray) {
 
   for (var rotationIndex = 0; rotationIndex < rotationArray.length; rotationIndex++) {
     if (rotationArray[rotationIndex].attributes.length !== 2)
-      return 'rotation must have exactly two attributes: axis and angle.';
+      return 'rotation must have exactly 2 attributes: axis and angle.';
 
     var coordinate = this.reader.getString(rotationArray[rotationIndex], 'axis');
 
     var coordinateIndex = coordinates.findIndex(isACoordinate);
 
-    if (coordinateIndex === -1)
-      return 'rotation must have an axis attribute with the value of x, y or z.';
+    if (coordinateIndex === -1) {
+      return 'rotation must have an axis attribute with the value of: x, y or z.';
+    }
 
     delete coordinates[coordinateIndex];
 
@@ -103,12 +109,12 @@ LSXParser.prototype.parseInitialsRotation = function(rotationArray) {
 
 LSXParser.prototype.parseInitialsScale = function(scaleArray) {
   if (scaleArray === null || scaleArray.length !== 1)
-    return 'There must be one and only one translate in INITIALS.';
+    return 'there must be 1 and only 1 translate in INITIALS.';
 
   var scale = scaleArray[0];
 
   if (scale.attributes.length !== 3)
-    return 'scale must have exactly three attributes: sx, sy, sz.';
+    return 'scale must have exactly 3 attributes: sx, sy, sz.';
 
   var error = this.getSXYZ(scale, this.graph.initials.scale = new Scale());
   if (error != null) {
@@ -118,12 +124,12 @@ LSXParser.prototype.parseInitialsScale = function(scaleArray) {
 
 LSXParser.prototype.parseInitialsReference = function(referenceArray) {
   if (referenceArray === null || referenceArray.length !== 1)
-    return 'There must be one and only one translate in INITIALS.';
+    return 'there must be 1 and only 1 translate in INITIALS.';
 
   var reference = referenceArray[0];
 
   if (reference.attributes.length !== 1)
-    return 'reference must have exactly one attribute: length.';
+    return 'reference must have exactly 1 attribute: length.';
 
   this.graph.initials.reference = this.reader.getFloat(reference, 'length');
 

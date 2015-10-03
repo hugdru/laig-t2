@@ -7,8 +7,12 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 
   var nodesElement = nodesArray[0];
 
+  if (nodesElement.attributes.length !== 0) {
+    return 'NODES, must not have attributes.';
+  }
+
   if (!(this.graph.hasOwnProperty('nodes') && this.graph.nodes.hasOwnProperty('all'))) {
-    return 'nodes.all property should already be defined';
+    return 'NODES, nodes.all property should already be defined.';
   }
 
   var nodesObject = this.graph.nodes;
@@ -16,7 +20,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 
   var error = this.parseNodesRoot(nodesObject, nodesElement.getElementsByTagName('ROOT'));
   if (error !== undefined) {
-    return error;
+    return 'NODES, ' + error;
   }
 
   var elementsOfNodes = nodesElement.children;
@@ -25,21 +29,21 @@ LSXParser.prototype.parseNodes = function(rootElement) {
     if (nodeElement.nodeName == 'ROOT') {
       continue;
     } else if (nodeElement.nodeName !== 'NODE') {
-      return nodeElement.nodeName + ' element is not valid under NODES.';
+      return 'NODES, ' + nodeElement.nodeName + ' element is not valid.';
     }
 
     if (nodeElement.attributes.length != 1) {
-      return 'NODE element can only have one attribute, id.';
+      return 'NODE, must have 1 and only 1 attribute, id.';
     }
 
     // Get NODE id
     var id = this.reader.getString(nodeElement, 'id');
     if (id == null) {
-      return 'Invalid ID for NODE.';
+      return 'Node, invalid ID.';
     }
 
     if (allNodesObject.hasOwnProperty(id)) {
-      return 'There already exists a NODE with the id, ' + id;
+      return 'Node, ' + id + ', already exists.';
     }
 
     allNodesObject[id] = {};
@@ -49,7 +53,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
     var nodeElementChildrenLength = nodeElementChildren.length;
 
     if (nodeElementChildrenLength < 3) {
-      return 'There must be at least 3 elements under a NODE: MATERIAL, TEXTURE, DESCENDANTS';
+      return 'Node, ' + id + ', there must be at least 3 elements: MATERIAL, TEXTURE, DESCENDANTS';
     }
 
     nodeObject.transformations = [];
@@ -60,59 +64,59 @@ LSXParser.prototype.parseNodes = function(rootElement) {
       switch (elementOfNode.nodeName) {
         case 'MATERIAL':
           if (nodeObject.hasOwnProperty('material')) {
-            return 'There can only be one MATERIAL under NODE.';
+            return 'NODE, ' + id + ', there can only be one MATERIAL.';
           }
           error = this.parseNodesMaterial(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           ++minimumElementCount;
           break;
         case 'TEXTURE':
           if (nodeObject.hasOwnProperty('texture')) {
-            return 'There can only be one TEXTURE under NODE.';
+            return 'NODE, ' + id + ', there can only be one TEXTURE.';
           }
           error = this.parseNodesTexture(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           ++minimumElementCount;
           break;
         case 'DESCENDANTS':
           if (nodeObject.hasOwnProperty('descendants')) {
-            return 'There can only be one DESCENDANTS under NODE.';
+            return 'NODE, ' + id + ', there can only be one DESCENDANTS.';
           }
           nodeObject.descendants = {};
           error = this.parseNodesDescendants(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           ++minimumElementCount;
           break;
         case 'TRANSLATION':
           error = this.parseNodesTranslation(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           break;
         case 'ROTATION':
           error = this.parseNodesRotation(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           break;
         case 'SCALE':
           error = this.parseNodesScale(nodeObject, elementOfNode);
           if (error !== undefined) {
-            return error;
+            return 'NODE, ' + id + ', ' + error;
           }
           break;
         default:
-          return nodeElementChildren[index].nodeName + ' is not a valid element under NODE.';
+          return 'NODE, ' + id + ', ' + nodeElementChildren[index].nodeName + ' is not a valid element.';
       }
     }
     if (minimumElementCount !== 3) {
-      return 'NODE must have one element of: MATERIAL, TEXTURE, and DESCENDANTS.';
+      return 'NODE, ' + id + ', must have 1 and only 1 element of: MATERIAL, TEXTURE, and DESCENDANTS.';
     }
   }
 
@@ -123,7 +127,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
       if (allNodesObject.hasOwnProperty(descendantId)) {
         nodeObjectDescendants[descendantId] = allNodesObject[descendantId];
       } else {
-        return 'NODE ' + nodeId + ' has an unexisting node as descendant, ' + descendantId;
+        return 'NODE, ' + nodeId + ', has an unexisting node as descendant, ' + descendantId + '.';
       }
     }
   }
@@ -138,22 +142,22 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 LSXParser.prototype.parseNodesRoot = function(nodesObject, rootArray) {
 
   if (nodesObject == null || rootArray == null || rootArray.length !== 1) {
-    return 'There must be one and only one ROOT in NODES';
+    return 'there must be 1 and only 1 ROOT.';
   }
 
   var rootElement = rootArray[0];
 
   if (rootElement.attributes.length !== 1) {
-    return 'ROOT element must have exactly one attribute: id.';
+    return 'ROOT element must have exactly 1 attribute: id.';
   }
 
   nodesObject.root = this.reader.getString(rootElement, 'id');
   if (nodesObject.root == null) {
-    return 'Invalid id attribute for ROOT, must be a string';
+    return 'invalid id attribute for ROOT, must be a string.';
   }
 
   if (nodesObject.all.hasOwnProperty(nodesObject.root)) {
-    return 'ROOT cannot be a leaf';
+    return 'ROOT cannot be a leaf.';
   }
 
 };
@@ -232,7 +236,7 @@ LSXParser.prototype.parseNodesDescendants = function(nodeObject, elementOfNode) 
     }
 
     if (nodeObject.descendants.hasOwnProperty(idDescendant)) {
-      return 'Descendant with same id in DESCENDANTS';
+      return 'descendant with same id, ' + idDescendant + ', in DESCENDANTS.';
     } else {
       nodeObject.descendants[idDescendant] = null;
     }
@@ -249,7 +253,7 @@ LSXParser.prototype.parseNodesTranslation = function(nodeObject, elementOfNode) 
   var coordinates = 'xyz';
 
   if (elementOfNode.attributes.length != 3) {
-    return 'TRANSLATE can only have 3 attributes: x, y, z';
+    return 'TRANSLATE can only have 3 attributes: x, y, z.';
   }
 
   translate = new Translate();
@@ -276,11 +280,11 @@ LSXParser.prototype.parseNodesRotation = function(nodeObject, elementOfNode) {
   rotation = new Rotate();
   var coordinate = this.reader.getString(elementOfNode, 'axis');
   var coordinateIndex = coordinates.indexOf(coordinate);
-  if (coordinateIndex === -1) return 'The axis attribute must be either: x, y or z.';
+  if (coordinateIndex === -1) return 'the axis attribute must be either: x, y or z.';
 
   rotation[coordinate] = this.reader.getFloat(elementOfNode, 'angle');
   if (rotation[coordinate] === null || isNaN(rotation[coordinate])) {
-    return 'The angle value must be a number.';
+    return 'the angle value must be a number.';
   }
   nodeObject.transformations.push(rotation);
 

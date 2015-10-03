@@ -2,10 +2,14 @@ LSXParser.prototype.parseLights = function(rootElement) {
 
   var lightsArray = rootElement.getElementsByTagName('LIGHTS');
   if (lightsArray === null || lightsArray.length !== 1) {
-    return 'There must be one and only one LIGHTS.';
+    return 'There must be 1 and only 1 LIGHTS.';
   }
 
   var lightsElement = lightsArray[0];
+
+  if (lightsElement.attributes.length !== 0) {
+    return 'LIGHTS, must not have attributes.';
+  }
 
   this.graph.lights = {};
 
@@ -15,21 +19,21 @@ LSXParser.prototype.parseLights = function(rootElement) {
   for (var lightElementIndex = 0; lightElementIndex < lightsElements.length; ++lightElementIndex) {
     var lightElement = lightsElements[lightElementIndex];
     if (lightElement.nodeName !== 'LIGHT') {
-      return lightElement.nodeName + ' element is not valid under LIGHTS.';
+      return 'LIGHTS, ' + lightElement.nodeName + ' element is not valid.';
     }
 
     if (lightElement.children.length != 5) {
-      return 'There must be exactly 5 elements under a LIGHT: enable, position, ambient, diffuse, specular';
+      return 'LIGHT, there must be exactly 5 elements: enable, position, ambient, diffuse and specular.';
     }
 
     // Get ID
     var id = this.reader.getString(lightElement, 'id');
     if (id == null) {
-      return 'Invalid ID for light.';
+      return 'LIGHT, invalid ID.';
     }
 
     if (this.graph.lights.hasOwnProperty(id)) {
-      return 'There already exists a LIGHT with the id, ' + id;
+      return 'LIGHT, ' + id + ', already exists.';
     }
 
     this.graph.lights[id] = {};
@@ -37,26 +41,26 @@ LSXParser.prototype.parseLights = function(rootElement) {
 
     error = this.parseLightsEnable(light, lightElement.getElementsByTagName('enable'));
     if (error !== undefined)
-      return error;
+      return 'LIGHT, ' + id + ', ' + error;
     error = this.parseLightsPosition(light, lightElement.getElementsByTagName('position'));
     if (error !== undefined)
-      return error;
+      return 'LIGHT, ' + id + ', ' + error;
     error = this.parseLightsAmbient(light, lightElement.getElementsByTagName('ambient'));
     if (error !== undefined)
-      return error;
+      return 'LIGHT, ' + id + ', ' + error;
     error = this.parseLightsDiffuse(light, lightElement.getElementsByTagName('diffuse'));
     if (error !== undefined)
-      return error;
+      return 'LIGHT, ' + id + ', ' + error;
     error = this.parseLightsSpecular(light, lightElement.getElementsByTagName('specular'));
     if (error !== undefined)
-      return error;
+      return 'LIGHT, ' + id + ', ' + error;
   }
 };
 
 LSXParser.prototype.parseLightsEnable = function(light, enableArray) {
 
   if (light == null || enableArray == null || enableArray.length != 1) {
-    return 'There must be one and only one enable in a light';
+    return 'there must be 1 and only 1 enable.';
   }
 
   var enableElement = enableArray[0];
@@ -67,14 +71,14 @@ LSXParser.prototype.parseLightsEnable = function(light, enableArray) {
 
   light.enabled = this.reader.getBoolean(enableElement, 'value');
   if (light.enabled == null) {
-    return 'Invalid value attribute for enable, must be either 0 or 1.';
+    return 'invalid value attribute for enable, must be either 0 or 1.';
   }
 };
 
 LSXParser.prototype.parseLightsPosition = function(light, positionArray) {
 
   if (light == null || positionArray == null || positionArray.length !== 1) {
-    return 'There must be one and only one position element in a light.';
+    return 'there must be 1 and only 1 position element.';
   }
 
   var positionElement = positionArray[0];
@@ -91,13 +95,13 @@ LSXParser.prototype.parseLightsPosition = function(light, positionArray) {
 
 LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
   if (light == null || ambientArray == null || ambientArray.length != 1) {
-    return 'There must be one and only one ambient in a light';
+    return 'there must be 1 and only 1 ambient.';
   }
 
   var ambientElement = ambientArray[0];
 
   if (ambientElement.attributes.length !== 4) {
-    return 'ambient element must have exactly four attributes: r, g, b, a.';
+    return 'ambient element must have exactly 4 attributes: r, g, b, a.';
   }
 
   var error = this.getRGBA(ambientElement, light.ambient = {});
@@ -108,13 +112,13 @@ LSXParser.prototype.parseLightsAmbient = function(light, ambientArray) {
 
 LSXParser.prototype.parseLightsDiffuse = function(light, diffuseArray) {
   if (light == null || diffuseArray == null || diffuseArray.length != 1) {
-    return 'There must be one and only one diffuse in a light';
+    return 'there must be 1 and only 1 diffuse';
   }
 
   var diffuseElement = diffuseArray[0];
 
   if (diffuseElement.attributes.length !== 4) {
-    return 'diffuse element must have exactly four attributes: r, g, b, a.';
+    return 'diffuse element must have exactly 4 attributes: r, g, b, a.';
   }
 
   var error = this.getRGBA(diffuseElement, light.diffuse = {});
@@ -126,13 +130,13 @@ LSXParser.prototype.parseLightsDiffuse = function(light, diffuseArray) {
 
 LSXParser.prototype.parseLightsSpecular = function(light, specularArray) {
   if (light == null || specularArray == null || specularArray.length != 1) {
-    return 'There must be one and only one specular in a light';
+    return 'there must be 1 and only 1 specular.';
   }
 
   var specularElement = specularArray[0];
 
   if (specularElement.attributes.length !== 4) {
-    return 'specular element must have exactly four attributes: r, g, b, a.';
+    return 'specular element must have exactly 4 attributes: r, g, b, a.';
   }
 
   var error = this.getRGBA(specularElement, light.specular = {});
