@@ -29,4 +29,8 @@ LSXParser.prototype.read = function(rootElement) {
   error = this.parseLeaves(rootElement);
   if (error !== undefined)
     return error;
+
+  error = this.parseNodes(rootElement);
+  if (error !== undefined)
+    return error;
 };

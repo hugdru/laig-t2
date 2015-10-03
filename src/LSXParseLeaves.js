@@ -8,7 +8,8 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
   var leavesElement = leavesArray[0];
 
   this.graph.nodes = {};
-  var nodes = this.graph.nodes;
+  this.graph.nodes.tree = {};
+  var nodes = this.graph.nodes.tree;
 
   var error;
 

@@ -56,10 +56,8 @@ LSXParser.prototype.parseTexturesFile = function(texture, fileArray) {
     return 'file element must have exactly one attribute: path.';
   }
 
-  texture.file = {};
-
-  texture.file.path = this.reader.getString(fileElement, 'path');
-  if (texture.file.path == null) {
+  texture.path = this.reader.getString(fileElement, 'path');
+  if (texture.path == null) {
     return 'Invalid path attribute for file, must be a string';
   }
 };

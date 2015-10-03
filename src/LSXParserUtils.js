@@ -90,3 +90,32 @@ LSXParser.prototype.getNumbers = function(stringOrArrayToParse, selectorString) 
 
   return result;
 };
+
+var degToRad = Math.PI / 180;
+
+function Rotate(axis, degrees) {
+  if (axis == null) {
+    axis = -1;
+    degrees = 0;
+  }
+  if (axis != 'x' && axis != 'y' && axis != 'z') return null;
+  this.setDegrees(degrees);
+  this.axis = axis;
+}
+
+Rotate.prototype.setDegrees = function(degrees) {
+  if (degrees == null) this.angle = 0;
+  else this.angle = degToRad * degrees;
+};
+
+function Translate(x, y, z) {
+  if (x != null) this.x = x;
+  if (y != null) this.y = y;
+  if (z != null) this.z = z;
+}
+
+function Scale(sx, sy, sz) {
+  if (sx != null) this.sx = x;
+  if (sy != null) this.sy = y;
+  if (sz != null) this.sz = z;
+}

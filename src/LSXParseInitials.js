@@ -63,7 +63,7 @@ LSXParser.prototype.parseInitialsTranslate = function(translateArray) {
   if (translate.attributes.length !== 3)
     return 'translate must have exactly three attributes: x, y, z.';
 
-  var error = this.getXYZ(translate, this.graph.initials.translate = {});
+  var error = this.getXYZ(translate, this.graph.initials.translate = new Translate());
   if (error != null) {
     return error;
   }
@@ -110,7 +110,7 @@ LSXParser.prototype.parseInitialsScale = function(scaleArray) {
   if (scale.attributes.length !== 3)
     return 'scale must have exactly three attributes: sx, sy, sz.';
 
-  var error = this.getSXYZ(scale, this.graph.initials.scale = {});
+  var error = this.getSXYZ(scale, this.graph.initials.scale = new Scale());
   if (error != null) {
     return error;
   }
