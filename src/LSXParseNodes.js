@@ -7,12 +7,12 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 
   var nodesElement = nodesArray[0];
 
-  if (!(this.graph.hasOwnProperty('nodes') && this.graph.nodes.hasOwnProperty('tree'))) {
-    return 'nodes.tree property should already be defined';
+  if (!(this.graph.hasOwnProperty('nodes') && this.graph.nodes.hasOwnProperty('all'))) {
+    return 'nodes.all property should already be defined';
   }
 
   var nodesObject = this.graph.nodes;
-  var treeObject = nodesObject.tree;
+  var allNodesObject = nodesObject.all;
 
   var error = this.parseNodesRoot(nodesObject, nodesElement.getElementsByTagName('ROOT'));
   if (error !== undefined) {
@@ -38,12 +38,12 @@ LSXParser.prototype.parseNodes = function(rootElement) {
       return 'Invalid ID for NODE.';
     }
 
-    if (treeObject.hasOwnProperty(id)) {
+    if (allNodesObject.hasOwnProperty(id)) {
       return 'There already exists a NODE with the id, ' + id;
     }
 
-    treeObject[id] = {};
-    nodeObject = treeObject[id];
+    allNodesObject[id] = {};
+    nodeObject = allNodesObject[id];
 
     var nodeElementChildren = nodeElement.children;
     var nodeElementChildrenLength = nodeElementChildren.length;
@@ -117,19 +117,19 @@ LSXParser.prototype.parseNodes = function(rootElement) {
   }
 
   // Check if ids in descendants really exist and convert them to "pointers"
-  for (var nodeId in treeObject) {
-    var nodeObjectDescendants = treeObject[nodeId].descendants;
+  for (var nodeId in allNodesObject) {
+    var nodeObjectDescendants = allNodesObject[nodeId].descendants;
     for (var descendantId in nodeObjectDescendants) {
-      if (treeObject.hasOwnProperty(nodeObjectDescendants[descendantId])) {
-        nodeObjectDescendants[descendantId] = treeObject[nodeObjectDescendants[descendantId]];
+      if (allNodesObject.hasOwnProperty(nodeObjectDescendants[descendantId])) {
+        nodeObjectDescendants[descendantId] = allNodesObject[nodeObjectDescendants[descendantId]];
       } else {
         return 'NODE ' + nodeId + ' has an unexisting node as descendant, ' + nodeObjectDescendants[descendantId];
       }
     }
   }
 
-  if (treeObject.hasOwnProperty(nodesObject.root)) {
-    nodesObject.root = treeObject[nodesObject.root];
+  if (allNodesObject.hasOwnProperty(nodesObject.root)) {
+    nodesObject.root = allNodesObject[nodesObject.root];
   } else {
     return 'ROOT NODE is missing, create a NODE with id, ' + nodesObject.root;
   }
@@ -152,7 +152,7 @@ LSXParser.prototype.parseNodesRoot = function(nodesObject, rootArray) {
     return 'Invalid id attribute for ROOT, must be a string';
   }
 
-  if (nodesObject.tree.hasOwnProperty(nodesObject.root)) {
+  if (nodesObject.all.hasOwnProperty(nodesObject.root)) {
     return 'ROOT cannot be a leaf';
   }
 
