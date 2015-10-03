@@ -82,7 +82,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
           if (nodeObject.hasOwnProperty('descendants')) {
             return 'There can only be one DESCENDANTS under NODE.';
           }
-          nodeObject.descendants = [];
+          nodeObject.descendants = {};
           error = this.parseNodesDescendants(nodeObject, elementOfNode);
           if (error !== undefined) {
             return error;
@@ -120,10 +120,10 @@ LSXParser.prototype.parseNodes = function(rootElement) {
   for (var nodeId in allNodesObject) {
     var nodeObjectDescendants = allNodesObject[nodeId].descendants;
     for (var descendantId in nodeObjectDescendants) {
-      if (allNodesObject.hasOwnProperty(nodeObjectDescendants[descendantId])) {
-        nodeObjectDescendants[descendantId] = allNodesObject[nodeObjectDescendants[descendantId]];
+      if (allNodesObject.hasOwnProperty(descendantId)) {
+        nodeObjectDescendants[descendantId] = allNodesObject[descendantId];
       } else {
-        return 'NODE ' + nodeId + ' has an unexisting node as descendant, ' + nodeObjectDescendants[descendantId];
+        return 'NODE ' + nodeId + ' has an unexisting node as descendant, ' + descendantId;
       }
     }
   }
@@ -226,11 +226,16 @@ LSXParser.prototype.parseNodesDescendants = function(nodeObject, elementOfNode) 
     }
 
     // Cannot check if respective node with that id exists cause it might not be created yet
-    var idNode = this.reader.getString(child, 'id');
-    if (idNode == null) {
+    var idDescendant = this.reader.getString(child, 'id');
+    if (idDescendant == null) {
       return 'Invalid ID for DESCENDANT.';
     }
-    nodeObject.descendants.push(idNode);
+
+    if (nodeObject.descendants.hasOwnProperty(idDescendant)) {
+      return 'Descendant with same id in DESCENDANTS';
+    } else {
+      nodeObject.descendants[idDescendant] = null;
+    }
   }
 
 };
@@ -248,12 +253,11 @@ LSXParser.prototype.parseNodesTranslation = function(nodeObject, elementOfNode) 
   }
 
   translate = new Translate();
-  for (var index in coordinates) {
-    translate[coordinates[index]] = this.reader.getFloat(elementOfNode, coordinates[index]);
-    if (translate[coordinates[index]] === null || isNaN(translate[coordinates[index]])) {
-      return 'translate must have an ' + coordinates[index] + ' attribute with a numeric value';
-    }
+  var error = this.getXYZ(elementOfNode, translate);
+  if (error != null) {
+    return error;
   }
+
   nodeObject.transformations.push(translate);
 };
 
