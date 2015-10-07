@@ -56,7 +56,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
     var stringArray = stringOfNumbers.split(/\s+/);
     switch (leaf.type) {
       case 'rectangle':
-        var arrayOfNumbers = this.getNumbers(stringArray, "f f f f");
+        var arrayOfNumbers = this.getNumbers(stringArray, "(f f)(i i)");
         if (arrayOfNumbers.constructor !== Array) {
           return 'LEAF, ' + id + ', ' + leaf.type + ': f f f f .';
         }
@@ -77,7 +77,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         leaf.args = arrayOfNumbers;
         break;
       case 'triangle':
-        arrayOfNumbers = this.getNumbers(stringArray, "f f f f f f f f f");
+        arrayOfNumbers = this.getNumbers(stringArray, "(f f f)(f f f)(f f f)");
         if (arrayOfNumbers.constructor !== Array) {
           return 'LEAF, ' + id + ', ' + leaf.type + ': f f f f f f f f f .';
         }
