@@ -59,52 +59,33 @@ LSXParser.prototype.getNumbers = function(stringOrArrayToParse, selectorString) 
   } else {
     arrayOfStrings = stringOrArrayToParse;
   }
-  var arrayOfStringsLength = arrayOfStrings.length;
+  var arrayOfSelectors = selectorString.split(/\s+/);
 
-  var regexInsideParentheses = /([^()]+)/g;
-  var matches = selectorString.match(regexInsideParentheses);
+  var length;
+  if ((length = arrayOfStrings.length) !== arrayOfSelectors.length) {
+    return 'number of space separated string and respective types have different lengths';
+  }
 
   result = [];
-
-  var totalLength = 0;
-  var stringIndex = 0;
-  for (var matchesIndex = 0; matchesIndex < matches.length; ++matchesIndex) {
-    var newArray = [];
-
-    if (matches != null) {
-      selectorString = matches[matchesIndex];
+  for (var index = 0; index < length; ++index) {
+    switch (arrayOfSelectors[index]) {
+      case 'i':
+        var newInt = parseInt(arrayOfStrings[index].match(/^\d*$/));
+        if (isNaN(newInt)) {
+          return 'was expecting a int.';
+        }
+        result.push(newInt);
+        break;
+      case 'f':
+        var newFloat = parseFloat(arrayOfStrings[index]);
+        if (isNaN(newFloat)) {
+          return 'was expecting a float.';
+        }
+        result.push(newFloat);
+        break;
+      default:
+        return 'selector not supported';
     }
-
-    var arrayOfSelectors = selectorString.split(/\s+/);
-    var arrayOfSelectorsLength = arrayOfSelectors.length;
-    totalLength += arrayOfSelectorsLength;
-
-    if (arrayOfStringsLength < totalLength) {
-      return 'number of space separated string and respective types have different lengths';
-    }
-
-    var oldStringIndex = stringIndex;
-    for (selectorIndex = 0; stringIndex < (oldStringIndex + arrayOfSelectorsLength); ++stringIndex, ++selectorIndex) {
-      switch (arrayOfSelectors[selectorIndex]) {
-        case 'i':
-          var newInt = parseInt(arrayOfStrings[stringIndex].match(/^\d*$/));
-          if (isNaN(newInt)) {
-            return 'was expecting a int.';
-          }
-          newArray.push(newInt);
-          break;
-        case 'f':
-          var newFloat = parseFloat(arrayOfStrings[stringIndex]);
-          if (isNaN(newFloat)) {
-            return 'was expecting a float.';
-          }
-          newArray.push(newFloat);
-          break;
-        default:
-          return 'selector not supported';
-      }
-    }
-    result.push(newArray);
   }
 
   return result;
