@@ -30,19 +30,19 @@
   </LIGHTS>
   <TEXTURES>
     <TEXTURE id="wall">
-      <file path="texture/wall.png" />
+      <file path="textures/wall.png" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
     <TEXTURE id="floor">
-      <file path="texture/floor.png" />
+      <file path="textures/floor.png" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
     <TEXTURE id="sphere">
-      <file path="texture/sphere.png" />
+      <file path="textures/sphere.png" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
     <TEXTURE id="cube">
-      <file path="texture/cube.png" />
+      <file path="textures/cube.png" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
   </TEXTURES>
