@@ -69,6 +69,6 @@ Triangle.prototype.initBuffers = function() {
   this.initGLBuffers();
 };
 
-CGFtexturedTriangle.prototype.display = function() {
+Triangle.prototype.display = function() {
   this.drawElements(this.primitiveType);
 };

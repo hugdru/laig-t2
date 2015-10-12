@@ -42,20 +42,27 @@ function getUrlVars() {
   return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'SceneGraph.js', 'LSXParser.js', 'LSXParserUtils.js', 'LSXParseInitials.js', 'LSXParseIllumination.js', 'LSXParseLights.js', 'LSXParseTextures.js', 'LSXParseMaterials.js', 'LSXParseLeaves.js', 'LSXParseNodes.js',
+serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js',
+              'parser/LSXParser.js', 'parser/LSXParserUtils.js',
+              'parser/LSXParseInitials.js', 'parser/LSXParseIllumination.js',
+              'parser/LSXParseLights.js', 'parser/LSXParseTextures.js',
+              'parser/LSXParseMaterials.js', 'parser/LSXParseLeaves.js',
+              'parser/LSXParseNodes.js', 'primitives/Cylinder.js',
+              'primitives/Rectangle.js', 'primitives/Sphere.js',
+              'primitives/Triangle.js',
 
   main = function() {
     // Standard application, scene and interface setup
     var cgfApplication = new CGFapplication(document.body);
-    var xmlScene = new XMLscene();
+    var scene = new Scene();
     var cgfInterface = new CGFinterface();
 
     cgfApplication.init();
 
-    cgfApplication.setScene(xmlScene);
+    cgfApplication.setScene(scene);
     cgfApplication.setInterface(cgfInterface);
 
-    cgfInterface.setActiveCamera(xmlScene.camera);
+    cgfInterface.setActiveCamera(scene.camera);
 
     // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
     // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
@@ -64,7 +71,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'SceneGraph.js', 'LSXParser.js', 
 
     // create and load graph, and associate it to scene.
     // Check console for loading errors
-    var myGraph = new SceneGraph(filename, xmlScene);
+    var myGraph = new SceneGraph(filename, scene);
 
     // start
     cgfApplication.run();

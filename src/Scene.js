@@ -1,11 +1,11 @@
-function XMLscene() {
+function Scene() {
   CGFscene.call(this);
 }
 
-XMLscene.prototype = Object.create(CGFscene.prototype);
-XMLscene.prototype.constructor = XMLscene;
+Scene.prototype = Object.create(CGFscene.prototype);
+Scene.prototype.constructor = Scene;
 
-XMLscene.prototype.init = function(application) {
+Scene.prototype.init = function(application) {
   CGFscene.prototype.init.call(this, application);
 
   this.initCameras();
@@ -22,7 +22,7 @@ XMLscene.prototype.init = function(application) {
   this.axis = new CGFaxis(this);
 };
 
-XMLscene.prototype.initLights = function() {
+Scene.prototype.initLights = function() {
 
   this.shader.bind();
 
@@ -33,11 +33,11 @@ XMLscene.prototype.initLights = function() {
   this.shader.unbind();
 };
 
-XMLscene.prototype.initCameras = function() {
+Scene.prototype.initCameras = function() {
   this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
-XMLscene.prototype.setDefaultAppearance = function() {
+Scene.prototype.setDefaultAppearance = function() {
   this.setAmbient(0.2, 0.4, 0.8, 1.0);
   this.setDiffuse(0.2, 0.4, 0.8, 1.0);
   this.setSpecular(0.2, 0.4, 0.8, 1.0);
@@ -46,7 +46,7 @@ XMLscene.prototype.setDefaultAppearance = function() {
 
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function() {
+Scene.prototype.onGraphLoaded = function() {
   //DEBUG
   console.log(this.graph);
 
@@ -55,7 +55,7 @@ XMLscene.prototype.onGraphLoaded = function() {
   this.lights[0].enable();
 };
 
-XMLscene.prototype.display = function() {
+Scene.prototype.display = function() {
   // ---- BEGIN Background, camera and axis setup
   this.shader.bind();
 
