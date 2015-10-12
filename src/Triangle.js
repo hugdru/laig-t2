@@ -1,4 +1,4 @@
-function CGFtexturedTriangle(scene, textureUrl, amplifS, amplifT, v1, v2, v3) {
+function Triangle(scene, amplifS, amplifT, v1, v2, v3) {
   CGFobject.call(this, scene);
 
   this.amplifS = amplifS;
@@ -20,11 +20,6 @@ function CGFtexturedTriangle(scene, textureUrl, amplifS, amplifT, v1, v2, v3) {
     (v3[2] - v2[2]) * (v3[2] - v2[2]));
 
 
-  //var max = Math.max (this.a, this.b, this.c);
-  //this.a = this.a / max;
-  //this.b = this.b / max;
-  //this.c = this.c / max;
-
   this.cosAlpha = (-this.a * this.a + this.b * this.b + this.c * this.c) / (2 * this.b * this.c);
   this.cosBeta = (this.a * this.a - this.b * this.b + this.c * this.c) / (2 * this.a * this.c);
   this.cosGamma = (this.a * this.a + this.b * this.b - this.c * this.c) / (2 * this.a * this.b);
@@ -36,30 +31,14 @@ function CGFtexturedTriangle(scene, textureUrl, amplifS, amplifT, v1, v2, v3) {
   // the sum of internal angles needs to be 180 or 3.14159
   // check this.sum to see that!
 
-
-  this.appearance = new CGFappearance(this.scene);
-  this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
-  this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
-  this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
-  this.appearance.setShininess(120);
-  if (textureUrl != null) {
-    this.texture = new CGFtexture(scene, textureUrl);
-    this.appearance.setTexture(this.texture);
-    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-  }
   this.initBuffers();
   this.wireframe = false;
-
-
 }
 
-CGFtexturedTriangle.prototype = Object.create(CGFobject.prototype);
-CGFtexturedTriangle.prototype.constructor = CGFtexturedTriangle;
+Triangle.prototype = Object.create(CGFobject.prototype);
+Triangle.prototype.constructor = Triangle;
 
-/**
- * @private
- */
-CGFtexturedTriangle.prototype.initBuffers = function() {
+Triangle.prototype.initBuffers = function() {
 
   this.vertices = [
     // Front face
@@ -88,18 +67,8 @@ CGFtexturedTriangle.prototype.initBuffers = function() {
 
   this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
   this.initGLBuffers();
-
 };
 
-/**
- *
- * @param shader {CGFshader} (must be applied)
- * @param mvMatrix {mat4}
- */
 CGFtexturedTriangle.prototype.display = function() {
-
-  this.scene.pushMatrix();
-  this.appearance.apply();
   this.drawElements(this.primitiveType);
-  this.scene.popMatrix();
 };
