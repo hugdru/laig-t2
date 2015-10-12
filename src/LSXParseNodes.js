@@ -137,6 +137,8 @@ LSXParser.prototype.parseNodes = function(rootElement) {
   } else {
     return 'ROOT NODE is missing, create a NODE with id, ' + nodesObject.root;
   }
+
+  delete this.graph.nodes.all;
 };
 
 LSXParser.prototype.parseNodesRoot = function(nodesObject, rootArray) {
