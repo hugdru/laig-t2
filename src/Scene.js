@@ -83,8 +83,6 @@ Scene.prototype.display = function() {
   // This is one possible way to do it
   if (this.graph.isLoaded) {
     this.lights[0].update();
-    //var myRect = new Rectangle(this, 0, 0,[0,10],[10,0]);
-    //myRect.display();
   }
 
   this.shader.unbind();
