@@ -50,7 +50,8 @@ Scene.prototype.onGraphLoaded = function() {
   //DEBUG
   console.log(this.graph);
 
-  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination.background.b, this.graph.illumination.background.a);
+  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination
+    .background.b, this.graph.illumination.background.a);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
 };
@@ -80,9 +81,11 @@ Scene.prototype.display = function() {
   // it is important that things depending on the proper loading of the graph
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
-  if (this.graph.loadedOk) {
+  if (this.graph.isLoaded) {
     this.lights[0].update();
-}
+    //var myRect = new Rectangle(this, 0, 0,[0,10],[10,0]);
+    //myRect.display();
+  }
 
   this.shader.unbind();
 };
