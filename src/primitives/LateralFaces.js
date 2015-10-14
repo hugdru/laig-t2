@@ -6,10 +6,13 @@ function LateralFaces(scene, amplifS, amplifT, slices, stacks) {
       return 'There must be at least 3 slices and 1 stack.';
     }
 
+    this.slices = slices;
+    this.stacks = stacks;
+
     this.stackStep = 1 / this.stacks;
 
-    this.teta = (2 * Math.PI) / this.slices;
-    this.startVertexPeriod = this.stacks + 1;
+    this.tetaStep = (2 * Math.PI) / this.slices;
+    this.stackPeriod = this.stacks + 1;
 
     this.initBuffers();
 }
@@ -22,47 +25,40 @@ LateralFaces.prototype.initBuffers = function() {
     this.indices = [];
     this.normals = [];
 
-    for (sliceIndex = 0; sliceIndex <= this.slices; ++sliceIndex) {
+    var teta = 0;
+    var stackPeriodTimesSliceIndex = 0;
+    var stackPeriodTimesSliceIndexNext = this.stackPeriod;
+    for (var sliceIndex = 0; sliceIndex <= this.slices; ++sliceIndex) {
 
-        // A lateral face
-        var stackAcc = -0.5;
-        var periodSlicesN = this.startVertexPeriod * sliceIndex;
-        var periodSlicesNnext = this.startVertexPeriod * (sliceIndex + 1);
-        var currentRad = sliceIndex * this.teta;
-        var tCoord = this.minT;
+        var stackAccumulator = -0.5;
+        var vertexX = Math.sin(teta);
+        var vertexZ = Math.cos(teta);
+
         for (var stackIndex = 0; stackIndex <= this.stacks; ++stackIndex) {
 
             /* Vertex */
-            var currentRadCos = Math.cos(currentRad);
-            var currentRadSin = Math.sin(currentRad);
-            this.vertices.push(
-                currentRadCos,
-                currentRadSin,
-                stackAcc
-            );
+            this.vertices.push(vertexX, stackAccumulator, vertexZ);
 
             /* Normals */
-            this.normals.push(
-                currentRadCos,
-                currentRadSin,
-                0
-            );
+            this.normals.push(vertexX, 0, vertexZ);
 
             /* Indices */
             if (stackIndex != this.stacks && sliceIndex != this.slices) {
                 var startVertex = stackIndex + 1;
                 this.indices.push(
-                    startVertex + periodSlicesN,
-                    startVertex - 1 + periodSlicesN,
-                    startVertex - 1 + periodSlicesNnext,
-                    startVertex + periodSlicesN,
-                    startVertex - 1 + periodSlicesNnext,
-                    startVertex + periodSlicesNnext
+                    startVertex + stackPeriodTimesSliceIndex,
+                    startVertex + stackPeriodTimesSliceIndex - 1,
+                    startVertex + stackPeriodTimesSliceIndexNext - 1,
+                    startVertex + stackPeriodTimesSliceIndex,
+                    startVertex + stackPeriodTimesSliceIndexNext - 1,
+                    startVertex + stackPeriodTimesSliceIndexNext
                 );
             }
-            stackAcc += this.stackStep;
-            tCoord += this.patchLengthT;
+            stackAccumulator += this.stackStep;
         }
+        teta += this.tetaStep;
+        stackPeriodTimesSliceIndex = stackPeriodTimesSliceIndexNext;
+        stackPeriodTimesSliceIndexNext += this.stackPeriod;
     }
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();

@@ -47,22 +47,20 @@ Sphere.prototype.initBuffers = function() {
       this.normals.push(vertexX / this.radius, vertexY / this.radius, vertexZ / this.radius);
 
       // Indices
-      if (phiIndex != this.phiSections) {
-          if (tetaIndex != this.tetaSections) {
-              this.indices.push(
-                  tetaIndex + tetaPeriodTimesPhiIndex,
-                  tetaIndex + tetaPeriodTimesNextPhiIndex + 1,
-                  tetaIndex + tetaPeriodTimesPhiIndex + 1,
-                  tetaIndex + tetaPeriodTimesPhiIndex,
-                  tetaIndex + tetaPeriodTimesNextPhiIndex,
-                  tetaIndex + tetaPeriodTimesNextPhiIndex + 1
-              );
-          }
+      if (phiIndex != this.phiSections && tetaIndex != this.tetaSections) {
+        this.indices.push(
+          tetaIndex + tetaPeriodTimesPhiIndex,
+          tetaIndex + tetaPeriodTimesNextPhiIndex + 1,
+          tetaIndex + tetaPeriodTimesPhiIndex + 1,
+          tetaIndex + tetaPeriodTimesPhiIndex,
+          tetaIndex + tetaPeriodTimesNextPhiIndex,
+          tetaIndex + tetaPeriodTimesNextPhiIndex + 1
+        );
       }
       tetaAccumulator += this.tetaStep;
     }
     phiAccumulator -= this.phiStep;
-    tetaPeriodTimesPhiIndex += this.tetaPeriod;
+    tetaPeriodTimesPhiIndex = tetaPeriodTimesNextPhiIndex;
     tetaPeriodTimesNextPhiIndex += this.tetaPeriod;
   }
 

@@ -2,7 +2,7 @@ function Base(scene, amplifS, amplifT, slices) {
     CGFobject.call(this, scene);
 
     if (slices == null || slices < 3) {
-      return 'Base must have at least 3 slices'
+      return 'Base must have at least 3 slices';
     }
 
     // FALTA FAZER TEXTURAS
@@ -11,7 +11,7 @@ function Base(scene, amplifS, amplifT, slices) {
     this.amplifT = amplifT;
     this.slices = slices;
 
-    this.teta = 2 * Math.PI / this.slices;
+    this.tetaStep = 2 * Math.PI / this.slices;
 
     this.initBuffers();
 }
@@ -24,16 +24,16 @@ Base.prototype.initBuffers = function() {
     var nextSlice;
     this.vertices = [0, 0, 0];
     this.indices = [];
-    this.normals = [0, 0, 1];
+    this.normals = [0, 1, 0];
 
+    var teta = 0;
     for (var sliceIndex = 0; sliceIndex < this.slices; ++sliceIndex) {
 
         // Vertices
-        // Vertex 1
         this.vertices.push(
-            Math.cos(sliceIndex * this.teta),
-            Math.sin(sliceIndex * this.teta),
-            0
+            Math.sin(teta),
+            0,
+            Math.cos(teta)
         );
 
         // Indices
@@ -43,11 +43,9 @@ Base.prototype.initBuffers = function() {
         else this.indices.push(sliceIndex + 2);
 
         // Normals
-        this.normals.push(
-            0,
-            0,
-            1
-        );
+        this.normals.push(0, 1, 0);
+
+        teta += this.tetaStep;
     }
 
     this.primitiveType = this.scene.gl.TRIANGLES;
