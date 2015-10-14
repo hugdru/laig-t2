@@ -20,6 +20,8 @@ Scene.prototype.init = function(application) {
   this.gl.depthFunc(this.gl.LEQUAL);
 
   this.axis = new CGFaxis(this);
+
+  this.sphere = new Sphere(this, 0, 0, 1, 20, 20);
 };
 
 Scene.prototype.initLights = function() {
@@ -80,9 +82,12 @@ Scene.prototype.display = function() {
   // it is important that things depending on the proper loading of the graph
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
-  if (this.graph.loadedOk) {
+  if (this.graph.isLoaded) {
     this.lights[0].update();
-}
+  }
+
+  this.scale(2,2,2);
+  this.sphere.display();
 
   this.shader.unbind();
 };
