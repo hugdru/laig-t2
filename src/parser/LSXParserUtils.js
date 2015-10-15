@@ -93,19 +93,19 @@ LSXParser.prototype.getNumbers = function(stringOrArrayToParse, selectorString) 
 
 var degToRad = Math.PI / 180;
 
-function Rotate(axis, degrees) {
+function Rotate(axis, angle) {
   if (axis == null) {
     axis = -1;
-    degrees = 0;
+    angle = 0;
   }
   if (axis != 'x' && axis != 'y' && axis != 'z') return null;
-  this.setDegrees(degrees);
+  this.setAngle(angle);
   this.axis = axis;
 }
 
-Rotate.prototype.setDegrees = function(degrees) {
-  if (degrees == null) this.angle = 0;
-  else this.angle = degToRad * degrees;
+Rotate.prototype.setAngle = function(angle) {
+  if (angle == null) this.angle = 0;
+  else this.angle = degToRad * angle;
 };
 
 function Translate(x, y, z) {
