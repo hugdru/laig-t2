@@ -51,18 +51,48 @@ SceneGraph.prototype.onXMLError = function(message) {
 };
 
 SceneGraph.prototype.display = function(node) {
-  if (node instanceof Rectangle
-       || node instanceof Cylinder
-       || node instanceof Sphere
-       || node instanceof Triangle) {
-
+  if (node instanceof Rectangle || node instanceof Cylinder || node instanceof Sphere || node instanceof Triangle)
     node.display();
-  }
-  else if (node.descendants === undefined)
-    return;
+
   else {
+    this.scene.pushMatrix();
+
+    this.applyNodeTransformations(node);
+
     for (var descendant in node.descendants) {
       this.display(node.descendants[descendant]);
+    }
+
+    this.scene.popMatrix();
+  }
+};
+
+SceneGraph.prototype.applyNodeTransformations = function(node) {
+  var transformations = node.transformations;
+
+  for (var transformation in transformations) {
+    if (transformations[transformation] instanceof Translate) {
+      var x = transformations[transformation].x;
+      var y = transformations[transformation].y;
+      var z = transformations[transformation].z;
+
+      this.scene.translate(x, y, z);
+    } else if (transformations[transformation] instanceof Rotate) {
+      var axis = transformations[transformation].axis;
+      var angle = transformations[transformation].angle;
+
+      if (axis === 'x')
+        this.scene.rotate(angle, 1, 0, 0);
+      else if (axis === 'y')
+        this.scene.rotate(angle, 0, 1, 0);
+      else if (axis === 'z')
+        this.scene.rotate(angle, 0, 0, 1);
+    } else if (transformations[transformation] instanceof Scale) {
+      var sx = transformations[transformation].sx;
+      var sy = transformations[transformation].sy;
+      var sz = transformations[transformation].sz;
+
+      this.scene.scale(sx, sy, sz);
     }
   }
 };
