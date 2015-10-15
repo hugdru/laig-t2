@@ -19,7 +19,6 @@ function Triangle(scene, amplifS, amplifT, v1, v2, v3) {
     (v3[1] - v2[1]) * (v3[1] - v2[1]) +
     (v3[2] - v2[2]) * (v3[2] - v2[2]));
 
-
   this.cosAlpha = (-this.a * this.a + this.b * this.b + this.c * this.c) / (2 * this.b * this.c);
   this.cosBeta = (this.a * this.a - this.b * this.b + this.c * this.c) / (2 * this.a * this.c);
   this.cosGamma = (this.a * this.a + this.b * this.b - this.c * this.c) / (2 * this.a * this.b);
@@ -48,11 +47,18 @@ Triangle.prototype.initBuffers = function() {
 
   ];
 
+  var vector1 = [this.v3[0]-this.v2[0], this.v3[1]-this.v2[1], this.v3[2]-this.v2[2]];
+  var vector2 = [this.v1[0]-this.v3[0], this.v1[1]-this.v3[1], this.v1[2]-this.v3[2]];
+
+  var normal = [vector1[1]*vector2[2]-vector2[1]*vector1[2], vector1[0]*vector2[2]-vector2[0]*vector1[2], vector1[0]*vector2[1]-vector2[0]*vector1[1]];
+  var normalNorm = Math.sqrt(Math.pow(normal[0],2) + Math.pow(normal[1],2) + Math.pow(normal[2],2));
+  normal = [normal[0]/normalNorm, normal[1]/normalNorm, normal[2]/normalNorm];
+
   this.normals = [
     // Front face
-    0.0, 0.0, 1.0,
-    0.0, 0.0, 1.0,
-    0.0, 0.0, 1.0
+    normal[0], normal[1], normal[2],
+    normal[0], normal[1], normal[2],
+    normal[0], normal[1], normal[2]
   ];
 
   this.texCoords = [
