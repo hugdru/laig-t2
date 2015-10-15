@@ -47,18 +47,23 @@ Triangle.prototype.initBuffers = function() {
 
   ];
 
-  var vector1 = [this.v3[0]-this.v2[0], this.v3[1]-this.v2[1], this.v3[2]-this.v2[2]];
-  var vector2 = [this.v1[0]-this.v3[0], this.v1[1]-this.v3[1], this.v1[2]-this.v3[2]];
+  var vector1 = [this.v3[0] - this.v2[0], this.v3[1] - this.v2[1], this.v3[2] - this.v2[2]];
+  var vector2 = [this.v1[0] - this.v3[0], this.v1[1] - this.v3[1], this.v1[2] - this.v3[2]];
 
-  var normal = [vector1[1]*vector2[2]-vector2[1]*vector1[2], vector1[0]*vector2[2]-vector2[0]*vector1[2], vector1[0]*vector2[1]-vector2[0]*vector1[1]];
-  var normalNorm = Math.sqrt(Math.pow(normal[0],2) + Math.pow(normal[1],2) + Math.pow(normal[2],2));
-  normal = [normal[0]/normalNorm, normal[1]/normalNorm, normal[2]/normalNorm];
+  var perpendicularVector = [
+    vector1[1] * vector2[2] - vector2[1] * vector1[2],
+    vector1[0] * vector2[2] - vector2[0] * vector1[2],
+    vector1[0] * vector2[1] - vector2[0] * vector1[1]
+  ];
+
+  var perpendicularVectorNorm = Math.sqrt(Math.pow(perpendicularVector[0], 2) + Math.pow(perpendicularVector[1], 2) + Math.pow(perpendicularVector[2], 2));
+  perpendicularVector = [perpendicularVector[0] / perpendicularVectorNorm, perpendicularVector[1] / perpendicularVectorNorm, perpendicularVector[2] / perpendicularVectorNorm];
 
   this.normals = [
     // Front face
-    normal[0], normal[1], normal[2],
-    normal[0], normal[1], normal[2],
-    normal[0], normal[1], normal[2]
+    perpendicularVector[0], perpendicularVector[1], perpendicularVector[2],
+    perpendicularVector[0], perpendicularVector[1], perpendicularVector[2],
+    perpendicularVector[0], perpendicularVector[1], perpendicularVector[2]
   ];
 
   this.texCoords = [

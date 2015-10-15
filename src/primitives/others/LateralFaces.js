@@ -48,7 +48,6 @@ LateralFaces.prototype.initBuffers = function() {
 
     for (var stackIndex = 0; stackIndex <= this.stacks; ++stackIndex) {
 
-      console.log(radius);
       var vertexX = radius * Math.sin(teta);
       var vertexZ = radius * Math.cos(teta);
 
