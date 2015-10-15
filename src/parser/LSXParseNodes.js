@@ -279,15 +279,16 @@ LSXParser.prototype.parseNodesRotation = function(nodeObject, elementOfNode) {
 
   var coordinates = 'xyz';
 
-  rotation = new Rotate();
   var coordinate = this.reader.getString(elementOfNode, 'axis');
   var coordinateIndex = coordinates.indexOf(coordinate);
   if (coordinateIndex === -1) return 'the axis attribute must be either: x, y or z.';
 
-  rotation[coordinate] = this.reader.getFloat(elementOfNode, 'angle');
-  if (rotation[coordinate] === null || isNaN(rotation[coordinate])) {
+  var degrees = this.reader.getFloat(elementOfNode, 'angle');
+  if (degrees === null || isNaN(degrees)) {
     return 'the angle value must be a number.';
   }
+
+  var rotation = new Rotate(coordinate, degrees);
   nodeObject.transformations.push(rotation);
 
 };
