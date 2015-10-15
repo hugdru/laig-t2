@@ -90,29 +90,30 @@ Scene.prototype.display = function() {
   // This is one possible way to do it
   if (this.graph.isLoaded) {
     this.lights[0].update();
+    this.graph.display(this.graph.nodes.root);
   }
 
-  this.pushMatrix();
-    this.scale(2, 2, 2);
-    this.sphere.display();
-  this.popMatrix();
+  //this.pushMatrix();
+    //this.scale(2, 2, 2);
+    //this.sphere.display();
+  //this.popMatrix();
 
-  this.pushMatrix();
-    this.translate(0, 0, 4);
-    this.cone.display();
-    this.translate(0, 0, 4);
-    this.cylinder.display();
-  this.popMatrix();
+  //this.pushMatrix();
+    //this.translate(0, 0, 4);
+    //this.cone.display();
+    //this.translate(0, 0, 4);
+    //this.cylinder.display();
+  //this.popMatrix();
 
-  this.pushMatrix();
-    this.translate(4, 0, 0);
-    this.base.display();
-    this.translate(1, 0, 0);
-    this.triangle.display();
-    this.translate(1, 0, 0);
-    this.scale(0.5, 0.5, 0.5);
-    this.rectangle.display();
-  this.popMatrix();
+  //this.pushMatrix();
+    //this.translate(4, 0, 0);
+    //this.base.display();
+    //this.translate(1, 0, 0);
+    //this.triangle.display();
+    //this.translate(1, 0, 0);
+    //this.scale(0.5, 0.5, 0.5);
+    //this.rectangle.display();
+  //this.popMatrix();
 
   this.shader.unbind();
 };
