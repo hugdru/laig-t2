@@ -115,7 +115,7 @@ function Translate(x, y, z) {
 }
 
 function Scale(sx, sy, sz) {
-  if (sx != null) this.sx = x;
-  if (sy != null) this.sy = y;
-  if (sz != null) this.sz = z;
+  if (sx != null) this.sx = sx;
+  if (sy != null) this.sy = sy;
+  if (sz != null) this.sz = sz;
 }
