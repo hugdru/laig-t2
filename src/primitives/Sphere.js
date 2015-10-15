@@ -35,13 +35,13 @@ Sphere.prototype.initBuffers = function() {
   for (var phiIndex = 0; phiIndex <= this.phiSections; ++phiIndex) {
 
     var tetaAccumulator = 0;
-    var vertexY = this.radius * Math.cos(phiAccumulator);
+    var vertexY = (this.radius * Math.cos(phiAccumulator))/2;
     var sinPhiAccumulator = Math.sin(phiAccumulator);
 
     for (var tetaIndex = 0; tetaIndex <= this.tetaSections; ++tetaIndex) {
 
-      var vertexX = this.radius * sinPhiAccumulator * Math.sin(tetaAccumulator);
-      var vertexZ = this.radius * sinPhiAccumulator * Math.cos(tetaAccumulator);
+      var vertexX = (this.radius * sinPhiAccumulator * Math.sin(tetaAccumulator))/2;
+      var vertexZ = (this.radius * sinPhiAccumulator * Math.cos(tetaAccumulator))/2;
 
       this.vertices.push(vertexX, vertexY, vertexZ);
       this.normals.push(vertexX / this.radius, vertexY / this.radius, vertexZ / this.radius);
