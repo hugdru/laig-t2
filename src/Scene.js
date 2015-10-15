@@ -23,8 +23,8 @@ Scene.prototype.init = function(application) {
 
   this.triangle = new Triangle(this, 0, 0, [0, 1, 3], [0, 0, 3], [3, 0, 3]);
   this.rectangle = new Rectangle(this, 0, 0, [0, 2, 0], [2, 0, 0]);
-  this.base = new Base(this, 0, 0, 5);
-  this.lateralFaces = new LateralFaces(this, 0, 0, 5, 5);
+  this.base = new Base(this, 0, 0, 20);
+  this.cylinder = new Cylinder(this, 0, 0, 1, 2, 0, 20, 20);
   this.sphere = new Sphere(this, 0, 0, 1, 20, 20);
 };
 
@@ -97,15 +97,14 @@ Scene.prototype.display = function() {
   this.popMatrix();
 
   this.pushMatrix();
-    this.translate(0, 0, 3);
-    this.lateralFaces.display();
+    this.translate(0, 0, 4);
+    this.cylinder.display();
     this.pushMatrix();
       this.translate(0, -0.5, 0);
       this.rotate(Math.PI, 0, 0, 1);
+      this.scale(2, 2, 2);
       this.base.display();
     this.popMatrix();
-    this.translate(0, 0.5, 0);
-    this.base.display();
   this.popMatrix();
 
   this.pushMatrix();
