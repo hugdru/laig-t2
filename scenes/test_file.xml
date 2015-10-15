@@ -94,8 +94,6 @@
     <NODE id="right_wall">
       <MATERIAL id="null" />
       <TEXTURE id="wall" />
-      <TRANSLATION x="0" y="0" z="10" />
-      <ROTATION axis="y" angle="90" />
       <DESCENDANTS>
         <DESCENDANT id="wall_floor" />
       </DESCENDANTS>
@@ -139,7 +137,7 @@
     <NODE id="right_square">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
-      <TRANSLATION x="2" y="0" z="1" />
+      <TRANSLATION x="3" y="0" z="2" />
       <ROTATION axis="y" angle="180" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
@@ -175,7 +173,7 @@
     <NODE id="sphere">
       <MATERIAL id="null" />
       <TEXTURE id="sphere" />
-      <TRANSLATION x="4" y="0" z="4" />
+      <TRANSLATION x="4" y="0.5" z="4" />
       <DESCENDANTS>
         <DESCENDANT id="sphere1" />
       </DESCENDANTS>
