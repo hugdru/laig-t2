@@ -39,11 +39,11 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
     }
 
     nodes[id] = {};
-    leaf = nodes[id];
 
     // Get LEAF type
-    leaf.type = this.reader.getString(leafElement, 'type');
-    if (leaf.type == null) {
+    var leafType = this.reader.getString(leafElement, 'type');
+
+    if (leafType == null) {
       return 'LEAF, ' + id + ', must have a type attribute with a string value.';
     }
 
@@ -54,34 +54,58 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
     }
 
     var stringArray = stringOfNumbers.split(/\s+/);
-    switch (leaf.type) {
+
+    var scene = this.graph.scene;
+
+    switch (leafType) {
       case 'rectangle':
         var arrayOfNumbers = this.getNumbers(stringArray, "f f i i");
         if (arrayOfNumbers.constructor !== Array) {
-          return 'LEAF, ' + id + ', ' + leaf.type + ': f f f f .';
+          return 'LEAF, ' + id + ', ' + leafType + ': f f f f .';
         }
-        leaf.args = arrayOfNumbers;
+
+        var v1 = [arrayOfNumbers[0], arrayOfNumbers[1]];
+        var v2 = [arrayOfNumbers[2], arrayOfNumbers[3]];
+
+        nodes[id] = new Rectangle(scene, 0, 0, v1, v2);
         break;
       case 'cylinder':
         arrayOfNumbers = this.getNumbers(stringArray, "f f f i i");
         if (arrayOfNumbers.constructor !== Array) {
-          return 'LEAF, ' + id + ', ' + leaf.type + ': f f f i i .';
+          return 'LEAF, ' + id + ', ' + leafType + ': f f f i i .';
         }
-        leaf.args = arrayOfNumbers;
+
+        var height       = arrayOfNumbers[0];
+        var bottomRadius = arrayOfNumbers[1];
+        var topRadius    = arrayOfNumbers[2];
+        var slices       = arrayOfNumbers[3];
+        var stacks       = arrayOfNumbers[4];
+
+        nodes[id] = new Cylinder(scene, 0, 0, height, bottomRadius, topRadius, slices, stacks);
         break;
       case 'sphere':
         arrayOfNumbers = this.getNumbers(stringArray, "f i i");
         if (arrayOfNumbers.constructor !== Array) {
-          return 'LEAF, ' + id + ', ' + leaf.type + ': f i i .';
+          return 'LEAF, ' + id + ', ' + leafType + ': f i i .';
         }
-        leaf.args = arrayOfNumbers;
+
+        var radius       = arrayOfNumbers[0];
+        var tetaSections = arrayOfNumbers[1];
+        var phiSections  = arrayOfNumbers[2];
+
+        nodes[id] = new Sphere(scene, 0, 0, radius, tetaSections, phiSections);
         break;
       case 'triangle':
         arrayOfNumbers = this.getNumbers(stringArray, "f f f f f f f f f");
         if (arrayOfNumbers.constructor !== Array) {
-          return 'LEAF, ' + id + ', ' + leaf.type + ': f f f f f f f f f .';
+          return 'LEAF, ' + id + ', ' + leafType + ': f f f f f f f f f .';
         }
-        leaf.args = arrayOfNumbers;
+
+        var v1 = [arrayOfNumbers[0], arrayOfNumbers[1], arrayOfNumbers[2]]
+        var v2 = [arrayOfNumbers[3], arrayOfNumbers[4], arrayOfNumbers[5]]
+        var v3 = [arrayOfNumbers[6], arrayOfNumbers[7], arrayOfNumbers[8]]
+
+        nodes[id] = new Triangle(scene, 0, 0, v1, v2, v3);
         break;
       default:
         return 'LEAF, ' + id + ', type attribute only accepts 4 primities: rectangle, cylinder, sphere, triangle.';
