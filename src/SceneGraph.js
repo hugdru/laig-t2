@@ -49,3 +49,20 @@ SceneGraph.prototype.onXMLError = function(message) {
   console.error("XML Loading Error: " + message);
   this.isLoaded = false;
 };
+
+SceneGraph.prototype.display = function(node) {
+  if (node instanceof Rectangle
+       || node instanceof Cylinder
+       || node instanceof Sphere
+       || node instanceof Triangle) {
+
+    node.display();
+  }
+  else if (node.descendants === undefined)
+    return;
+  else {
+    for (var descendant in node.descendants) {
+      this.display(node.descendants[descendant]);
+    }
+  }
+};
