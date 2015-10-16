@@ -35,8 +35,7 @@ LSXParser.prototype.parseMaterials = function(rootElement) {
       return 'MATERIAL, ' + id + ', already exists.';
     }
 
-    this.graph.materials[id] = {};
-    var material = this.graph.materials[id];
+    var material = new CGFappearance(this.graph.scene);
 
     error = this.parseMaterialsShininess(material, materialElement.getElementsByTagName('shininess'));
     if (error !== undefined)
@@ -53,6 +52,8 @@ LSXParser.prototype.parseMaterials = function(rootElement) {
     error = this.parseMaterialsEmission(material, materialElement.getElementsByTagName('emission'));
     if (error !== undefined)
       return 'MATERIAL, ' + id + ', ' + error;
+
+    this.graph.materials[id] = material;
   }
 };
 
@@ -68,10 +69,12 @@ LSXParser.prototype.parseMaterialsShininess = function(material, shininessArray)
     return 'shininess element must have exactly 1 attribute: value.';
   }
 
-  material.shininess = this.reader.getFloat(shininessElement, 'value');
-  if (material.shininess == null || isNaN(material.shininess)) {
+  var shininess = this.reader.getFloat(shininessElement, 'value');
+  if (shininess == null || isNaN(shininess)) {
     return 'invalid value for value attribute of shininess, must be a number.';
   }
+
+  material.setShininess(shininess);
 };
 
 LSXParser.prototype.parseMaterialsSpecular = function(material, specularArray) {
@@ -85,10 +88,13 @@ LSXParser.prototype.parseMaterialsSpecular = function(material, specularArray) {
     return 'specular element must have exactly 4 attributes: r, g, b and a.';
   }
 
-  var error = this.getRGBA(specularElement, material.specular = {});
+  var specular = {};
+  var error = this.getRGBA(specularElement, specular);
   if (error != null) {
     return error;
   }
+
+  material.setSpecular(specular.r, specular.g, specular.b, specular.a);
 };
 
 LSXParser.prototype.parseMaterialsDiffuse = function(material, diffuseArray) {
@@ -102,11 +108,13 @@ LSXParser.prototype.parseMaterialsDiffuse = function(material, diffuseArray) {
     return 'difuse element must have exactly 4 attributes: r, g, b and a.';
   }
 
-  var error = this.getRGBA(diffuseElement, material.diffuse = {});
+  var diffuse = {};
+  var error = this.getRGBA(diffuseElement, diffuse);
   if (error != null) {
     return error;
   }
 
+  material.setDiffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
 };
 
 LSXParser.prototype.parseMaterialsAmbient = function(material, ambientArray) {
@@ -120,10 +128,13 @@ LSXParser.prototype.parseMaterialsAmbient = function(material, ambientArray) {
     return 'ambient element must have exactly 4 attributes: r, g, b and a.';
   }
 
-  var error = this.getRGBA(ambientElement, material.ambient = {});
+  var ambient = {};
+  var error = this.getRGBA(ambientElement, ambient);
   if (error != null) {
     return error;
   }
+
+  material.setAmbient(ambient.r, ambient.g, ambient.b, ambient.a);
 };
 
 LSXParser.prototype.parseMaterialsEmission = function(material, emissionArray) {
@@ -137,8 +148,11 @@ LSXParser.prototype.parseMaterialsEmission = function(material, emissionArray) {
     return 'emission element must have exactly 4 attributes: r, g, b and a.';
   }
 
-  var error = this.getRGBA(emissionElement, material.emission = {});
+  var emission = {};
+  var error = this.getRGBA(emissionElement, emission);
   if (error != null) {
     return error;
   }
+
+  material.setEmission(emission.r, emission.g, emission.b, emission.a);
 };
