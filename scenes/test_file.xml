@@ -56,7 +56,8 @@
     </MATERIAL>
   </MATERIALS>
   <LEAVES>
-    <LEAF id="wall_floor" type="rectangle" args="0 10 10 0" />
+    <LEAF id="walls" type="rectangle" args="0 5 10 0" />
+    <LEAF id="floor1" type="rectangle" args="0 10 10 0" />
     <LEAF id="square" type="rectangle" args="0 1 1 0" />
     <LEAF id="sphere1" type="sphere" args="1 25 25" />
   </LEAVES>
@@ -79,7 +80,7 @@
       <TRANSLATION x="0" y="0" z="10" />
       <ROTATION axis="x" angle="-90" />
       <DESCENDANTS>
-        <DESCENDANT id="wall_floor" />
+        <DESCENDANT id="floor1" />
       </DESCENDANTS>
     </NODE>
     <NODE id="left_wall">
@@ -88,21 +89,21 @@
       <TRANSLATION x="0" y="0" z="10" />
       <ROTATION axis="y" angle="90" />
       <DESCENDANTS>
-        <DESCENDANT id="wall_floor" />
+        <DESCENDANT id="walls" />
       </DESCENDANTS>
     </NODE>
     <NODE id="right_wall">
       <MATERIAL id="null" />
       <TEXTURE id="wall" />
       <DESCENDANTS>
-        <DESCENDANT id="wall_floor" />
+        <DESCENDANT id="walls" />
       </DESCENDANTS>
     </NODE>
     <NODE id="x_wall">
       <MATERIAL id="null" />
       <TEXTURE id="wall" />
       <DESCENDANTS>
-        <DESCENDANT id="wall_floor" />
+        <DESCENDANT id="walls" />
       </DESCENDANTS>
     </NODE>
     <NODE id="cube">
