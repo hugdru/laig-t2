@@ -50,20 +50,30 @@ SceneGraph.prototype.onXMLError = function(message) {
   this.isLoaded = false;
 };
 
-SceneGraph.prototype.display = function(node) {
+SceneGraph.prototype.display = function(node, inheritedMaterial) {
   if (node instanceof Rectangle || node instanceof Cylinder || node instanceof Sphere || node instanceof Triangle)
     node.display();
 
   else {
+
+    var material = inheritedMaterial;
+
+    if (node.material instanceof CGFappearance) {
+      material = node.material;
+      material.apply();
+    }
+
     this.scene.pushMatrix();
 
     this.applyNodeTransformations(node);
 
     for (var descendant in node.descendants) {
-      this.display(node.descendants[descendant]);
+      this.display(node.descendants[descendant], material);
     }
 
     this.scene.popMatrix();
+
+    inheritedMaterial.apply();
   }
 };
 

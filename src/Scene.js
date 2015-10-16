@@ -90,7 +90,9 @@ Scene.prototype.display = function() {
   // This is one possible way to do it
   if (this.graph.isLoaded) {
     this.lights[0].update();
-    this.graph.display(this.graph.nodes.root);
+
+    var root = this.graph.nodes.root;
+    this.graph.display(root, root.material);
   }
 
   this.shader.unbind();
