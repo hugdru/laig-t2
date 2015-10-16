@@ -41,7 +41,7 @@ Scene.prototype.initLights = function() {
 };
 
 Scene.prototype.initCameras = function() {
-  this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+  this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
 };
 
 Scene.prototype.setDefaultAppearance = function() {
@@ -92,28 +92,6 @@ Scene.prototype.display = function() {
     this.lights[0].update();
     this.graph.display(this.graph.nodes.root);
   }
-
-  //this.pushMatrix();
-    //this.scale(2, 2, 2);
-    //this.sphere.display();
-  //this.popMatrix();
-
-  //this.pushMatrix();
-    //this.translate(0, 0, 4);
-    //this.cone.display();
-    //this.translate(0, 0, 4);
-    //this.cylinder.display();
-  //this.popMatrix();
-
-  //this.pushMatrix();
-    //this.translate(4, 0, 0);
-    //this.base.display();
-    //this.translate(1, 0, 0);
-    //this.triangle.display();
-    //this.translate(1, 0, 0);
-    //this.scale(0.5, 0.5, 0.5);
-    //this.rectangle.display();
-  //this.popMatrix();
 
   this.shader.unbind();
 };
