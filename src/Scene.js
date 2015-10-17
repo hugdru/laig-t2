@@ -20,13 +20,6 @@ Scene.prototype.init = function(application) {
   this.gl.depthFunc(this.gl.LEQUAL);
 
   this.axis = new CGFaxis(this);
-
-  this.triangle = new Triangle(this, 0, 0, [0, 1, 3], [0, 0, 3], [3, 0, 3]);
-  this.rectangle = new Rectangle(this, 0, 0, [0, 2, 0], [2, 0, 0]);
-  this.base = new Base(this, 0, 0, 20);
-  this.cone = new Cylinder(this, 0, 0, 3, 2, 0, 20, 20);
-  this.cylinder = new Cylinder(this, 0, 0, 3, 2, 4, 20, 20);
-  this.sphere = new Sphere(this, 0, 0, 1, 20, 20);
 };
 
 Scene.prototype.initLights = function() {

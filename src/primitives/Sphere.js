@@ -2,8 +2,8 @@ function Sphere(scene, amplifS, amplifT, radius, tetaSections, phiSections) {
   CGFobject.call(this, scene);
 
   // Falta fazer as textures
-  if (tetaSections == null || tetaSections < 3 || phiSections == null || phiSections < 2) {
-    return 'A Sphere has to have at least 3 tetaSections and 2 phiSections.';
+  if (scene == null || tetaSections == null || tetaSections < 3 || phiSections == null || phiSections < 2 || radius == null || radius < 0) {
+    throw new Error('Sphere, has to have at least 3 tetaSections, 2 phiSections and a positive radius.');
   }
 
   this.amplifS = amplifS;
@@ -35,13 +35,13 @@ Sphere.prototype.initBuffers = function() {
   for (var phiIndex = 0; phiIndex <= this.phiSections; ++phiIndex) {
 
     var tetaAccumulator = 0;
-    var vertexY = (this.radius * Math.cos(phiAccumulator))/2;
+    var vertexY = this.radius * Math.cos(phiAccumulator);
     var sinPhiAccumulator = Math.sin(phiAccumulator);
 
     for (var tetaIndex = 0; tetaIndex <= this.tetaSections; ++tetaIndex) {
 
-      var vertexX = (this.radius * sinPhiAccumulator * Math.sin(tetaAccumulator))/2;
-      var vertexZ = (this.radius * sinPhiAccumulator * Math.cos(tetaAccumulator))/2;
+      var vertexX = this.radius * sinPhiAccumulator * Math.sin(tetaAccumulator);
+      var vertexZ = this.radius * sinPhiAccumulator * Math.cos(tetaAccumulator);
 
       this.vertices.push(vertexX, vertexY, vertexZ);
       this.normals.push(vertexX / this.radius, vertexY / this.radius, vertexZ / this.radius);
