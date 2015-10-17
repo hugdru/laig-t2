@@ -36,8 +36,7 @@ LSXParser.prototype.parseTextures = function(rootElement) {
       return 'TEXTURE, ' + id + ', already exists.';
     }
 
-    this.graph.textures[id] = {};
-    var texture = this.graph.textures[id];
+    var texture = {};
 
     error = this.parseTexturesFile(texture, textureElement.getElementsByTagName('file'));
     if (error !== undefined)
@@ -45,6 +44,9 @@ LSXParser.prototype.parseTextures = function(rootElement) {
     error = this.parseTexturesAmplif_factor(texture, textureElement.getElementsByTagName('amplif_factor'));
     if (error !== undefined)
       return 'TEXTURE, ' + id + ', ' + error;
+
+    this.graph.textures[id] = new CGFtexture(this.graph.scene, texture.path);
+    this.graph.textures[id].amplifFactor = texture.amplifFactor;
   }
 };
 
@@ -64,6 +66,8 @@ LSXParser.prototype.parseTexturesFile = function(texture, fileArray) {
   if (texture.path == null) {
     return 'invalid value for attribute path of file, must be a string.';
   }
+
+  texture.path = "../scenes/" + texture.path;
 };
 
 LSXParser.prototype.parseTexturesAmplif_factor = function(texture, Amplif_factorArray) {
