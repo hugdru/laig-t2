@@ -9,5 +9,7 @@
 
 ### Assigned to Hugo ###
 * Mapeamento das texturas em todas as primitivas
-* Melhorar a primitiva retângulo
+
+### Done ###
 * No parse criar logo as texturas através do objeto CGFTexture
+* Melhorar a primitiva retângulo
