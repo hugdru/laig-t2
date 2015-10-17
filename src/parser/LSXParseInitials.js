@@ -12,7 +12,7 @@ LSXParser.prototype.parseInitials = function(rootElement) {
   }
 
   if (initials.children.length !== 7)
-    return 'INITIALS, must have exactly 7 children: frustum, translate, 3 rotations, scale and reference.';
+    return 'INITIALS, must have exactly 7 children: frustum, translation, 3 rotations, scale and reference.';
 
   this.graph.initials = {};
 
@@ -22,7 +22,7 @@ LSXParser.prototype.parseInitials = function(rootElement) {
   if (error !== undefined)
     return 'INITIALS, ' + error;
 
-  error = this.parseInitialsTranslate(initials.getElementsByTagName('translate'));
+  error = this.parseInitialsTranslate(initials.getElementsByTagName('translation'));
   if (error !== undefined)
     return 'INITIALS, ' + error;
 
@@ -61,7 +61,7 @@ LSXParser.prototype.parseInitialsFrustum = function(frustumArray) {
 
 LSXParser.prototype.parseInitialsTranslate = function(translateArray) {
   if (translateArray === null || translateArray.length !== 1)
-    return 'there must be 1 and only 1 translate in INITIALS.';
+    return 'there must be 1 and only 1 translation in INITIALS.';
 
   var translate = translateArray[0];
 
@@ -109,7 +109,7 @@ LSXParser.prototype.parseInitialsRotation = function(rotationArray) {
 
 LSXParser.prototype.parseInitialsScale = function(scaleArray) {
   if (scaleArray === null || scaleArray.length !== 1)
-    return 'there must be 1 and only 1 translate in INITIALS.';
+    return 'there must be 1 and only 1 scale in INITIALS.';
 
   var scale = scaleArray[0];
 
@@ -124,7 +124,7 @@ LSXParser.prototype.parseInitialsScale = function(scaleArray) {
 
 LSXParser.prototype.parseInitialsReference = function(referenceArray) {
   if (referenceArray === null || referenceArray.length !== 1)
-    return 'there must be 1 and only 1 translate in INITIALS.';
+    return 'there must be 1 and only 1 reference in INITIALS.';
 
   var reference = referenceArray[0];
 
