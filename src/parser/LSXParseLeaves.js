@@ -59,7 +59,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
 
     switch (leafType) {
       case 'rectangle':
-        var arrayOfNumbers = this.getNumbers(stringArray, "f f i i");
+        var arrayOfNumbers = this.getNumbers(stringArray, "f f f f");
         if (arrayOfNumbers.constructor !== Array) {
           return 'LEAF, ' + id + ', ' + leafType + ': f f f f .';
         }
