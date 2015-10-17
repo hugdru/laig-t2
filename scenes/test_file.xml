@@ -80,7 +80,7 @@
     <LEAF id="walls" type="rectangle" args="0 5 10 0" />
     <LEAF id="floor1" type="rectangle" args="0 10 10 0" />
     <LEAF id="square" type="rectangle" args="0 1 1 0" />
-    <LEAF id="sphere1" type="sphere" args="1 25 25" />
+    <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
   </LEAVES>
   <NODES>
     <ROOT id="scene" />
