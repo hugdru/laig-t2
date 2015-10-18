@@ -100,14 +100,14 @@ Scene.prototype.display = function() {
   if (this.graph.isLoaded) {
     this.lights[0].update();
 
-    //var root = this.graph.nodes.root;
-    //this.graph.display(root, root.material);
+    var root = this.graph.nodes.root;
+    this.graph.display(root, root.material);
   }
 
-  this.triangleAppearance.apply();
+  //this.triangleAppearance.apply();
   //this.pushMatrix();
-    this.scale(2, 2, 2);
-    this.sphere.display();
+    //this.scale(2, 2, 2);
+    //this.sphere.display();
   //this.popMatrix();
 
   //this.pushMatrix();
