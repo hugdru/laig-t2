@@ -134,11 +134,11 @@ Scene.prototype.display = function() {
 
     var initials = this.graph.initials;
     var degreeToRad = Math.PI / 180;
-    this.scale(initials.scale.sx, initials.scale.sy, initials.scale.sz);
+    this.translate(initials.translate.x, initials.translate.y, initials.translate.z);
     this.rotate(degreeToRad * initials.rotation.x, 1, 0, 0);
     this.rotate(degreeToRad * initials.rotation.y, 0, 1, 0);
     this.rotate(degreeToRad * initials.rotation.z, 0, 0, 1);
-    this.translate(initials.translate.x, initials.translate.y, initials.translate.z);
+    this.scale(initials.scale.sx, initials.scale.sy, initials.scale.sz);
 
     if (this.lightsCreated) {
       this.updateLights();
