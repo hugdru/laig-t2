@@ -149,8 +149,6 @@ Scene.prototype.display = function() {
       this.axis.display();
     }
 
-    this.setDefaultAppearance();
-
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material);
   }
