@@ -104,15 +104,6 @@
         <DESCENDANT id="floor1" />
       </DESCENDANTS>
     </NODE>
-    <NODE id="left_wall">
-      <MATERIAL id="null" />
-      <TEXTURE id="wall" />
-      <TRANSLATION x="0" y="0" z="10" />
-      <ROTATION axis="y" angle="90" />
-      <DESCENDANTS>
-        <DESCENDANT id="walls" />
-      </DESCENDANTS>
-    </NODE>
     <NODE id="right_wall">
       <MATERIAL id="null" />
       <TEXTURE id="wall" />
@@ -120,9 +111,11 @@
         <DESCENDANT id="walls" />
       </DESCENDANTS>
     </NODE>
-    <NODE id="x_wall">
+    <NODE id="left_wall">
       <MATERIAL id="null" />
       <TEXTURE id="wall" />
+      <TRANSLATION x="0" y="0" z="10" />
+      <ROTATION axis="y" angle="90" />
       <DESCENDANTS>
         <DESCENDANT id="walls" />
       </DESCENDANTS>
