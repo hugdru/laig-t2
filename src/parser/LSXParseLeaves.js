@@ -18,7 +18,11 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
   var error;
 
   var leafElements = leavesElement.children;
-  for (var leafElementIndex = 0; leafElementIndex < leafElements.length; ++leafElementIndex) {
+  var leafElementsLength = leafElements.length;
+  if (leafElementsLength < 1) {
+    return 'LEAVES, there must be at least one LEAF.';
+  }
+  for (var leafElementIndex = 0; leafElementIndex < leafElementsLength; ++leafElementIndex) {
     var leafElement = leafElements[leafElementIndex];
     if (leafElement.nodeName !== 'LEAF') {
       return 'LEAVES, ' + leafElement.nodeName + ' element is not valid.';
@@ -57,6 +61,8 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
 
     var scene = this.graph.scene;
 
+    var v1, v2;
+
     switch (leafType) {
       case 'rectangle':
         var arrayOfNumbers = this.getNumbers(stringArray, "f f f f");
@@ -64,8 +70,8 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
           return 'LEAF, ' + id + ', ' + leafType + ': f f f f .';
         }
 
-        var v1 = [arrayOfNumbers[0], arrayOfNumbers[1]];
-        var v2 = [arrayOfNumbers[2], arrayOfNumbers[3]];
+        v1 = [arrayOfNumbers[0], arrayOfNumbers[1]];
+        v2 = [arrayOfNumbers[2], arrayOfNumbers[3]];
 
         nodes[id] = new Rectangle(scene, 0, 0, v1, v2);
         break;
@@ -101,9 +107,9 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
           return 'LEAF, ' + id + ', ' + leafType + ': f f f f f f f f f .';
         }
 
-        var v1 = [arrayOfNumbers[0], arrayOfNumbers[1], arrayOfNumbers[2]]
-        var v2 = [arrayOfNumbers[3], arrayOfNumbers[4], arrayOfNumbers[5]]
-        var v3 = [arrayOfNumbers[6], arrayOfNumbers[7], arrayOfNumbers[8]]
+        v1 = [arrayOfNumbers[0], arrayOfNumbers[1], arrayOfNumbers[2]];
+        v2 = [arrayOfNumbers[3], arrayOfNumbers[4], arrayOfNumbers[5]];
+        v3 = [arrayOfNumbers[6], arrayOfNumbers[7], arrayOfNumbers[8]];
 
         nodes[id] = new Triangle(scene, 0, 0, v1, v2, v3);
         break;
