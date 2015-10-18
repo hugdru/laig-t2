@@ -52,16 +52,16 @@ LateralFaces.prototype.initBuffers = function() {
   for (var sliceIndex = 0; sliceIndex <= this.slices; ++sliceIndex) {
 
     var radius = this.bottomRadius;
-    var stackAccumulator = -0.5 * this.height;
+    var stackAccumulator = 0;
     var tCoord = 0;
 
     for (var stackIndex = 0; stackIndex <= this.stacks; ++stackIndex) {
 
-      var vertexX = radius * Math.sin(teta);
-      var vertexZ = radius * Math.cos(teta);
+      var vertexX = radius * Math.cos(teta);
+      var vertexY = radius * Math.sin(teta);
 
       /* Vertex */
-      this.vertices.push(vertexX, stackAccumulator, vertexZ);
+      this.vertices.push(vertexX, vertexY, stackAccumulator);
 
       /* Texture */
       if (this.applyTexture) {
@@ -69,7 +69,7 @@ LateralFaces.prototype.initBuffers = function() {
       }
 
       /* Normals */
-      this.normals.push(vertexX / radius, 0, vertexZ / radius);
+      this.normals.push(vertexX / radius, vertexY / radius, 0);
 
       /* Indices */
       if (stackIndex != this.stacks && sliceIndex != this.slices) {

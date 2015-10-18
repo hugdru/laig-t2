@@ -3,7 +3,7 @@ function Cylinder(scene, amplifS, amplifT, height, bottomRadius, topRadius, slic
   this.lateralFaces = new LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, slices, stacks);
   this.base = new Base(scene, amplifS, amplifT, slices);
 
-  this.halfHeight = height / 2;
+  this.height = height;
   this.bottomRadius = bottomRadius;
   this.topRadius = topRadius;
 }
@@ -15,15 +15,14 @@ Cylinder.prototype.display = function() {
   this.lateralFaces.display();
 
   this.scene.pushMatrix();
-    this.scene.translate(0, -this.halfHeight, 0);
-    this.scene.rotate(Math.PI, 0, 0, 1);
-    this.scene.scale(this.bottomRadius, 0, this.bottomRadius);
+    this.scene.translate(0, 0, this.height);
+    this.scene.scale(this.topRadius, this.topRadius, 0);
     this.base.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
-    this.scene.translate(0, this.halfHeight, 0);
-    this.scene.scale(this.topRadius, 0, this.topRadius);
+    this.scene.rotate(Math.PI, -1, 0, 0);
+    this.scene.scale(this.bottomRadius, this.bottomRadius, 0);
     this.base.display();
   this.scene.popMatrix();
 }

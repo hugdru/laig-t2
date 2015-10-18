@@ -18,7 +18,6 @@ Scene.prototype.init = function(application) {
   this.gl.enable(this.gl.DEPTH_TEST);
   this.gl.enable(this.gl.CULL_FACE);
   this.gl.depthFunc(this.gl.LEQUAL);
-
 };
 
 Scene.prototype.initLights = function() {
@@ -156,4 +155,3 @@ Scene.prototype.display = function() {
 
   this.shader.unbind();
 };
-

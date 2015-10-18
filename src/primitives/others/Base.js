@@ -25,16 +25,16 @@ Base.prototype.initBuffers = function() {
     var nextSlice;
     this.vertices = [0, 0, 0];
     this.indices = [];
-    this.normals = [0, 1, 0];
+    this.normals = [0, 0, 1];
 
     var teta = 0;
     for (var sliceIndex = 0; sliceIndex < this.slices; ++sliceIndex) {
 
         // Vertices
         this.vertices.push(
+            Math.cos(teta),
             Math.sin(teta),
-            0,
-            Math.cos(teta)
+            0
         );
 
         // Indices
@@ -44,10 +44,12 @@ Base.prototype.initBuffers = function() {
         else this.indices.push(sliceIndex + 2);
 
         // Normals
-        this.normals.push(0, 1, 0);
+        this.normals.push(0, 0, 1);
 
         teta += this.tetaStep;
     }
+
+    console.log(this.indices);
 
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
