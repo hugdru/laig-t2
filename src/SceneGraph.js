@@ -73,7 +73,12 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
 
     this.scene.popMatrix();
 
-    inheritedMaterial.apply();
+    if (inheritedMaterial instanceof CGFappearance) {
+      inheritedMaterial.apply();
+    }
+    else {
+      this.scene.setDefaultAppearance();
+    }
   }
 };
 
