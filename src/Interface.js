@@ -10,6 +10,13 @@ Interface.prototype.init = function(application) {
   CGFinterface.prototype.init.call(this, application);
 
   this.gui = new dat.GUI();
+};
+
+Interface.prototype.processKeyboard = function(event) {
+  CGFinterface.prototype.processKeyboard.call(this, event);
+};
+
+Interface.prototype.initCreateLights = function() {
 
   // Lights check boxes
   var lightsGroup = this.gui.addFolder('Lights');
@@ -17,12 +24,8 @@ Interface.prototype.init = function(application) {
 
   for (var lightIndex = 0; lightIndex < this.scene.lights.filledLength; ++lightIndex) {
     var light = this.scene.lights[lightIndex];
-    lightsGroup.add(light, 'turnIt').name(light.name).onChange(light.toggle());
+    lightsGroup.add(light, 'enabled').name(light.name).onChange(this.scene.updateLights.call(this.scene));
   }
 
   return true;
-};
-
-Interface.prototype.processKeyboard = function(event) {
-  CGFinterface.prototype.processKeyboard.call(this, event);
-};
+}

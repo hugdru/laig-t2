@@ -1,7 +1,9 @@
 degreeToRad = Math.PI / 180;
 
-function Scene() {
+function Scene(cgfInterface) {
   CGFscene.call(this);
+
+  this.cgfInterface = cgfInterface;
 }
 
 Scene.prototype = Object.create(CGFscene.prototype);
@@ -50,16 +52,10 @@ Scene.prototype.initLights = function() {
     ++index;
   }
 
-  CGFlight.prototype.toggle = function() {
-    if (this.turnIt) {
-      this.enable();
-    } else {
-      this.disable();
-    }
-  };
-
   this.lights.filledLength = index;
   this.lightsCreated = true;
+
+  this.cgfInterface.initCreateLights();
 
   this.shader.unbind();
 };

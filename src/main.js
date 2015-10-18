@@ -57,8 +57,8 @@ serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js', 'Interface.js',
   main = function() {
     // Standard application, scene and interface setup
     var cgfApplication = new CGFapplication(document.body);
-    var scene = new Scene();
     var cgfInterface = new Interface();
+    var scene = new Scene(cgfInterface);
 
     cgfApplication.init();
 
