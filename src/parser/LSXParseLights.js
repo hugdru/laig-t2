@@ -16,7 +16,11 @@ LSXParser.prototype.parseLights = function(rootElement) {
   var error;
 
   var lightsElements = lightsElement.children;
-  for (var lightElementIndex = 0; lightElementIndex < lightsElements.length; ++lightElementIndex) {
+  var lightsElementsLength = lightsElements.length;
+  if (lightsElementsLength < 1 || lightsElementsLength > 8) {
+    return 'LIGHTS, there must be at least 1 LIGHT and at most 8 LIGHT';
+  }
+  for (var lightElementIndex = 0; lightElementIndex < lightsElementsLength; ++lightElementIndex) {
     var lightElement = lightsElements[lightElementIndex];
     if (lightElement.nodeName !== 'LIGHT') {
       return 'LIGHTS, ' + lightElement.nodeName + ' element is not valid.';
