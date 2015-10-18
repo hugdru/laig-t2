@@ -146,7 +146,9 @@ Scene.prototype.display = function() {
     }
 
     // Draw axis
-    this.axis.display();
+    if (this.graph.initials.reference != 0) {
+      this.axis.display();
+    }
 
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material);
