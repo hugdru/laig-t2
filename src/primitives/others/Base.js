@@ -1,11 +1,12 @@
 function Base(scene, amplifS, amplifT, slices) {
     CGFobject.call(this, scene);
 
-    if (slices == null || slices < 3) {
-      return 'Base must have at least 3 slices';
+    if (scene == null ||
+        slices == null || slices < 3) {
+          throw new Error('Base, must have valid arguments');
     }
 
-    // FALTA FAZER TEXTURAS
+    this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
 
     this.amplifS = amplifS;
     this.amplifT = amplifT;

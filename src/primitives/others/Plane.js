@@ -3,11 +3,12 @@ function Plane(scene, amplifS, amplifT, divisions, vertexTopLeft, vertexBottomRi
 
   if (scene == null ||
     vertexTopLeft.constructor !== Array || vertexTopLeft.length !== 2 ||
-    vertexBottomRight.constructor !== Array || vertexBottomRight.length !== 2 ||
-    amplifS == null || amplifT == null
+    vertexBottomRight.constructor !== Array || vertexBottomRight.length !== 2
   ) {
     throw new Error('Plane, must have valid arguments.');
   }
+
+  this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
 
   var width = vertexBottomRight[0] - vertexTopLeft[0];
   var height = vertexTopLeft[1] - vertexBottomRight[1];
@@ -26,8 +27,10 @@ function Plane(scene, amplifS, amplifT, divisions, vertexTopLeft, vertexBottomRi
   this.heightStep = height / this.divisions;
   this.widthStep = width / this.divisions;
 
-  this.heightTextureStep = this.heightStep / this.amplifS;
-  this.widthTextureStep = this.widthStep / this.amplifT;
+  if (this.applyTexture) {
+    this.heightTextureStep = this.heightStep / this.amplifS;
+    this.widthTextureStep = this.widthStep / this.amplifT;
+  }
 
   this.period = this.divisions + 1;
 
@@ -39,54 +42,56 @@ Plane.prototype.constructor = Plane;
 
 Plane.prototype.initBuffers = function() {
 
-  this.vertices = [];
-  this.normals = [];
-  this.indices = [];
-  this.texCoords = [];
+    this.vertices = [];
+    this.normals = [];
+    this.indices = [];
+    if (this.applyTexture) this.texCoords = [];
 
-  var sCoord = 0;
-  var workVertex = {
-    x: this.startVertex.x,
-    y: this.startVertex.y
-  };
-  var lengthIndexTimesPeriod = 0;
-  var lengthIndexTimesPeriodNext = this.period;
-  for (var lengthIndex = 0; lengthIndex <= this.divisions; ++lengthIndex) {
+    var sCoord = 0;
+    var workVertex = {
+      x: this.startVertex.x,
+      y: this.startVertex.y
+    };
+    var lengthIndexTimesPeriod = 0;
+    var lengthIndexTimesPeriodNext = this.period;
+    for (var lengthIndex = 0; lengthIndex <= this.divisions; ++lengthIndex) {
 
-    workVertex.y = this.startVertex.y;
-    var tCoord = 0;
-    for (var heightIndex = 0; heightIndex <= this.divisions; ++heightIndex) {
+      workVertex.y = this.startVertex.y;
+      var tCoord = 0;
+      for (var heightIndex = 0; heightIndex <= this.divisions; ++heightIndex) {
 
-      this.vertices.push(workVertex.x, workVertex.y, 0);
-      this.normals.push(0, 0, 1);
-      this.texCoords.push(sCoord, tCoord);
+        this.vertices.push(workVertex.x, workVertex.y, 0);
+        this.normals.push(0, 0, 1);
 
-      if (lengthIndex !== this.divisions && heightIndex !== this.divisions) {
-        this.indices.push(
-          heightIndex + lengthIndexTimesPeriod,
-          heightIndex + lengthIndexTimesPeriodNext,
-          heightIndex + lengthIndexTimesPeriod + 1,
-          heightIndex + lengthIndexTimesPeriod + 1,
-          heightIndex + lengthIndexTimesPeriodNext,
-          heightIndex + lengthIndexTimesPeriodNext + 1
-        );
+        if (this.applyTexture) {
+          this.texCoords.push(sCoord, tCoord);
+        }
+
+          if (lengthIndex !== this.divisions && heightIndex !== this.divisions) {
+            this.indices.push(
+              heightIndex + lengthIndexTimesPeriod,
+              heightIndex + lengthIndexTimesPeriodNext,
+              heightIndex + lengthIndexTimesPeriod + 1,
+              heightIndex + lengthIndexTimesPeriod + 1,
+              heightIndex + lengthIndexTimesPeriodNext,
+              heightIndex + lengthIndexTimesPeriodNext + 1
+            );
+          }
+
+          workVertex.y += this.heightStep; tCoord += this.heightTextureStep;
+        }
+        workVertex.x += this.widthStep;
+        sCoord += this.widthTextureStep;
+        lengthIndexTimesPeriod = lengthIndexTimesPeriodNext;
+        lengthIndexTimesPeriodNext += this.period;
       }
 
-      workVertex.y += this.heightStep;
-      tCoord += this.heightTextureStep;
-    }
-    workVertex.x += this.widthStep;
-    sCoord += this.widthTextureStep;
-    lengthIndexTimesPeriod = lengthIndexTimesPeriodNext;
-    lengthIndexTimesPeriodNext += this.period;
-  }
 
+      this.primitiveType = this.scene.gl.TRIANGLES;
 
-  this.primitiveType = this.scene.gl.TRIANGLES;
+      this.initGLBuffers();
+    };
 
-  this.initGLBuffers();
-};
-
-Plane.prototype.display = function() {
-  this.drawElements(this.primitiveType);
-};
+    Plane.prototype.display = function() {
+      this.drawElements(this.primitiveType);
+    };
