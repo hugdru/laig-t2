@@ -1,31 +1,37 @@
 function LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, slices, stacks) {
   CGFobject.call(this, scene);
 
-  // Falta fazer as textures
-  if (slices == null || slices < 3 || stacks == null || stacks < 1) {
-    return 'There must be at least 3 slices and 1 stack.';
+  if (scene == null ||
+    height == null || height <= 0 ||
+    bottomRadius == null || bottomRadius < 0 ||
+    topRadius == null || topRadius < 0 ||
+    topRadius === 0 && bottomRadius === 0 ||
+    slices == null || slices < 3 ||
+    stacks == null || stacks < 1)
+    {
+    throw new Error('LateralFaces, must have valid arguments.');
   }
 
-  if (height == null || height <= 0) {
-    return 'The height must be greater than 0';
-  }
-
-  if (bottomRadius == null || topRadius == null || bottomRadius < 0 || topRadius < 0 || (topRadius === 0 && bottomRadius === 0)) {
-    return 'BottomRadius and topRadius cannot be simultaneously zero, and they must be greater or equal to 0';
-  }
+  this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
 
   this.slices = slices;
   this.stacks = stacks;
   this.height = height;
   this.bottomRadius = bottomRadius;
   this.topRadius = topRadius;
-
-  this.stackStep = this.height / this.stacks;
-
-  this.radiusStep = (this.topRadius - this.bottomRadius) / this.height * this.stackStep;
+  this.amplifS = amplifS;
+  this.amplifT = amplifT;
 
   this.tetaStep = (2 * Math.PI) / this.slices;
+  this.stackStep = this.height / this.stacks;
+  this.radiusStep = (this.topRadius - this.bottomRadius) / this.height * this.stackStep;
+
   this.stackPeriod = this.stacks + 1;
+
+  if (this.applyTexture) {
+    this.tetaTextureStep = this.tetaStep / this.amplifS;
+    this.stackTextureStep = this.stackStep / this.amplifT;
+  }
 
   this.initBuffers();
 }
@@ -37,7 +43,9 @@ LateralFaces.prototype.initBuffers = function() {
   this.vertices = [];
   this.indices = [];
   this.normals = [];
+  if (this.applyTexture) this.texCoords = [];
 
+  var sCoord = 0;
   var teta = 0;
   var stackPeriodTimesSliceIndex = 0;
   var stackPeriodTimesSliceIndexNext = this.stackPeriod;
@@ -45,6 +53,7 @@ LateralFaces.prototype.initBuffers = function() {
 
     var radius = this.bottomRadius;
     var stackAccumulator = -0.5 * this.height;
+    var tCoord = 0;
 
     for (var stackIndex = 0; stackIndex <= this.stacks; ++stackIndex) {
 
@@ -53,6 +62,11 @@ LateralFaces.prototype.initBuffers = function() {
 
       /* Vertex */
       this.vertices.push(vertexX, stackAccumulator, vertexZ);
+
+      /* Texture */
+      if (this.applyTexture) {
+        this.texCoords.push(sCoord, tCoord);
+      }
 
       /* Normals */
       this.normals.push(vertexX / radius, 0, vertexZ / radius);
@@ -69,9 +83,11 @@ LateralFaces.prototype.initBuffers = function() {
           startVertex + stackPeriodTimesSliceIndexNext
         );
       }
+      tCoord += this.stackTextureStep;
       stackAccumulator += this.stackStep;
       radius += this.radiusStep;
     }
+    sCoord += this.tetaTextureStep;
     teta += this.tetaStep;
     stackPeriodTimesSliceIndex = stackPeriodTimesSliceIndexNext;
     stackPeriodTimesSliceIndexNext += this.stackPeriod;
