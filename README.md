@@ -9,7 +9,6 @@
 * Mapeamento das texturas em todas as primitivas
 * Interface das luzes on/off
 * Luzes
-* Corrigir o cilindro
 
 
 ### Done ###
@@ -18,3 +17,4 @@
 * Verificar se todos os campos têm números válidos no parse
 * Definir os initials
 * Variável ambiente da iluminação
+* Corrigir o cilindro
