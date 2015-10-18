@@ -17,9 +17,6 @@ Scene.prototype.init = function(application) {
   this.gl.enable(this.gl.CULL_FACE);
   this.gl.depthFunc(this.gl.LEQUAL);
 
-  this.axis = new CGFaxis(this);
-  this.enableTextures(true);
-
 };
 
 Scene.prototype.initLights = function() {
@@ -66,14 +63,14 @@ Scene.prototype.initLights = function() {
   this.shader.unbind();
 };
 
+Scene.prototype.initCameras = function() {
+  this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
+};
+
 Scene.prototype.updateLights = function() {
   for (i = 0; i < this.lights.filledLength; i++) {
     this.lights[i].update();
   }
-};
-
-Scene.prototype.initCameras = function() {
-  this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
 };
 
 Scene.prototype.setDefaultAppearance = function() {
@@ -91,9 +88,24 @@ Scene.prototype.onGraphLoaded = function() {
   console.log(this);
   /***************/
 
-  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination.background.b, this.graph.illumination.background.a);
+  /** INITIALS **/
+  // Frustum
+  this.camera.near = this.graph.initials.frustum.near;
+  this.camera.far = this.graph.initials.frustum.far;
+  // Reference
+  this.axis = new CGFaxis(this, this.graph.initials.reference);
 
+  /** ILLUMINATION **/
+  // background
+  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination.background.b, this.graph.illumination.background.a);
+  // ambient
+  this.setGlobalAmbientLight(this.graph.illumination.ambient.r, this.graph.illumination.ambient.g, this.graph.illumination.ambient.b, this.graph.illumination.ambient.a);
+
+  /** LIGHTS **/
   this.initLights();
+
+  /** TEXTURES **/
+  this.enableTextures(true);
 };
 
 Scene.prototype.display = function() {
@@ -111,9 +123,6 @@ Scene.prototype.display = function() {
   // Apply transformations corresponding to the camera position relative to the origin
   this.applyViewMatrix();
 
-  // Draw axis
-  this.axis.display();
-
   this.setDefaultAppearance();
 
   // ---- END Background, camera and axis setup
@@ -123,9 +132,20 @@ Scene.prototype.display = function() {
   // This is one possible way to do it
   if (this.graph.isLoaded) {
 
+    var initials = this.graph.initials;
+    var degreeToRad = Math.PI / 180;
+    this.scale(initials.scale.sx, initials.scale.sy, initials.scale.sz);
+    this.rotate(degreeToRad * initials.rotation.x, 1, 0, 0);
+    this.rotate(degreeToRad * initials.rotation.y, 0, 1, 0);
+    this.rotate(degreeToRad * initials.rotation.z, 0, 0, 1);
+    this.translate(initials.translate.x, initials.translate.y, initials.translate.z);
+
     if (this.lightsCreated) {
       this.updateLights();
     }
+
+    // Draw axis
+    this.axis.display();
 
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material);
@@ -133,3 +153,4 @@ Scene.prototype.display = function() {
 
   this.shader.unbind();
 };
+
