@@ -7,9 +7,6 @@
 
 ### Assigned to Hugo ###
 * Mapeamento das texturas em todas as primitivas
-* Interface das luzes on/off
-* Luzes
-
 
 ### Done ###
 * No parse criar logo as texturas através do objeto CGFTexture
@@ -18,3 +15,5 @@
 * Definir os initials
 * Variável ambiente da iluminação
 * Corrigir o cilindro
+* Interface das luzes on/off
+* Luzes
