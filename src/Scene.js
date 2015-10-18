@@ -20,20 +20,6 @@ Scene.prototype.init = function(application) {
   this.axis = new CGFaxis(this);
   this.enableTextures(true);
 
-  this.triangle = new Triangle(this, 0, 0, [0, 1, 3], [0, 0, 3], [3, 0, 3]);
-  this.rectangle = new Rectangle(this, 1, 1, [0, 2], [2, 0]);
-  this.base = new Base(this, 0, 0, 20);
-  this.cone = new Cylinder(this, 1, 1, 3, 2, 0, 20, 20);
-  this.cylinder = new Cylinder(this, 1, 1, 1, 1, 1, 20, 20);
-  this.sphere = new Sphere(this, 1, 1, 1, 20, 20);
-
-  this.triangleAppearance = new CGFappearance(this);
-  this.triangleAppearance.setAmbient(0.5, 0.5, 0.5, 1);
-  this.triangleAppearance.setDiffuse(0.3, 0.3, 0.3, 1);
-  this.triangleAppearance.setSpecular(0.15, 0.15, 0.15, 1);
-  this.triangleAppearance.setShininess(2.5);
-  this.triangleAppearance.loadTexture('../scenes/textures/floor.png');
-  this.triangleAppearance.setTextureWrap('REPEAT', 'REPEAT');
 };
 
 Scene.prototype.initLights = function() {
@@ -144,28 +130,6 @@ Scene.prototype.display = function() {
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material);
   }
-
-  //this.triangleAppearance.apply();
-  //this.pushMatrix();
-  //this.scale(2, 2, 2);
-  //this.sphere.display();
-  //this.popMatrix();
-
-  //this.pushMatrix();
-  //this.translate(0, 0, 4);
-  //this.cone.display();
-  //this.translate(0, 0, 4);
-  //this.cylinder.display();
-  //this.popMatrix();
-
-  //this.pushMatrix();
-  //this.translate(4, 0, 0);
-  //this.base.display();
-  //this.triangle.display();
-  //this.translate(1, 0, 0);
-  //this.scale(2, 2, 2);
-  //this.rectangle.display();
-  //this.popMatrix();
 
   this.shader.unbind();
 };
