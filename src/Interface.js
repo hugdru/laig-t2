@@ -24,7 +24,7 @@ Interface.prototype.initCreateLights = function() {
 
   for (var lightIndex = 0; lightIndex < this.scene.lights.filledLength; ++lightIndex) {
     var light = this.scene.lights[lightIndex];
-    lightsGroup.add(light, 'enabled').name(light.name).onChange(this.scene.updateLights.call(this.scene));
+    lightsGroup.add(light, 'enabled').name(light.name);
   }
 
   return true;
