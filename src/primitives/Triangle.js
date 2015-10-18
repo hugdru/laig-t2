@@ -1,6 +1,8 @@
 function Triangle(scene, amplifS, amplifT, v1, v2, v3) {
   CGFobject.call(this, scene);
 
+  // Textures are wrong
+
   this.amplifS = amplifS;
   this.amplifT = amplifT;
   this.v1 = v1;
