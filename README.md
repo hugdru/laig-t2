@@ -1,9 +1,7 @@
 # To do #
 ### Unassigned ###
 * Documentar o código
-* Variáveis default
 * Aplicação texturas no grafo
-
 
 ### Assigned to Hugo ###
 * Mapeamento das texturas em todas as primitivas
@@ -17,3 +15,4 @@
 * Corrigir o cilindro
 * Interface das luzes on/off
 * Luzes
+* Variáveis default
