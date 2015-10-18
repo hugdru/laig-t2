@@ -1,3 +1,5 @@
+degreeToRad = Math.PI / 180;
+
 function Scene() {
   CGFscene.call(this);
 }
@@ -133,7 +135,6 @@ Scene.prototype.display = function() {
   if (this.graph.isLoaded) {
 
     var initials = this.graph.initials;
-    var degreeToRad = Math.PI / 180;
     this.translate(initials.translate.x, initials.translate.y, initials.translate.z);
     this.rotate(degreeToRad * initials.rotation.x, 1, 0, 0);
     this.rotate(degreeToRad * initials.rotation.y, 0, 1, 0);
