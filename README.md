@@ -2,8 +2,6 @@
 ### Unassigned ###
 * Documentar o código
 * Variáveis default
-* Definir os initials
-* Variável ambiente da iluminação
 * Aplicação texturas no grafo
 
 
@@ -11,6 +9,8 @@
 * Mapeamento das texturas em todas as primitivas
 * Interface das luzes on/off
 * Luzes
+* Definir os initials
+* Variável ambiente da iluminação
 
 ### Done ###
 * No parse criar logo as texturas através do objeto CGFTexture
