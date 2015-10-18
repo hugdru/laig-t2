@@ -10,8 +10,6 @@ Scene.prototype.init = function(application) {
 
   this.initCameras();
 
-  this.initLights();
-
   this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   this.gl.clearDepth(100.0);
@@ -42,11 +40,50 @@ Scene.prototype.initLights = function() {
 
   this.shader.bind();
 
-  this.lights[0].setPosition(2, 3, 3, 1);
-  this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-  this.lights[0].update();
+  var index = 0;
+  for (var lightName in this.graph.lights) {
+    var light = this.graph.lights[lightName];
+
+    this.lights[index].name = lightName;
+    this.lights[index].turnIt = light.enabled;
+
+    this.lights[index].setPosition(light.position.x, light.position.y, light.position.z, light.position.w);
+    this.lights[index].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
+    this.lights[index].setDiffuse(light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a);
+    this.lights[index].setSpecular(light.specular.r, light.specular.g, light.specular.b, light.specular.a);
+
+    this.lights[index].name = lightName;
+
+    if (this.lights[index].turnIt) {
+      this.lights[index].enable();
+      this.lights[index].setVisible(true);
+    }
+
+    //this.lights[index].setConstantAttenuation(1);
+    //this.lights[index].setLinearAttenuation(1);
+    //this.lights[index].setQuadraticAttenuation(0);
+
+    ++index;
+  }
+
+  CGFlight.prototype.toggle = function() {
+    if (this.turnIt) {
+      this.enable();
+    } else {
+      this.disable();
+    }
+  };
+
+  this.lights.filledLength = index;
+  this.lightsCreated = true;
 
   this.shader.unbind();
+};
+
+Scene.prototype.updateLights = function() {
+  for (i = 0; i < this.lights.filledLength; i++) {
+    this.lights[i].update();
+  }
 };
 
 Scene.prototype.initCameras = function() {
@@ -63,13 +100,14 @@ Scene.prototype.setDefaultAppearance = function() {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 Scene.prototype.onGraphLoaded = function() {
-  //DEBUG
+  /**** DEBUG ****/
   console.log(this.graph);
+  console.log(this);
+  /***************/
 
-  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination
-    .background.b, this.graph.illumination.background.a);
-  this.lights[0].setVisible(true);
-  this.lights[0].enable();
+  this.gl.clearColor(this.graph.illumination.background.r, this.graph.illumination.background.g, this.graph.illumination.background.b, this.graph.illumination.background.a);
+
+  this.initLights();
 };
 
 Scene.prototype.display = function() {
@@ -98,7 +136,10 @@ Scene.prototype.display = function() {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
   if (this.graph.isLoaded) {
-    this.lights[0].update();
+
+    if (this.lightsCreated) {
+      this.updateLights();
+    }
 
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material);
@@ -106,24 +147,24 @@ Scene.prototype.display = function() {
 
   //this.triangleAppearance.apply();
   //this.pushMatrix();
-    //this.scale(2, 2, 2);
-    //this.sphere.display();
+  //this.scale(2, 2, 2);
+  //this.sphere.display();
   //this.popMatrix();
 
   //this.pushMatrix();
-    //this.translate(0, 0, 4);
-    //this.cone.display();
-    //this.translate(0, 0, 4);
-    //this.cylinder.display();
+  //this.translate(0, 0, 4);
+  //this.cone.display();
+  //this.translate(0, 0, 4);
+  //this.cylinder.display();
   //this.popMatrix();
 
   //this.pushMatrix();
-    //this.translate(4, 0, 0);
-    //this.base.display();
-    //this.triangle.display();
-    //this.translate(1, 0, 0);
-    //this.scale(2, 2, 2);
-    //this.rectangle.display();
+  //this.translate(4, 0, 0);
+  //this.base.display();
+  //this.triangle.display();
+  //this.translate(1, 0, 0);
+  //this.scale(2, 2, 2);
+  //this.rectangle.display();
   //this.popMatrix();
 
   this.shader.unbind();

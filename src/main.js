@@ -42,7 +42,7 @@ function getUrlVars() {
   return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js',
+serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js', 'Interface.js',
               'parser/LSXParser.js', 'parser/LSXParserUtils.js',
               'parser/LSXParseInitials.js', 'parser/LSXParseIllumination.js',
               'parser/LSXParseLights.js', 'parser/LSXParseTextures.js',
@@ -58,7 +58,7 @@ serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js',
     // Standard application, scene and interface setup
     var cgfApplication = new CGFapplication(document.body);
     var scene = new Scene();
-    var cgfInterface = new CGFinterface();
+    var cgfInterface = new Interface();
 
     cgfApplication.init();
 
