@@ -8,9 +8,8 @@ function Plane(scene, divisions, vertexTopLeft, vertexBottomRight) {
     throw new Error('Plane, must have valid arguments.');
   }
 
-
-  var width = vertexBottomRight[0] - vertexTopLeft[0];
-  var height = vertexTopLeft[1] - vertexBottomRight[1];
+  this.width = vertexBottomRight[0] - vertexTopLeft[0];
+  this.height = vertexTopLeft[1] - vertexBottomRight[1];
 
   if (this.width <= 0 || this.height <= 0) throw new Error('Plane, first is topLeft and second is BottomRight.');
 
@@ -21,8 +20,8 @@ function Plane(scene, divisions, vertexTopLeft, vertexBottomRight) {
 
   this.divisions = divisions || 1;
 
-  this.heightStep = height / this.divisions;
-  this.widthStep = width / this.divisions;
+  this.heightStep = this.height / this.divisions;
+  this.widthStep = this.width / this.divisions;
 
   this.rawHeightTextureStep = this.heightStep;
   this.rawWidthTextureStep = this.widthStep;
@@ -52,7 +51,7 @@ Plane.prototype.initBuffers = function() {
   for (var lengthIndex = 0; lengthIndex <= this.divisions; ++lengthIndex) {
 
     workVertex.y = this.startVertex.y;
-    var tCoord = 0;
+    var tCoord = this.height;
     for (var heightIndex = 0; heightIndex <= this.divisions; ++heightIndex) {
 
       this.vertices.push(workVertex.x, workVertex.y, 0);
@@ -72,7 +71,7 @@ Plane.prototype.initBuffers = function() {
       }
 
       workVertex.y += this.heightStep;
-      tCoord += this.rawHeightTextureStep;
+      tCoord -= this.rawHeightTextureStep;
     }
     workVertex.x += this.widthStep;
     sCoord += this.rawWidthTextureStep;
