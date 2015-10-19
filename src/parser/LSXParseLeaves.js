@@ -111,7 +111,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         v2 = [arrayOfNumbers[3], arrayOfNumbers[4], arrayOfNumbers[5]];
         v3 = [arrayOfNumbers[6], arrayOfNumbers[7], arrayOfNumbers[8]];
 
-        nodes[id] = new Triangle(scene, 0, 0, v1, v2, v3);
+        nodes[id] = new Triangle(scene, v1, v2, v3);
         break;
       default:
         return 'LEAF, ' + id + ', type attribute only accepts 4 primities: rectangle, cylinder, sphere, triangle.';

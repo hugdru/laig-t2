@@ -24,8 +24,15 @@ Interface.prototype.initCreateLights = function() {
 
   for (var lightIndex = 0; lightIndex < this.scene.lights.filledLength; ++lightIndex) {
     var light = this.scene.lights[lightIndex];
-    lightsGroup.add(light, 'enabled').name(light.name);
+    lightsGroup.add(light, 'enabled').name(light.name).onChange(function(value) {
+      var light = this.object;
+      if (light.enabled) {
+        light.setVisible(true);
+      } else {
+        light.setVisible(false);
+      }
+    });
   }
 
   return true;
-}
+};
