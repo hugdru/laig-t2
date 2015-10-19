@@ -32,12 +32,12 @@ Sphere.prototype.initBuffers = function() {
   this.indices = [];
   this.rawTexCoords = [];
 
+  var tCoord = 1;
   var phiAccumulator = 0;
   var tetaPeriodTimesPhiIndex = 0;
   var tetaPeriodTimesNextPhiIndex = this.tetaPeriod;
   for (var phiIndex = 0; phiIndex <= this.phiSections; ++phiIndex) {
 
-    var tCoord = 1;
     var tetaAccumulator = 0;
     var vertexY = this.radius * Math.cos(phiAccumulator);
     var sinPhiAccumulator = Math.sin(phiAccumulator);
