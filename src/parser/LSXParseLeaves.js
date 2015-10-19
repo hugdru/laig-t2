@@ -73,7 +73,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         v1 = [arrayOfNumbers[0], arrayOfNumbers[1]];
         v2 = [arrayOfNumbers[2], arrayOfNumbers[3]];
 
-        nodes[id] = new Rectangle(scene, 0, 0, v1, v2);
+        nodes[id] = new Rectangle(scene, v1, v2);
         break;
       case 'cylinder':
         arrayOfNumbers = this.getNumbers(stringArray, "f f f i i");

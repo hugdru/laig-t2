@@ -1,4 +1,4 @@
-function Plane(scene, amplifS, amplifT, divisions, vertexTopLeft, vertexBottomRight) {
+function Plane(scene, divisions, vertexTopLeft, vertexBottomRight) {
   CGFobject.call(this, scene);
 
   if (scene == null ||
@@ -8,7 +8,6 @@ function Plane(scene, amplifS, amplifT, divisions, vertexTopLeft, vertexBottomRi
     throw new Error('Plane, must have valid arguments.');
   }
 
-  this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
 
   var width = vertexBottomRight[0] - vertexTopLeft[0];
   var height = vertexTopLeft[1] - vertexBottomRight[1];
@@ -21,16 +20,12 @@ function Plane(scene, amplifS, amplifT, divisions, vertexTopLeft, vertexBottomRi
   };
 
   this.divisions = divisions || 1;
-  this.amplifS = amplifS;
-  this.amplifT = amplifT;
 
   this.heightStep = height / this.divisions;
   this.widthStep = width / this.divisions;
 
-  if (this.applyTexture) {
-    this.heightTextureStep = this.heightStep / this.amplifS;
-    this.widthTextureStep = this.widthStep / this.amplifT;
-  }
+  this.rawHeightTextureStep = this.heightStep;
+  this.rawWidthTextureStep = this.widthStep;
 
   this.period = this.divisions + 1;
 
@@ -42,56 +37,69 @@ Plane.prototype.constructor = Plane;
 
 Plane.prototype.initBuffers = function() {
 
-    this.vertices = [];
-    this.normals = [];
-    this.indices = [];
-    if (this.applyTexture) this.texCoords = [];
+  this.vertices = [];
+  this.normals = [];
+  this.indices = [];
+  this.rawTexCoords = [];
 
-    var sCoord = 0;
-    var workVertex = {
-      x: this.startVertex.x,
-      y: this.startVertex.y
-    };
-    var lengthIndexTimesPeriod = 0;
-    var lengthIndexTimesPeriodNext = this.period;
-    for (var lengthIndex = 0; lengthIndex <= this.divisions; ++lengthIndex) {
+  var sCoord = 0;
+  var workVertex = {
+    x: this.startVertex.x,
+    y: this.startVertex.y
+  };
+  var lengthIndexTimesPeriod = 0;
+  var lengthIndexTimesPeriodNext = this.period;
+  for (var lengthIndex = 0; lengthIndex <= this.divisions; ++lengthIndex) {
 
-      workVertex.y = this.startVertex.y;
-      var tCoord = 0;
-      for (var heightIndex = 0; heightIndex <= this.divisions; ++heightIndex) {
+    workVertex.y = this.startVertex.y;
+    var tCoord = 0;
+    for (var heightIndex = 0; heightIndex <= this.divisions; ++heightIndex) {
 
-        this.vertices.push(workVertex.x, workVertex.y, 0);
-        this.normals.push(0, 0, 1);
+      this.vertices.push(workVertex.x, workVertex.y, 0);
+      this.normals.push(0, 0, 1);
 
-        if (this.applyTexture) {
-          this.texCoords.push(sCoord, tCoord);
-        }
+      this.rawTexCoords.push(sCoord, tCoord);
 
-          if (lengthIndex !== this.divisions && heightIndex !== this.divisions) {
-            this.indices.push(
-              heightIndex + lengthIndexTimesPeriod,
-              heightIndex + lengthIndexTimesPeriodNext,
-              heightIndex + lengthIndexTimesPeriod + 1,
-              heightIndex + lengthIndexTimesPeriod + 1,
-              heightIndex + lengthIndexTimesPeriodNext,
-              heightIndex + lengthIndexTimesPeriodNext + 1
-            );
-          }
-
-          workVertex.y += this.heightStep; tCoord += this.heightTextureStep;
-        }
-        workVertex.x += this.widthStep;
-        sCoord += this.widthTextureStep;
-        lengthIndexTimesPeriod = lengthIndexTimesPeriodNext;
-        lengthIndexTimesPeriodNext += this.period;
+      if (lengthIndex !== this.divisions && heightIndex !== this.divisions) {
+        this.indices.push(
+          heightIndex + lengthIndexTimesPeriod,
+          heightIndex + lengthIndexTimesPeriodNext,
+          heightIndex + lengthIndexTimesPeriod + 1,
+          heightIndex + lengthIndexTimesPeriod + 1,
+          heightIndex + lengthIndexTimesPeriodNext,
+          heightIndex + lengthIndexTimesPeriodNext + 1
+        );
       }
 
+      workVertex.y += this.heightStep;
+      tCoord += this.rawHeightTextureStep;
+    }
+    workVertex.x += this.widthStep;
+    sCoord += this.rawWidthTextureStep;
+    lengthIndexTimesPeriod = lengthIndexTimesPeriodNext;
+    lengthIndexTimesPeriodNext += this.period;
+  }
 
-      this.primitiveType = this.scene.gl.TRIANGLES;
+  this.texCoords = this.rawTexCoords.slice();
 
-      this.initGLBuffers();
-    };
+  this.primitiveType = this.scene.gl.TRIANGLES;
 
-    Plane.prototype.display = function() {
-      this.drawElements(this.primitiveType);
-    };
+  this.initGLBuffers();
+};
+
+Plane.prototype.display = function() {
+  this.drawElements(this.primitiveType);
+};
+
+Plane.prototype.setTextureAmplification = function(amplifS, amplifT) {
+  if (isNaN(amplifS) || isNaN(amplifT) || amplifS === 0 || amplifT === 0) {
+    throw new Error('Plane, must receive valid amplifS and amplifT.');
+  }
+
+  for (var index = 0; index < this.rawTexCoords.length; index += 2) {
+    this.texCoords[index] = this.rawTexCoords[index] / amplifS;
+    this.texCoords[index + 1] = this.rawTexCoords[index + 1] / amplifT;
+  }
+
+  this.updateTexCoordsGLBuffers();
+}
