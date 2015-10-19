@@ -72,6 +72,8 @@ Sphere.prototype.initBuffers = function() {
     tetaPeriodTimesNextPhiIndex += this.tetaPeriod;
   }
 
+  this.texCoords = this.rawTexCoords.slice();
+
   this.primitiveType = this.scene.gl.TRIANGLES;
   this.initGLBuffers();
 };
