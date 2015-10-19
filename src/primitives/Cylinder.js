@@ -1,7 +1,7 @@
-function Cylinder(scene, amplifS, amplifT, height, bottomRadius, topRadius, slices, stacks) {
+function Cylinder(scene, height, bottomRadius, topRadius, slices, stacks) {
   CGFobject.call(this, scene);
-  this.lateralFaces = new LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, slices, stacks);
-  this.base = new Base(scene, amplifS, amplifT, slices);
+  this.lateralFaces = new LateralFaces(scene, height, bottomRadius, topRadius, slices, stacks);
+  this.base = new Base(scene, slices);
 
   this.height = height;
   this.bottomRadius = bottomRadius;
@@ -25,4 +25,8 @@ Cylinder.prototype.display = function() {
     this.scene.scale(this.bottomRadius, this.bottomRadius, 0);
     this.base.display();
   this.scene.popMatrix();
-}
+};
+
+Cylinder.prototype.setTextureAmplification = function(amplifS, amplifT) {
+  this.lateralFaces.setTextureAmplification(amplifS, amplifT);
+};

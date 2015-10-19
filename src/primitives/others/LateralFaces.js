@@ -1,4 +1,4 @@
-function LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, slices, stacks) {
+function LateralFaces(scene, height, bottomRadius, topRadius, slices, stacks) {
   CGFobject.call(this, scene);
 
   if (scene == null ||
@@ -12,15 +12,11 @@ function LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, 
     throw new Error('LateralFaces, must have valid arguments.');
   }
 
-  this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
-
   this.slices = slices;
   this.stacks = stacks;
   this.height = height;
   this.bottomRadius = bottomRadius;
   this.topRadius = topRadius;
-  this.amplifS = amplifS;
-  this.amplifT = amplifT;
 
   this.tetaStep = (2 * Math.PI) / this.slices;
   this.stackStep = this.height / this.stacks;
@@ -28,10 +24,8 @@ function LateralFaces(scene, amplifS, amplifT, height, bottomRadius, topRadius, 
 
   this.stackPeriod = this.stacks + 1;
 
-  if (this.applyTexture) {
-    this.tetaTextureStep = this.tetaStep / this.amplifS;
-    this.stackTextureStep = this.stackStep / this.amplifT;
-  }
+  this.rawTetaTextureStep = 1 / this.slices;
+  this.rawStackTextureStep = 1 / this.stacks;
 
   this.initBuffers();
 }
@@ -43,7 +37,7 @@ LateralFaces.prototype.initBuffers = function() {
   this.vertices = [];
   this.indices = [];
   this.normals = [];
-  if (this.applyTexture) this.texCoords = [];
+  this.rawTexCoords = [];
 
   var sCoord = 0;
   var teta = 0;
@@ -64,9 +58,7 @@ LateralFaces.prototype.initBuffers = function() {
       this.vertices.push(vertexX, vertexY, stackAccumulator);
 
       /* Texture */
-      if (this.applyTexture) {
-        this.texCoords.push(sCoord, tCoord);
-      }
+      this.rawTexCoords.push(sCoord, tCoord);
 
       /* Normals */
       this.normals.push(vertexX / radius, vertexY / radius, 0);
@@ -83,19 +75,34 @@ LateralFaces.prototype.initBuffers = function() {
           startVertex + stackPeriodTimesSliceIndexNext
         );
       }
-      tCoord += this.stackTextureStep;
+      tCoord += this.rawStackTextureStep;
       stackAccumulator += this.stackStep;
       radius += this.radiusStep;
     }
-    sCoord += this.tetaTextureStep;
+    sCoord += this.rawTetaTextureStep;
     teta += this.tetaStep;
     stackPeriodTimesSliceIndex = stackPeriodTimesSliceIndexNext;
     stackPeriodTimesSliceIndexNext += this.stackPeriod;
   }
+  this.texCoords = this.rawTexCoords.slice();
+
   this.primitiveType = this.scene.gl.TRIANGLES;
   this.initGLBuffers();
 };
 
 LateralFaces.prototype.display = function() {
   this.drawElements(this.primitiveType);
+};
+
+LateralFaces.prototype.setTextureAmplification = function(amplifS, amplifT) {
+  if (isNaN(amplifS) || isNaN(amplifT) || amplifS === 0 || amplifT === 0) {
+    throw new Error('Plane, must receive valid amplifS and amplifT.');
+  }
+
+  for (var index = 0; index < this.rawTexCoords.length; index += 2) {
+    this.texCoords[index] = this.rawTexCoords[index] / amplifS;
+    this.texCoords[index + 1] = this.rawTexCoords[index + 1] / amplifT;
+  }
+
+  this.updateTexCoordsGLBuffers();
 };

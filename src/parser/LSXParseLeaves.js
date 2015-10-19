@@ -87,7 +87,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         var slices       = arrayOfNumbers[3];
         var stacks       = arrayOfNumbers[4];
 
-        nodes[id] = new Cylinder(scene, 0, 0, height, bottomRadius, topRadius, slices, stacks);
+        nodes[id] = new Cylinder(scene, height, bottomRadius, topRadius, slices, stacks);
         break;
       case 'sphere':
         arrayOfNumbers = this.getNumbers(stringArray, "f i i");
@@ -99,7 +99,7 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         var tetaSections = arrayOfNumbers[1];
         var phiSections  = arrayOfNumbers[2];
 
-        nodes[id] = new Sphere(scene, 0, 0, radius, tetaSections, phiSections);
+        nodes[id] = new Sphere(scene, radius, tetaSections, phiSections);
         break;
       case 'triangle':
         arrayOfNumbers = this.getNumbers(stringArray, "f f f f f f f f f");

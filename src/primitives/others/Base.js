@@ -1,4 +1,4 @@
-function Base(scene, amplifS, amplifT, slices) {
+function Base(scene, slices) {
     CGFobject.call(this, scene);
 
     if (scene == null ||
@@ -6,10 +6,6 @@ function Base(scene, amplifS, amplifT, slices) {
           throw new Error('Base, must have valid arguments');
     }
 
-    this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
-
-    this.amplifS = amplifS;
-    this.amplifT = amplifT;
     this.slices = slices;
 
     this.tetaStep = 2 * Math.PI / this.slices;

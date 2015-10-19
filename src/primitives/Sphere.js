@@ -1,4 +1,4 @@
-function Sphere(scene, amplifS, amplifT, radius, tetaSections, phiSections) {
+function Sphere(scene, radius, tetaSections, phiSections) {
   CGFobject.call(this, scene);
 
   if (scene == null || radius == null || radius <= 0 ||
@@ -8,10 +8,6 @@ function Sphere(scene, amplifS, amplifT, radius, tetaSections, phiSections) {
     throw new Error('Sphere, must have valid arguments.');
   }
 
-  this.applyTexture = !isNaN(amplifS) && !isNaN(amplifT) && amplifS !== 0 && amplifT !== 0;
-
-  this.amplifS = amplifS;
-  this.amplifT = amplifT;
   this.radius = radius;
   this.tetaSections = tetaSections;
   this.phiSections = phiSections;
@@ -19,10 +15,8 @@ function Sphere(scene, amplifS, amplifT, radius, tetaSections, phiSections) {
 
   this.tetaStep = (2 * Math.PI) / this.tetaSections;
   this.phiStep = Math.PI / this.phiSections;
-  if (this.applyTexture) {
-    this.tetaTextureStep = this.tetaStep / this.amplifS;
-    this.phiTextureStep = this.phiStep / this.amplifT;
-  }
+  this.tetaTextureStep = 1 / this.tetaSections;
+  this.phiTextureStep = 1 / this.phiSections;
 
   this.initBuffers();
   this.wireframe = false;
@@ -36,7 +30,7 @@ Sphere.prototype.initBuffers = function() {
   this.vertices = [];
   this.normals = [];
   this.indices = [];
-  if (this.applyTexture) this.texCoords = [];
+  this.rawTexCoords = [];
 
   var phiAccumulator = 0;
   var tetaPeriodTimesPhiIndex = 0;
@@ -55,9 +49,7 @@ Sphere.prototype.initBuffers = function() {
       var vertexZ = this.radius * sinPhiAccumulator * Math.cos(tetaAccumulator);
 
       this.vertices.push(vertexX, vertexY, vertexZ);
-      if (this.applyTexture) {
-        this.texCoords.push(sCoord, tCoord);
-      }
+      this.rawTexCoords.push(sCoord, tCoord);
       this.normals.push(vertexX / this.radius, vertexY / this.radius, vertexZ / this.radius);
 
       // Indices
@@ -86,4 +78,17 @@ Sphere.prototype.initBuffers = function() {
 
 Sphere.prototype.display = function() {
   this.drawElements(this.primitiveType);
+};
+
+Sphere.prototype.setTextureAmplification = function(amplifS, amplifT) {
+  if (isNaN(amplifS) || isNaN(amplifT) || amplifS === 0 || amplifT === 0) {
+    throw new Error('Plane, must receive valid amplifS and amplifT.');
+  }
+
+  for (var index = 0; index < this.rawTexCoords.length; index += 2) {
+    this.texCoords[index] = this.rawTexCoords[index] / amplifS;
+    this.texCoords[index + 1] = this.rawTexCoords[index + 1] / amplifT;
+  }
+
+  this.updateTexCoordsGLBuffers();
 };
