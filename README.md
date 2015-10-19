@@ -2,6 +2,7 @@
 ### Unassigned ###
 * Documentar o código
 * Aplicação texturas no grafo
+* Corrigir toggle das luzes set visible
 
 ### Assigned to Hugo ###
 * Mapeamento das texturas em todas as primitivas
