@@ -55,13 +55,25 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
     node.display();
 
   else {
-
+    var inheritedTexture = "null";
     var material = inheritedMaterial;
 
     if (node.material instanceof CGFappearance) {
       material = node.material;
-      material.apply();
     }
+
+    if (node.texture instanceof CGFtexture) {
+      material.setTexture(node.texture);
+    }
+    else if (node.texture === "clear" && inheritedMaterial.texture instanceof CGFtexture) {
+      inheritedTexture = inheritedMaterial.texture;
+      inheritedMaterial.texture = undefined;
+    }
+    else if (inheritedMaterial.texture instanceof CGFtexture) {
+      material.setTexture(inheritedMaterial.texture);
+    }
+
+    material.apply();
 
     this.scene.pushMatrix();
 
@@ -72,6 +84,10 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
     }
 
     this.scene.popMatrix();
+
+    if (inheritedTexture instanceof CGFtexture) {
+      inheritedMaterial.setTexture(inheritedTexture);
+    }
 
     if (inheritedMaterial instanceof CGFappearance) {
       inheritedMaterial.apply();
