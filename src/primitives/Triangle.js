@@ -31,9 +31,9 @@ function Triangle(scene, v1, v2, v3) {
     (this.vertexC[2] - this.vertexB[2]) * (this.vertexC[2] - this.vertexB[2])
   );
 
-  this.cosA = (-this.distAC * this.distAC + this.distBA * this.distBA + this.distCB * this.distCB) / (2 * this.distBA * this.distCB);
-  this.cosB = (this.distAC * this.distAC - this.distBA * this.distBA + this.distCB * this.distCB) / (2 * this.distAC * this.distCB);
-  this.cosC = (this.distAC * this.distAC + this.distBA * this.distBA - this.distCB * this.distCB) / (2 * this.distAC * this.distBA);
+  this.cosA = (-this.distCB * this.distCB + this.distAC * this.distAC + this.distBA * this.distBA) / (2 * this.distAC * this.distBA);
+  this.cosB = (this.distCB * this.distCB - this.distAC * this.distAC + this.distBA * this.distBA) / (2 * this.distCB * this.distBA);
+  this.cosC = (this.distCB * this.distCB + this.distAC * this.distAC - this.distBA * this.distBA) / (2 * this.distCB * this.distAC);
 
   this.angA = Math.acos(this.cosA);
   this.angB = Math.acos(this.cosB);
@@ -87,9 +87,9 @@ Triangle.prototype.initBuffers = function() {
   ];
 
   this.rawTexCoords = [
-    0, 0,
-    this.distBA, 0,
-    this.distAC * Math.cos(this.cosA), this.distAC * Math.sin(this.cosA)
+    0, 1,
+    this.distBA, 1,
+    this.distAC * Math.cos(this.angA), (1 - this.distAC * Math.sin(this.angA))
   ];
 
   this.indices = [
