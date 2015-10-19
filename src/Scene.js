@@ -31,7 +31,8 @@ Scene.prototype.initLights = function() {
     var light = this.graph.lights[lightName];
 
     this.lights[index].name = lightName;
-    this.lights[index].turnIt = light.enabled;
+    this.lights[index].enabled = light.enabled;
+
 
     this.lights[index].setPosition(light.position.x, light.position.y, light.position.z, light.position.w);
     this.lights[index].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
@@ -40,9 +41,12 @@ Scene.prototype.initLights = function() {
 
     this.lights[index].name = lightName;
 
-    if (this.lights[index].turnIt) {
+    if (this.lights[index].enabled) {
       this.lights[index].enable();
       this.lights[index].setVisible(true);
+    } else {
+      this.lights[index].disable();
+      this.lights[index].setVisible(false);
     }
 
     //this.lights[index].setConstantAttenuation(1);
@@ -53,6 +57,7 @@ Scene.prototype.initLights = function() {
   }
 
   this.lights.filledLength = index;
+
   this.lightsCreated = true;
 
   this.cgfInterface.initCreateLights();
