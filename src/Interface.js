@@ -21,7 +21,6 @@ Interface.prototype.initCreateLights = function() {
   // Lights check boxes
   var lightsGroup = this.gui.addFolder('Lights');
   lightsGroup.open();
-  var scene = this.scene;
 
   for (var lightIndex = 0; lightIndex < this.scene.lights.filledLength; ++lightIndex) {
     var light = this.scene.lights[lightIndex];
