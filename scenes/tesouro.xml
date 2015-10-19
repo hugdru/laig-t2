@@ -35,42 +35,42 @@
 
   <TEXTURES>
     <TEXTURE id="marble">
-      <file path="textures/marble.jpg" />
+      <file path="tesouro/marble.jpg" />
       <amplif_factor s="4" t="2" />
     </TEXTURE>
 
     <TEXTURE id="wood">
-      <file path="textures/wood.jpg" />
+      <file path="tesouro/wood.jpg" />
       <amplif_factor s="2.5" t="2.0" />
     </TEXTURE>
 
     <TEXTURE id="gold">
-      <file path="textures/gold.jpg" />
+      <file path="tesouro/gold.jpg" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
 
     <TEXTURE id="trunk">
-      <file path="textures/trunk.bmp" />
+      <file path="tesouro/trunk.bmp" />
       <amplif_factor s="2.5" t="2.0" />
     </TEXTURE>
 
     <TEXTURE id="grass">
-      <file path="textures/grass.jpg" />
+      <file path="tesouro/grass.jpg" />
       <amplif_factor s="10" t="10" />
     </TEXTURE>
 
     <TEXTURE id="leaves">
-      <file path="textures/leaves.jpg" />
+      <file path="tesouro/leaves.jpg" />
       <amplif_factor s="2" t="2" />
     </TEXTURE>
 
     <TEXTURE id="skybox">
-      <file path="textures/skybox.jpg" />
+      <file path="tesouro/skybox.jpg" />
       <amplif_factor s="1" t="1" />
     </TEXTURE>
 
     <TEXTURE id="skybox-reverse">
-      <file path="textures/skybox.jpg" />
+      <file path="tesouro/skybox.jpg" />
       <amplif_factor s="-1" t="1" />
     </TEXTURE>
 

@@ -11,7 +11,7 @@ function Plane(scene, divisions, vertexTopLeft, vertexBottomRight) {
   this.width = vertexBottomRight[0] - vertexTopLeft[0];
   this.height = vertexTopLeft[1] - vertexBottomRight[1];
 
-  if (this.width <= 0 || this.height <= 0) throw new Error('Plane, first is topLeft and second is BottomRight.');
+  //if (this.width <= 0 || this.height <= 0) throw new Error('Plane, first is topLeft and second is BottomRight.');
 
   this.startVertex = {
     x: vertexTopLeft[0],
