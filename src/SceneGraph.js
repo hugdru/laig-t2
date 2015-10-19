@@ -77,7 +77,9 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
       material.setTexture(inheritedMaterial.texture);
     }
 
-    material.apply();
+    if (material instanceof CGFappearance) {
+      material.apply();
+    }
 
     this.scene.pushMatrix();
 
