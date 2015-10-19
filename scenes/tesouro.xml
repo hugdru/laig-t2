@@ -56,7 +56,7 @@
 
     <TEXTURE id="grass">
       <file path="tesouro/grass.jpg" />
-      <amplif_factor s="10" t="10" />
+      <amplif_factor s="0.1" t="0.1" />
     </TEXTURE>
 
     <TEXTURE id="leaves">

@@ -29,4 +29,5 @@ Cylinder.prototype.display = function() {
 
 Cylinder.prototype.setTextureAmplification = function(amplifS, amplifT) {
   this.lateralFaces.setTextureAmplification(amplifS, amplifT);
+  this.base.setTextureAmplification(amplifS, amplifT);
 };
