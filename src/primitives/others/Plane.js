@@ -102,4 +102,4 @@ Plane.prototype.setTextureAmplification = function(amplifS, amplifT) {
   }
 
   this.updateTexCoordsGLBuffers();
-}
+};

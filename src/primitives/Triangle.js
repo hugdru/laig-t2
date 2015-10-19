@@ -1,34 +1,44 @@
-function Triangle(scene, amplifS, amplifT, v1, v2, v3) {
+function Triangle(scene, v1, v2, v3) {
   CGFobject.call(this, scene);
 
-  // Textures are wrong
+  if (scene == null ||
+    v1.constructor !== Array || v1.length !== 3 ||
+    v2.constructor !== Array || v2.length !== 3 ||
+    v3.constructor !== Array || v3.length !== 3
+  ) {
+    throw new Error('Triangle, must have valid arguments.');
+  }
 
-  this.amplifS = amplifS;
-  this.amplifT = amplifT;
-  this.v1 = v1;
-  this.v2 = v2;
-  this.v3 = v3;
+  this.vertexA = v1;
+  this.vertexB = v2;
+  this.vertexC = v3;
 
-  this.a = Math.sqrt((v1[0] - v3[0]) * (v1[0] - v3[0]) +
-    (v1[1] - v3[1]) * (v1[1] - v3[1]) +
-    (v1[2] - v3[2]) * (v1[2] - v3[2]));
+  this.distAC = Math.sqrt(
+    (this.vertexA[0] - this.vertexC[0]) * (this.vertexA[0] - this.vertexC[0]) +
+    (this.vertexA[1] - this.vertexC[1]) * (this.vertexA[1] - this.vertexC[1]) +
+    (this.vertexA[2] - this.vertexC[2]) * (this.vertexA[2] - this.vertexC[2])
+  );
 
-  this.b = Math.sqrt((v2[0] - v1[0]) * (v2[0] - v1[0]) +
-    (v2[1] - v1[1]) * (v2[1] - v1[1]) +
-    (v2[2] - v1[2]) * (v2[2] - v1[2]));
+  this.distBA = Math.sqrt(
+    (this.vertexB[0] - this.vertexA[0]) * (this.vertexB[0] - this.vertexA[0]) +
+    (this.vertexB[1] - this.vertexA[1]) * (this.vertexB[1] - this.vertexA[1]) +
+    (this.vertexB[2] - this.vertexA[2]) * (this.vertexB[2] - this.vertexA[2])
+  );
 
-  this.c = Math.sqrt((v3[0] - v2[0]) * (v3[0] - v2[0]) +
-    (v3[1] - v2[1]) * (v3[1] - v2[1]) +
-    (v3[2] - v2[2]) * (v3[2] - v2[2]));
+  this.distCB = Math.sqrt(
+    (this.vertexC[0] - this.vertexB[0]) * (this.vertexC[0] - this.vertexB[0]) +
+    (this.vertexC[1] - this.vertexB[1]) * (this.vertexC[1] - this.vertexB[1]) +
+    (this.vertexC[2] - this.vertexB[2]) * (this.vertexC[2] - this.vertexB[2])
+  );
 
-  this.cosAlpha = (-this.a * this.a + this.b * this.b + this.c * this.c) / (2 * this.b * this.c);
-  this.cosBeta = (this.a * this.a - this.b * this.b + this.c * this.c) / (2 * this.a * this.c);
-  this.cosGamma = (this.a * this.a + this.b * this.b - this.c * this.c) / (2 * this.a * this.b);
+  this.cosA = (-this.distAC * this.distAC + this.distBA * this.distBA + this.distCB * this.distCB) / (2 * this.distBA * this.distCB);
+  this.cosB = (this.distAC * this.distAC - this.distBA * this.distBA + this.distCB * this.distCB) / (2 * this.distAC * this.distCB);
+  this.cosC = (this.distAC * this.distAC + this.distBA * this.distBA - this.distCB * this.distCB) / (2 * this.distAC * this.distBA);
 
-  this.beta = Math.acos(this.cosBeta);
-  this.alpha = Math.acos(this.cosAlpha);
-  this.gamma = Math.acos(this.cosGamma);
-  this.sum = this.beta + this.alpha + this.gamma;
+  this.angA = Math.acos(this.cosA);
+  this.angB = Math.acos(this.cosB);
+  this.angC = Math.acos(this.cosC);
+  this.sum = this.angB + this.angA + this.angC;
   // the sum of internal angles needs to be 180 or 3.14159
   // check this.sum to see that!
 
@@ -43,23 +53,31 @@ Triangle.prototype.initBuffers = function() {
 
   this.vertices = [
     // Front face
-    this.v1[0], this.v1[1], this.v1[2],
-    this.v2[0], this.v2[1], this.v2[2],
-    this.v3[0], this.v3[1], this.v3[2]
-
+    this.vertexA[0], this.vertexA[1], this.vertexA[2],
+    this.vertexB[0], this.vertexB[1], this.vertexB[2],
+    this.vertexC[0], this.vertexC[1], this.vertexC[2]
   ];
 
-  var vector1 = [this.v3[0] - this.v2[0], this.v3[1] - this.v2[1], this.v3[2] - this.v2[2]];
-  var vector2 = [this.v1[0] - this.v3[0], this.v1[1] - this.v3[1], this.v1[2] - this.v3[2]];
+  var vectorCB = [this.vertexC[0] - this.vertexB[0], this.vertexC[1] - this.vertexB[1], this.vertexC[2] - this.vertexB[2]];
+  var vectorAC = [this.vertexA[0] - this.vertexC[0], this.vertexA[1] - this.vertexC[1], this.vertexA[2] - this.vertexC[2]];
 
   var perpendicularVector = [
-    vector1[1] * vector2[2] - vector2[1] * vector1[2],
-    vector1[0] * vector2[2] - vector2[0] * vector1[2],
-    vector1[0] * vector2[1] - vector2[0] * vector1[1]
+    vectorCB[1] * vectorAC[2] - vectorAC[1] * vectorCB[2],
+    vectorCB[0] * vectorAC[2] - vectorAC[0] * vectorCB[2],
+    vectorCB[0] * vectorAC[1] - vectorAC[0] * vectorCB[1]
   ];
 
-  var perpendicularVectorNorm = Math.sqrt(Math.pow(perpendicularVector[0], 2) + Math.pow(perpendicularVector[1], 2) + Math.pow(perpendicularVector[2], 2));
-  perpendicularVector = [perpendicularVector[0] / perpendicularVectorNorm, perpendicularVector[1] / perpendicularVectorNorm, perpendicularVector[2] / perpendicularVectorNorm];
+  var perpendicularVectorNorm = Math.sqrt(
+    Math.pow(perpendicularVector[0], 2) +
+    Math.pow(perpendicularVector[1], 2) +
+    Math.pow(perpendicularVector[2], 2)
+  );
+
+  perpendicularVector = [
+    perpendicularVector[0] / perpendicularVectorNorm,
+    perpendicularVector[1] / perpendicularVectorNorm,
+    perpendicularVector[2] / perpendicularVectorNorm
+  ];
 
   this.normals = [
     // Front face
@@ -68,15 +86,17 @@ Triangle.prototype.initBuffers = function() {
     perpendicularVector[0], perpendicularVector[1], perpendicularVector[2]
   ];
 
-  this.texCoords = [
-    (this.c - this.a * Math.cos(this.beta)) / this.amplifS, 0.0,
-    0.0, 1 / this.amplifT,
-    this.c / this.amplifS, 1.0 / this.amplifT
+  this.rawTexCoords = [
+    0, 0,
+    this.distBA, 0,
+    this.distAC * Math.cos(this.cosA), this.distAC * Math.sin(this.cosA)
   ];
 
   this.indices = [
     0, 1, 2
   ];
+
+  this.texCoords = this.rawTexCoords.slice();
 
   this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
   this.initGLBuffers();
@@ -84,4 +104,17 @@ Triangle.prototype.initBuffers = function() {
 
 Triangle.prototype.display = function() {
   this.drawElements(this.primitiveType);
+};
+
+Triangle.prototype.setTextureAmplification = function(amplifS, amplifT) {
+  if (isNaN(amplifS) || isNaN(amplifT) || amplifS === 0 || amplifT === 0) {
+    throw new Error('Triangle, must receive valid amplifS and amplifT.');
+  }
+
+  for (var index = 0; index < this.rawTexCoords.length; index += 2) {
+    this.texCoords[index] = this.rawTexCoords[index] / amplifS;
+    this.texCoords[index + 1] = this.rawTexCoords[index + 1] / amplifT;
+  }
+
+  this.updateTexCoordsGLBuffers();
 };
