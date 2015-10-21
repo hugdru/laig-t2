@@ -50,7 +50,7 @@ SceneGraph.prototype.onXMLError = function(message) {
   this.isLoaded = false;
 };
 
-SceneGraph.prototype.display = function(node, inheritedMaterial) {
+SceneGraph.prototype.display = function(node, inheritedMaterial, inheritedTexture) {
   if (node instanceof Rectangle || node instanceof Cylinder || node instanceof Sphere || node instanceof Triangle) {
     if (inheritedMaterial.texture instanceof CGFtexture) {
       node.setTextureAmplification(inheritedMaterial.texture.amplifFactor.s, inheritedMaterial.texture.amplifFactor.t);
@@ -59,26 +59,27 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
   }
 
   else {
-    var inheritedTexture = "null";
+    var texture = inheritedTexture;
     var material = inheritedMaterial;
 
     if (node.material instanceof CGFappearance) {
       material = node.material;
     }
 
-    if (node.texture instanceof CGFtexture) {
-      material.setTexture(node.texture);
-    }
-    else if (node.texture === "clear" && inheritedMaterial.texture instanceof CGFtexture) {
-      inheritedTexture = inheritedMaterial.texture;
-      inheritedMaterial.texture = undefined;
-    }
-    else if (inheritedMaterial.texture instanceof CGFtexture) {
-      material.setTexture(inheritedMaterial.texture);
-    }
-
     if (material instanceof CGFappearance) {
       material.apply();
+    }
+
+    if (node.texture instanceof CGFtexture) {
+      texture = node.texture;
+      texture.bind();
+    }
+    else if (node.texture === "clear" && texture instanceof CGFtexture) {
+      texture.unbind();
+      texture = "null";
+    }
+    else if (node.texture === "null" && texture instanceof CGFtexture) {
+      texture.bind();
     }
 
     this.scene.pushMatrix();
@@ -86,20 +87,20 @@ SceneGraph.prototype.display = function(node, inheritedMaterial) {
     this.applyNodeTransformations(node);
 
     for (var descendant in node.descendants) {
-      this.display(node.descendants[descendant], material);
+      this.display(node.descendants[descendant], material, texture);
     }
 
     this.scene.popMatrix();
-
-    if (inheritedTexture instanceof CGFtexture) {
-      inheritedMaterial.setTexture(inheritedTexture);
-    }
 
     if (inheritedMaterial instanceof CGFappearance) {
       inheritedMaterial.apply();
     }
     else {
       this.scene.setDefaultAppearance();
+    }
+
+    if (inheritedTexture instanceof CGFtexture) {
+      inheritedTexture.bind();
     }
   }
 };

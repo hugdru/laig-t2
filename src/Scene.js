@@ -151,7 +151,7 @@ Scene.prototype.display = function() {
     }
 
     var root = this.graph.nodes.root;
-    this.graph.display(root, root.material);
+    this.graph.display(root, root.material, root.material.texture);
   }
 
   this.shader.unbind();
