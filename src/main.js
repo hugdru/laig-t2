@@ -47,12 +47,15 @@ serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js', 'Interface.js',
               'parser/LSXParseInitials.js', 'parser/LSXParseIllumination.js',
               'parser/LSXParseLights.js', 'parser/LSXParseTextures.js',
               'parser/LSXParseMaterials.js', 'parser/LSXParseLeaves.js',
-              'parser/LSXParseNodes.js',
+              'parser/LSXParseNodes.js', 'parser/LSXParseAnimations.js',
               // Primitives
               'primitives/Triangle.js', 'primitives/Rectangle.js',
               'primitives/Sphere.js', 'primitives/Cylinder.js',
               'primitives/others/Base.js', 'primitives/others/LateralFaces.js',
               'primitives/others/Plane.js',
+              // Animations
+              'animations/Animation.js', 'animations/LinearAnimation.js',
+              'animations/CircularAnimation.js',
 
   main = function() {
     // Standard application, scene and interface setup

@@ -56,8 +56,6 @@ LSXParser.prototype.parseNodes = function(rootElement) {
       return 'Node, ' + id + ', there must be at least 3 elements: MATERIAL, TEXTURE, DESCENDANTS';
     }
 
-    nodeObject.transformations = [];
-
     var minimumElementCount = 0;
     for (var index = 0; index < nodeElementChildrenLength; ++index) {
       var elementOfNode = nodeElementChildren[index];
@@ -81,6 +79,13 @@ LSXParser.prototype.parseNodes = function(rootElement) {
             return 'NODE, ' + id + ', ' + error;
           }
           ++minimumElementCount;
+          break;
+        case 'ANIMATION':
+          nodeObject.animations = nodeObject.animations || [];
+          error = this.parseNodesAnimation(nodeObject, elementOfNode);
+          if (error !== undefined) {
+            return 'NODE, ' + id + ', ' + error;
+          }
           break;
         case 'DESCENDANTS':
           if (nodeObject.hasOwnProperty('descendants')) {
@@ -137,8 +142,6 @@ LSXParser.prototype.parseNodes = function(rootElement) {
   } else {
     return 'ROOT NODE is missing, create a NODE with id, ' + nodesObject.root;
   }
-
-  delete this.graph.nodes.all;
 };
 
 LSXParser.prototype.parseNodesRoot = function(nodesObject, rootArray) {
@@ -264,6 +267,7 @@ LSXParser.prototype.parseNodesTranslation = function(nodeObject, elementOfNode) 
     return error;
   }
 
+  nodeObject.transformations = nodeObject.transformations || [];
   nodeObject.transformations.push(translate);
 };
 
@@ -289,6 +293,7 @@ LSXParser.prototype.parseNodesRotation = function(nodeObject, elementOfNode) {
   }
 
   var rotation = new Rotate(coordinate, degrees);
+  nodeObject.transformations = nodeObject.transformations || [];
   nodeObject.transformations.push(rotation);
 
 };
@@ -308,6 +313,25 @@ LSXParser.prototype.parseNodesScale = function(nodeObject, elementOfNode) {
   if (error != null) {
     return error;
   }
+  nodeObject.transformations = nodeObject.transformations || [];
   nodeObject.transformations.push(scale);
 
+};
+
+LSXParser.prototype.parseNodesAnimation = function(nodeObject, elementOfNode) {
+
+  if (nodeObject == null || elementOfNode == null) {
+    return 'parseNodesAnimation was expecting valid arguments.';
+  }
+
+  if (elementOfNode.attributes.length != 1) {
+    return 'ANIMATION can only have 1 attribute: id.';
+  }
+
+  var id = this.reader.getString(elementOfNode, 'id');
+  if (id == null) {
+    return 'missing id for animation.';
+  }
+
+  nodeObject.animations.push(id);
 };

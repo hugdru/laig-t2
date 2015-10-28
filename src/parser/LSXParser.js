@@ -33,4 +33,10 @@ LSXParser.prototype.read = function(rootElement) {
   error = this.parseNodes(rootElement);
   if (error !== undefined)
     return error;
+
+  error = this.parseAnimations(rootElement);
+  if (error !== undefined)
+    return error;
+
+  //delete this.graph.nodes.all;
 };

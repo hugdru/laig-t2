@@ -54,10 +54,15 @@ LSXParser.prototype.getNumbers = function(stringOrArrayToParse, selectorString) 
   }
 
   var arrayOfStrings;
-  if (stringOrArrayToParse.constructor !== Array) {
-    arrayOfStrings = stringOrArrayToParse.split(/\s+/);
-  } else {
-    arrayOfStrings = stringOrArrayToParse;
+  switch (stringOrArrayToParse.constructor) {
+    case String:
+      arrayOfStrings = stringOrArrayToParse.split(/\s+/);
+      break;
+    case Array:
+      arrayOfStrings = stringOrArrayToParse;
+      break;
+    default:
+      return 'getNumbers, expecting a String or Array for 1st argument.';
   }
   var arrayOfSelectors = selectorString.split(/\s+/);
 
