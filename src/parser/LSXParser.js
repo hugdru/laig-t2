@@ -38,5 +38,5 @@ LSXParser.prototype.read = function(rootElement) {
   if (error !== undefined)
     return error;
 
-  //delete this.graph.nodes.all;
+  delete this.graph.nodes.all;
 };
