@@ -24,7 +24,7 @@ Scene.prototype.init = function(application) {
 
 Scene.prototype.initLights = function() {
 
-  this.shader.bind();
+  this.setActiveShader(this.defaultShader);
 
   var index = 0;
   for (var lightName in this.graph.lights) {
@@ -61,8 +61,6 @@ Scene.prototype.initLights = function() {
   this.lightsCreated = true;
 
   this.cgfInterface.initCreateLights();
-
-  this.shader.unbind();
 };
 
 Scene.prototype.initCameras = function() {
@@ -112,7 +110,7 @@ Scene.prototype.onGraphLoaded = function() {
 
 Scene.prototype.display = function() {
   // ---- BEGIN Background, camera and axis setup
-  this.shader.bind();
+  this.setActiveShader(this.defaultShader);
 
   // Clear image and depth buffer everytime we update the scene
   this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -153,6 +151,4 @@ Scene.prototype.display = function() {
     var root = this.graph.nodes.root;
     this.graph.display(root, root.material, root.material.texture);
   }
-
-  this.shader.unbind();
 };

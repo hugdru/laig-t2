@@ -237,6 +237,8 @@
     </MATERIAL>
   </MATERIALS>
 
+  <animations>
+  </animations>
 
   <LEAVES>
     <LEAF id="rectangulo" type="rectangle" args="0 1 1 0" />      <!-- 2D coordinates for left-top and right-bottom vertices. -->
