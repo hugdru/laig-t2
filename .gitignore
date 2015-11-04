@@ -1,4 +1,5 @@
 .tern-project
+.tern-port
 lib/
 mongoose
 tags
