@@ -64,7 +64,7 @@ LSXParser.prototype.parseAnimations = function(rootElement) {
     }
   }
 
-  delete this.graph.animations;
+  //delete this.graph.animations;
 };
 
 LSXParser.prototype.parseAnimationsAttributes = function(animationsObject, animationElement, id) {
@@ -98,7 +98,7 @@ LSXParser.prototype.parseAnimationsAttributes = function(animationsObject, anima
         return startOfError + 'must have exactly 3 attributes.';
       }
 
-      return (animationsObject[id] = new LinearAnimation(span));
+      return (animationsObject[id] = new LinearAnimation(this.graph.scene, span));
     case 'circular':
 
       startOfError = 'type ' + type + ', ';
@@ -137,7 +137,7 @@ LSXParser.prototype.parseAnimationsAttributes = function(animationsObject, anima
         return startOfError + 'rotang value must be a number.';
       }
 
-      return (animationsObject[id] = new CircularAnimation(span, center, radius, startang, rotang));
+      return (animationsObject[id] = new CircularAnimation(this.graph.scene, span, center, radius, startang, rotang));
     default:
       return 'animation only supports linear and circular animations.';
   }

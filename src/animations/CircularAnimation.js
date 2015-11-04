@@ -1,6 +1,8 @@
 var degToRad = Math.PI / 180;
 
-function CircularAnimation(span, center, radius, startdegree, rotationDegree) {
+function CircularAnimation(scene, span, center, radius, startdegree, rotationDegree) {
+
+  Animation.call(this, scene);
 
   if (span == null || center == null ||
       radius == null || radius <= 0 ||
@@ -8,8 +10,6 @@ function CircularAnimation(span, center, radius, startdegree, rotationDegree) {
      ) {
     return 'CircularAnimation expecting valid arguments';
   }
-
-  Animation.call(this);
 
   this.span = span;
   this.center = center;

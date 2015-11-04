@@ -80,7 +80,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
           }
           ++minimumElementCount;
           break;
-        case 'ANIMATION':
+        case 'animationref':
           nodeObject.animations = nodeObject.animations || [];
           error = this.parseNodesAnimation(nodeObject, elementOfNode);
           if (error !== undefined) {
@@ -325,12 +325,12 @@ LSXParser.prototype.parseNodesAnimation = function(nodeObject, elementOfNode) {
   }
 
   if (elementOfNode.attributes.length != 1) {
-    return 'ANIMATION can only have 1 attribute: id.';
+    return 'animationref can only have 1 attribute: id.';
   }
 
   var id = this.reader.getString(elementOfNode, 'id');
   if (id == null) {
-    return 'missing id for animation.';
+    return 'missing id for animationref.';
   }
 
   nodeObject.animations.push(id);

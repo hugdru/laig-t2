@@ -1,4 +1,7 @@
-function LinearAnimation(span) {
+function LinearAnimation(scene, span) {
+
+  Animation.call(this, scene);
+
   if (span == null) {
     return 'LinearAnimation was expecting valid arguments';
   }
