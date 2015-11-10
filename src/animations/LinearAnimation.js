@@ -30,10 +30,6 @@ LinearAnimation.prototype.updateTranslate = function(animationNode, deltaTime) {
     throw new Error('updateTranslate, was expecting a animationNode and a valid deltaTime.');
   }
 
-  if (animationNode.currentElapsedTime > this.span) {
-    return true;
-  }
-
   if (animationNode.previousElapsedTime == null) {
     animationNode.previousElapsedTime = 0;
   }
@@ -45,6 +41,14 @@ LinearAnimation.prototype.updateTranslate = function(animationNode, deltaTime) {
   }
 
   var previousTime = animationNode.previousElapsedTime;
+  if (currentStage >= this.stageLength) {
+    var delta = this.span - previousTime;
+    animationNode.translate.x += this.slopes[indexStage].x * stageDeltaTime;
+    animationNode.translate.y += this.slopes[indexStage].y * stageDeltaTime;
+    animationNode.translate.z += this.slopes[indexStage].z * stageDeltaTime;
+    return true;
+  }
+
   for (var indexStage = animationNode.previousStage; indexStage <= currentStage; ++indexStage) {
 
     var timeStageFinished;
@@ -75,4 +79,5 @@ LinearAnimation.prototype.resetTimes = function(animationNode) {
   Animation.prototype.resetTimes.call(this, animationNode);
 
   animationNode.previousElapsedTime = null;
+  animationNode.currentElapsedTime = 0;
 };
