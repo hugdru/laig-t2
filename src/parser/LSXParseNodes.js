@@ -17,6 +17,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 
   var nodesObject = this.graph.nodes;
   var allNodesObject = nodesObject.all;
+  var numberOfNodes = 0;
 
   var error = this.parseNodesRoot(nodesObject, nodesElement.getElementsByTagName('ROOT'));
   if (error !== undefined) {
@@ -48,6 +49,8 @@ LSXParser.prototype.parseNodes = function(rootElement) {
 
     allNodesObject[id] = {};
     nodeObject = allNodesObject[id];
+    nodeObject.id = numberOfNodes;
+    ++numberOfNodes;
 
     var nodeElementChildren = nodeElement.children;
     var nodeElementChildrenLength = nodeElementChildren.length;
@@ -142,6 +145,7 @@ LSXParser.prototype.parseNodes = function(rootElement) {
   } else {
     return 'ROOT NODE is missing, create a NODE with id, ' + nodesObject.root;
   }
+
 };
 
 LSXParser.prototype.parseNodesRoot = function(nodesObject, rootArray) {

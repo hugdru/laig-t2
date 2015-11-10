@@ -84,6 +84,7 @@ SceneGraph.prototype.display = function(node, inheritedMaterial, inheritedTextur
 
     this.scene.pushMatrix();
 
+    this.runAnimations(node);
     this.applyNodeTransformations(node);
 
     for (var descendant in node.descendants) {
@@ -104,6 +105,22 @@ SceneGraph.prototype.display = function(node, inheritedMaterial, inheritedTextur
     }
   }
 };
+
+SceneGraph.prototype.runAnimations = function(node) {
+  var animations = node.animations;
+  if (animations == null) return;
+
+  for (var index = 0; index < animations.length; ++index) {
+    var animation = animations[index];
+    animation.runOnce(node);
+    var transformations = animation.getTransformations(node);
+    this.scene.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z);
+    this.scene.rotate(transformations.rotate.x, 1, 0, 0);
+    this.scene.rotate(transformations.rotate.y, 0, 1, 0);
+    this.scene.rotate(transformations.rotate.z, 0, 0, 1);
+    this.scene.translate(transformations.translate.x, transformations.translate.y, transformations.translate.z);
+  }
+}
 
 SceneGraph.prototype.applyNodeTransformations = function(node) {
   var transformations = node.transformations;

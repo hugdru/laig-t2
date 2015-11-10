@@ -1,0 +1,3 @@
+function AnimationNode(node, animation) {
+
+}

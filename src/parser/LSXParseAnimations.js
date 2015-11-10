@@ -136,8 +136,9 @@ LSXParser.prototype.parseAnimationsAttributes = function(animationsObject, anima
       if (rotang === null || isNaN(rotang)) {
         return startOfError + 'rotang value must be a number.';
       }
-
-      return (animationsObject[id] = new CircularAnimation(this.graph.scene, span, center, radius, startang, rotang));
+      animationsObject[id] = new CircularAnimation(this.graph.scene, span, center, radius, startang, rotang)
+      animationsObject[id].buildFunctions();
+      return animationsObject[id];
     default:
       return 'animation only supports linear and circular animations.';
   }
@@ -186,4 +187,5 @@ LSXParser.prototype.parseLinearAnimation = function(animationObject, childrenOfA
   }
 
   animationObject.controlPoints = controlPoints;
+  animationObject.buildFunctions();
 };
