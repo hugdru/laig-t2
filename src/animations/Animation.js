@@ -10,25 +10,100 @@ function Animation(scene, span) {
   this.animationNodes = {};
 }
 
-Animation.prototype.update = function(currentTime) {
+Animation.prototype.update = function(currentUpdateTime) {
 
-  var node = this.node;
-  var animation = this.animation;
+  var disableUpdate = true;
 
-  var deltaTime = currentTime - node.previousTime;
+  for (var property in this.animationNodes) {
 
-  var doneTranslate = animation.updateTranslate.call(node, deltaTime);
-  var doneRotate = animation.updateRotate.call(node, deltaTime);
-  var scaleRotate = animation.updateScale.call(node, deltaTime);
+    animationNode = this.animationNodes[property];
+    if (animationNode.done) {
+      continue;
+    }
 
-  if (doneTranslate && doneRotate && scaleRotate) {
-    animation.stop(node);
+    if (animationNode.previousUpdateTime == null) {
+      animationNode.previousUpdateTime = currentUpdateTime;
+      disableUpdate = false;
+      continue;
+    }
+
+    var deltaTime = currentUpdateTime - animationNode.previousUpdateTime;
+
+    var translateDone = this.updateTranslate(animationNode, deltaTime);
+    var rotateDone = this.updateRotate(animationNode, deltaTime);
+    var scaleDone = this.updateScale(animationNode, deltaTime);
+
+    var allDone = translateDone && rotateDone && scaleDone;
+    if (allDone) {
+      animationNode.done = true;
+      animationNode.resetTimes(animationNode);
+    }
+
+    disableUpdate = disableUpdate && allDone;
+
+    animationNode.previousUpdateTime = currentUpdateTime;
   }
 
-  node.previousTime = currentTime;
+  if (disableUpdate) {
+    this.disableUpdate();
+  } else {
+      var self = this;
+      this.requestId = requestAnimationFrame(function() { self.update(performance.now()); });
+  }
+
 };
 
 Animation.prototype.buildFunctions = function() {
+};
+
+Animation.prototype.run = function(node) {
+  this.checkNode(node);
+  this.createNodeAnimationIfNotExists(node);
+  this.animationNodes[node.id].done = false;
+  this.update();
+};
+
+Animation.prototype.runOnce = function(node) {
+  this.checkNode(node);
+  var created = this.createNodeAnimationIfNotExists(node);
+  if (created) {
+    this.update();
+  }
+};
+
+Animation.prototype.disableUpdate = function() {
+  if (this.requestId != null) {
+    cancelAnimationFrame(this.requestId);
+    this.requestId = null;
+  }
+};
+
+Animation.prototype.updateTranslate = function(animationNode, deltaTime) {
+  return true;
+};
+
+Animation.prototype.updateRotate = function(animationNode, deltaTime) {
+  return true;
+};
+
+Animation.prototype.updateScale = function(animationNode, deltaTime) {
+  return true;
+};
+
+Animation.prototype.getTransformations = function(node) {
+
+  this.checkNode(node);
+  var animationNode = this.animationNodes[node.id];
+  if (animationNode == null) {
+    return;
+  }
+
+  return {
+    translate: animationNode.translate,
+    rotate: animationNode.rotate,
+    scale: animationNode.scale
+  };
+
 };
 
 Animation.prototype.setDefaults = function(node) {
@@ -39,91 +114,16 @@ Animation.prototype.setDefaults = function(node) {
   animationNode.rotate = {x: 0, y: 0, z: 0};
   animationNode.scale = {x: 1, y: 1, z: 1};
 
-  animationNode.previousTime = 0;
-  animationNode.elapsedTime = 0;
+  animationNode.currentElapsedTime = 0;
 };
 
-Animation.prototype.start = function(node, check) {
-
-  if (check === undefined) {
-    check = true;
-  }
-
-  if (check) {
-    this.checkNode(node);
-    this.createNodeAnimationIfNotExists(node);
-  }
-
-  this.setDefaults(node);
-  var animationNode = this.animationNodes[node.id];
-  animationNode.requestId = window.requestAnimationFrame(this.update);
-};
-
-Animation.prototype.runOnce = function(node) {
-
-  this.checkNode(node);
-  this.createNodeAnimationIfNotExists(node);
-  var animationNode = this.animationNodes[node.id];
-  if (!animationNode.ranOnce) {
-    this.start(node, false);
-    animationNode.ranOnce = true;
-  }
-};
-
-Animation.prototype.associate = function(node, setDefault) {
-  this.checkNode(node);
-
-  if (setDefault === undefined) {
-    setDefault = true;
-  }
-  this.createNodeAnimationIfNotExists(node, setDefault);
-};
-
-Animation.prototype.stop = function(node) {
-
-  this.checkNode(node);
-
-  var animationNode = this.animationNodes[node.id];
-  if (animationNode == null) {
-    return;
-  }
-
-  if (animationNode.requestId != null) {
-    window.cancelAnimationFrame(animationNode.requestId);
-    animationNode.requestId = null;
-  }
-};
-
-Animation.prototype.updateTranslate = function(deltaTime) {
-  return true;
-};
-
-Animation.prototype.updateRotate = function(deltaTime) {
-  return true;
-};
-
-Animation.prototype.updateScale = function(deltaTime) {
-  return true;
-};
-
-Animation.prototype.getTransformations = function(node) {
-
-  this.checkNode(node);
-  var animationNode = this.animationNodes[node.id];
-  return {
-    translate: animationNode.translate,
-    rotate: animationNode.rotate,
-    scale: animationNode.scale
-  };
-
-};
 
 Animation.prototype.createNodeAnimationIfNotExists = function(node, setDefault) {
 
-  if (setDefault === undefined) {
-    setDefault = true;
-  }
   if (!this.animationNodes.hasOwnProperty(node.id)) {
+    if (setDefault === undefined) {
+      setDefault = true;
+    }
     if (setDefault) {
       this.setDefaults(node);
     }
@@ -138,3 +138,11 @@ Animation.prototype.checkNode = function(node) {
   }
 };
 
+Animation.prototype.resetTimes = function(animationNode) {
+  if (animationNode == null) {
+    throw new Error('Animation, resetTimes must received a animationNode as argument.');
+  }
+
+  animationNode.previousUpdateTime = null;
+  animationNode.currentElapsedTime = 0;
+};

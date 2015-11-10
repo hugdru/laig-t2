@@ -24,41 +24,55 @@ LinearAnimation.prototype.buildFunctions = function() {
   }
 };
 
-LinearAnimation.prototype.updateTranslate = function(deltaTime) {
+LinearAnimation.prototype.updateTranslate = function(animationNode, deltaTime) {
 
-  if (this.currentElapsedTime > this.span) {
+  if (animationNode == null || deltaTime == null || deltaTime < 0) {
+    throw new Error('updateTranslate, was expecting a animationNode and a valid deltaTime.');
+  }
+
+  if (animationNode.currentElapsedTime > this.span) {
     return true;
   }
 
-  if (this.previousElapsedTime === undefined) {
-    this.previousElapsedTime = 0;
+  if (animationNode.previousElapsedTime == null) {
+    animationNode.previousElapsedTime = 0;
   }
-  this.currentElapsedTime += deltaTime;
+  animationNode.currentElapsedTime += deltaTime;
 
-  var currentStage = Math.floor(this.currentElapsedTime / this.span * this.stageLength);
-  if (this.previousStage === undefined) {
-    this.previousStage = currentStage;
+  var currentStage = Math.floor(animationNode.currentElapsedTime / this.span * this.stageLength);
+  if (animationNode.previousStage == null) {
+    animationNode.previousStage = currentStage;
   }
 
-  var previousTime = this.previousElapsedTime;
-  for (var indexStage = this.previousStage; indexStage <= currentStage; ++indexStage) {
+  var previousTime = animationNode.previousElapsedTime;
+  for (var indexStage = animationNode.previousStage; indexStage <= currentStage; ++indexStage) {
 
+    var timeStageFinished;
     var stageDeltaTime;
-    if (this.previousStage === currentStage) {
+    if (animationNode.previousStage === currentStage) {
       stageDeltaTime = deltaTime;
     } else if (indexStage === currentStage) {
-      stageDeltaTime = this.currentElapsedTime - previousTime;
+      stageDeltaTime = animationNode.currentElapsedTime - previousTime;
     } else {
-      var timeStageFinished = (indexStage + 1) * this.eachStageSpan;
+      timeStageFinished = (indexStage + 1) * animationNode.eachStageSpan;
       stageDeltaTime = timeStageFinished - previousTime;
     }
 
-    this.translate.x += slopes[indexStage].x * stageDeltaTime;
-    this.translate.y += slopes[indexStage].y * stageDeltaTime;
-    this.translate.z += slopes[indexStage].z * stageDeltaTime;
+    animationNode.translate.x += this.slopes[indexStage].x * stageDeltaTime;
+    animationNode.translate.y += this.slopes[indexStage].y * stageDeltaTime;
+    animationNode.translate.z += this.slopes[indexStage].z * stageDeltaTime;
 
-    previousTime = timeStageFinished;
+    if (animationNode.previousStage !== currentStage) {
+      previousTime = timeStageFinished;
+    }
   }
 
-  this.previousStage = currentStage;
+  animationNode.previousStage = currentStage;
+};
+
+LinearAnimation.prototype.resetTimes = function(animationNode) {
+
+  Animation.prototype.resetTimes.call(this, animationNode);
+
+  animationNode.previousElapsedTime = null;
 };

@@ -83,11 +83,11 @@
     <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
   </LEAVES>
   <animations>
-    <animation id="linearAnimation1" span="1" type="linear">
+    <animation id="linearAnimation1" span="20" type="linear">
       <controlpoint xx="2" yy="3" zz="3" />
-      <controlpoint xx="3" yy="4" zz="4" />
+      <controlpoint xx="20" yy="20" zz="20" />
     </animation>
-    <animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />
+    <!--<animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />-->
   </animations>
   <NODES>
     <ROOT id="scene" />
@@ -130,7 +130,7 @@
     <NODE id="cube">
       <MATERIAL id="red" />
       <TEXTURE id="cube" />
-      <animationref id="circularAnimation1" />
+      <!--<animationref id="circularAnimation1" />-->
       <animationref id="linearAnimation1" />
       <DESCENDANTS>
         <DESCENDANT id="base_square" />
