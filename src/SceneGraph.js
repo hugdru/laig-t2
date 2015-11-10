@@ -84,8 +84,8 @@ SceneGraph.prototype.display = function(node, inheritedMaterial, inheritedTextur
 
     this.scene.pushMatrix();
 
-    this.runAnimations(node);
     this.applyNodeTransformations(node);
+    this.runAnimations(node);
 
     for (var descendant in node.descendants) {
       this.display(node.descendants[descendant], material, texture);
