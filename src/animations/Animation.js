@@ -32,11 +32,8 @@ Animation.prototype.update = function(currentUpdateTime) {
       continue;
     }
 
-    var translateDone = this.updateTranslate(animationNode, deltaTime);
-    var rotateDone = this.updateRotate(animationNode, deltaTime);
-    var scaleDone = this.updateScale(animationNode, deltaTime);
+    var allDone = this.updateMatrix(animationNode, deltaTime);
 
-    var allDone = translateDone && rotateDone && scaleDone;
     if (allDone) {
       animationNode.done = true;
       this.resetTimes(animationNode);
@@ -78,19 +75,11 @@ Animation.prototype.runOnce = function(node) {
   }
 };
 
-Animation.prototype.updateTranslate = function(animationNode, deltaTime) {
+Animation.prototype.updateMatrix = function(animationNode, deltaTime) {
   return true;
 };
 
-Animation.prototype.updateRotate = function(animationNode, deltaTime) {
-  return true;
-};
-
-Animation.prototype.updateScale = function(animationNode, deltaTime) {
-  return true;
-};
-
-Animation.prototype.getTransformations = function(node) {
+Animation.prototype.getMatrix = function(node) {
 
   this.checkNode(node);
   var animationNode = this.animationNodes[node.id];
@@ -124,7 +113,6 @@ Animation.prototype.setDefaults = function(node) {
     z: 1
   };
 
-  animationNode.previousElapsedTime = 0;
   animationNode.currentElapsedTime = 0;
 };
 
@@ -159,23 +147,32 @@ Animation.prototype.angleBetweenVectors = function(vector1, vector2) {
     return;
   }
 
+  var dotProduct = this.dotProduct(vector1, vector2);
+
+  var vector1Norm = this.norm(vector1);
+  var vector2Norm = this.norm(vector2);
+
+  return Math.acos(dotProduct / (vector1Norm * vector2Norm));
+};
+
+Animation.prototype.dotProduct = function(vector1, vector2) {
+
   var length = vector1.length;
 
   var dotProduct = 0;
-  for (var vectorIndex = 0; vectorIndex < length; ++vectorIndex) {
-    dotProduct += vector1[vectorIndex] * vector2[vectorIndex];
+  for (var coordinate in vector) {
+    dotProduct += vector1[coordinate] * vector2[coordinate];
   }
 
-  var norm = function(vector) {
-    var vectorNorm = 0;
-    for (var vectorIndex = 0; vectorIndex < vector.length; ++vectorIndex) {
-      vectorNorm += vector[vectorIndex] * vector[vectorIndex];
-    }
-    return Math.sqrt(vectorNorm);
-  };
+  return dotProduct;
+};
 
-  var vector1Norm = norm(vector1);
-  var vector2Norm = norm(vector2);
+Animation.prototype.norm = function(vector) {
 
-  return Math.acos(dotProduct / (vector1Norm * vector2Norm));
+  var vectorNorm = 0;
+  for (var coordinate in vector) {
+    vectorNorm += vector[coordinate] * vector[coordinate];
+  }
+
+  return Math.sqrt(vectorNorm);
 };

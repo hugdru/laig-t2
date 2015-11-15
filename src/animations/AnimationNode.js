@@ -1,3 +1,0 @@
-function AnimationNode(node, animation) {
-
-}

@@ -16,89 +16,55 @@ LinearAnimation.prototype.buildFunctions = function() {
     throw new Error('LinearAnimation, was expecting at least two controlPoints.');
   }
 
-  this.eachStageSpan = this.span / this.stageLength;
-
-  /* Translate */
-  this.slopes = [];
+  var distance = 0;
+  this.positions = [];
   for (var stageIndex = 0; stageIndex < this.stageLength; ++stageIndex) {
-    var slope = {};
-    slope.x = (this.controlPoints[stageIndex + 1].x - this.controlPoints[stageIndex].x) / this.eachStageSpan;
-    slope.y = (this.controlPoints[stageIndex + 1].y - this.controlPoints[stageIndex].y) / this.eachStageSpan;
-    slope.z = (this.controlPoints[stageIndex + 1].z - this.controlPoints[stageIndex].z) / this.eachStageSpan;
-    this.slopes.push(slope);
+    var vector = {};
+    vector.x = this.controlPoints[stageIndex + 1].x - this.controlPoints[stageIndex].x;
+    vector.y = this.controlPoints[stageIndex + 1].y - this.controlPoints[stageIndex].y;
+    vector.z = this.controlPoints[stageIndex + 1].z - this.controlPoints[stageIndex].z;
+    this.positions.push(vector);
+
+    distance += this.norm(vector);
   }
-  /* End Of Translate */
-  /* Rotate */
-  this.intervalRotate = this.eachStageSpan * 0.15;
-  this.rotateSteps = [];
-  for (stageIndex = 0; stageIndex < (this.stageLength - 1); ++stageIndex) {
-    var rotateStep = {};
-    rotateStep.y = (Math.PI / 2) / this.intervalRotate;
-    this.rotateSteps.push(rotateStep);
+
+  var velocity = distance / this.span;
+  this.positionTimes = {};
+  this.positionTimes[0] = 0;
+  this.positionTimesDelta = {};
+  for (stageIndex = 1; stageIndex < this.stageLength; ++stageIndex) {
+    var timeStage = this.norm(this.positions[stageIndex]) / velocity;
+    this.positionTimes[stageIndex] = this.positionTimes[stageIndex - 1] + timeStage;
+    this.positionTimesDelta[stageIndex - 1] = this.positionTimes[stageIndex] - this.positionTimes[stageIndex - 1];
   }
-  /* End Of Rotate */
+
+  this.positionTimesDelta[stageIndex - 1] = this.span - this.positionTimes[stageIndex - 1];
+
 };
 
-LinearAnimation.prototype.updateTranslate = function(animationNode, deltaTime) {
-
+LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
   if (animationNode == null || deltaTime == null || deltaTime < 0) {
-    throw new Error('updateTranslate, was expecting a animationNode and a valid deltaTime.');
+      throw new Error('updateMatrix, was expecting a animationNode and a valid deltaTime.');
   }
 
   animationNode.currentElapsedTime += deltaTime;
+  animationNode.currentElapsedTime = Math.min(animationNode.currentElapsedTime, this.span);
 
-  var currentStage = Math.floor(animationNode.currentElapsedTime * (this.stageLength / this.span));
-
-  if (this.previousStage == null) {
-    this.previousStage = this.currentStage;
+  var currentStageIndex = 0;
+  for (currentStageIndex = (this.stageLength - 1); currentStageIndex > 0; --currentStageIndex) {
+    if (this.positionTimes[currentStageIndex] < animationNode.currentElapsedTime) {
+      break;
+    }
   }
 
-  if (currentStage >= this.stageLength) {
-    //animationNode.translate.x = this.controlPoints[this.controlPoints.length - 1].x;
-    //animationNode.translate.y = this.controlPoints[this.controlPoints.length - 1].y;
-    //animationNode.translate.z = this.controlPoints[this.controlPoints.length - 1].z;
-    //return true;
-  }
+  var stageRatio = (animationNode.currentElapsedTime - this.positionTimes[currentStageIndex]) / this.positionTimesDelta[currentStageIndex];
+  animationNode.translate.x = this.controlPoints[currentStageIndex].x + this.positions[currentStageIndex].x * stageRatio;
+  animationNode.translate.y = this.controlPoints[currentStageIndex].y + this.positions[currentStageIndex].y * stageRatio,
+  animationNode.translate.z = this.controlPoints[currentStageIndex].z + this.positions[currentStageIndex].z * stageRatio;
 
-  if (this.previousStage === this.currentStage) {
-    animationNode.translate.x += this.slopes[currentStage].x * deltaTime;
-    animationNode.translate.y += this.slopes[currentStage].y * deltaTime;
-    animationNode.translate.z += this.slopes[currentStage].z * deltaTime;
-  } else {
-    deltaTime = this.currentElapsedTime - currentStage * this.eachStageSpan;
-    animationNode.translate.x = this.controlPoints[currentStage].x + this.slopes[currentStage].x * deltaTime;
-    animationNode.translate.y = this.controlPoints[currentStage].y + this.slopes[currentStage].y * deltaTime;
-    animationNode.translate.z = this.controlPoints[currentStage].z + this.slopes[currentStage].z * deltaTime;
-  }
-
-  animationNode.previousStage = currentStage;
-};
-
-LinearAnimation.prototype.updateRotate = function(animationNode, deltaTime) {
-
-  if (animationNode == null || deltaTime == null || deltaTime < 0) {
-    throw new Error('updateRotate, was expecting a animationNode and a valid deltaTime.');
-  }
-
-  if (this.previousStage == null) {
-    this.previousStage = this.currentStage;
-  }
-
-  var currentStage = Math.floor(animationNode.currentElapsedTime * (this.stageLength / this.span));
-
-  if (currentStage >= (this.stageLength - 1)) {
+  if (animationNode.currentElapsedTime >= this.span) {
     return true;
   }
-
-  if (this.previousStage !== this.currentStage) {
-    animationNode.rotate.y = 0;
-    for (var index = 0; index < this.currentStage; ++index) {
-      //animationNode.rotate.y += this.rotateSteps[index].y;
-    }
-  } else if (((currentStage + 1) * this.eachStageSpan - animationNode.currentElapsedTime) < this.intervalRotate) {
-      //animationNode.rotate.y += this.rotateSteps[currentStage].y * deltaTime;
-  }
-
 };
 
 LinearAnimation.prototype.resetTimes = function(animationNode) {
@@ -106,5 +72,4 @@ LinearAnimation.prototype.resetTimes = function(animationNode) {
   Animation.prototype.resetTimes.call(this, animationNode);
 
   animationNode.currentElapsedTime = 0;
-  animationNode.previousStage = null;
 };

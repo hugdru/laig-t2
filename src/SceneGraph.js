@@ -113,7 +113,7 @@ SceneGraph.prototype.runAnimations = function(node) {
   for (var index = (animations.length - 1); index >= 0; --index) {
     var animation = animations[index];
     var done = animation.runOnce(node);
-    var transformations = animation.getTransformations(node);
+    var transformations = animation.getMatrix(node);
     this.scene.translate(transformations.translate.x, transformations.translate.y, transformations.translate.z);
     this.scene.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z);
     this.scene.rotate(transformations.rotate.x, 1, 0, 0);
