@@ -65,6 +65,7 @@ Animation.prototype.run = function(node) {
   this.createNodeAnimationIfNotExists(node);
   this.animationNodes[node.id].done = false;
   this.update();
+  return this.animationNodes[node.id].done;
 };
 
 Animation.prototype.runOnce = function(node) {
@@ -72,6 +73,8 @@ Animation.prototype.runOnce = function(node) {
   var created = this.createNodeAnimationIfNotExists(node);
   if (created) {
     this.update();
+  } else {
+    return this.animationNodes[node.id].done;
   }
 };
 
@@ -125,7 +128,6 @@ Animation.prototype.setDefaults = function(node) {
   animationNode.currentElapsedTime = 0;
 };
 
-
 Animation.prototype.createNodeAnimationIfNotExists = function(node, setDefault) {
 
   if (!this.animationNodes.hasOwnProperty(node.id)) {
@@ -150,4 +152,30 @@ Animation.prototype.resetTimes = function(animationNode) {
   if (animationNode == null) {
     throw new Error('Animation, resetTimes must received a animationNode as argument.');
   }
+};
+
+Animation.prototype.angleBetweenVectors = function(vector1, vector2) {
+  if (vector1 == null || vector2 == null || vector1.constructor !== Array || vector2.constructor !== Array || vector1.length !== vector2.length) {
+    return;
+  }
+
+  var length = vector1.length;
+
+  var dotProduct = 0;
+  for (var vectorIndex = 0; vectorIndex < length; ++vectorIndex) {
+    dotProduct += vector1[vectorIndex] * vector2[vectorIndex];
+  }
+
+  var norm = function(vector) {
+    var vectorNorm = 0;
+    for (var vectorIndex = 0; vectorIndex < vector.length; ++vectorIndex) {
+      vectorNorm += vector[vectorIndex] * vector[vectorIndex];
+    }
+    return Math.sqrt(vectorNorm);
+  };
+
+  var vector1Norm = norm(vector1);
+  var vector2Norm = norm(vector2);
+
+  return Math.acos(dotProduct / (vector1Norm * vector2Norm));
 };

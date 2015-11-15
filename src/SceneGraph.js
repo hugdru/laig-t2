@@ -110,17 +110,20 @@ SceneGraph.prototype.runAnimations = function(node) {
   var animations = node.animations;
   if (animations == null) return;
 
-  for (var index = 0; index < animations.length; ++index) {
+  for (var index = (animations.length - 1); index >= 0; --index) {
     var animation = animations[index];
-    animation.runOnce(node);
+    var done = animation.runOnce(node);
     var transformations = animation.getTransformations(node);
+    this.scene.translate(transformations.translate.x, transformations.translate.y, transformations.translate.z);
     this.scene.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z);
     this.scene.rotate(transformations.rotate.x, 1, 0, 0);
     this.scene.rotate(transformations.rotate.y, 0, 1, 0);
     this.scene.rotate(transformations.rotate.z, 0, 0, 1);
-    this.scene.translate(transformations.translate.x, transformations.translate.y, transformations.translate.z);
+    if (!done) {
+      break;
+    }
   }
-}
+};
 
 SceneGraph.prototype.applyNodeTransformations = function(node) {
   var transformations = node.transformations;

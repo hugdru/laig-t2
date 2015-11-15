@@ -79,7 +79,7 @@
   <LEAVES>
     <LEAF id="walls" type="rectangle" args="0 5 10 0" />
     <LEAF id="floor1" type="rectangle" args="0 10 10 0" />
-    <LEAF id="square" type="rectangle" args="0 1 1 0" />
+    <LEAF id="square" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
     <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
   </LEAVES>
   <animations>
@@ -92,6 +92,32 @@
       <controlpoint xx="0" yy="0" zz="0" />
       <controlpoint xx="0" yy="0" zz="-4" />
       <controlpoint xx="0" yy="0" zz="0" />
+
+      <!--<controlpoint xx="0" yy="2" zz="0" />-->
+      <!--<controlpoint xx="4" yy="2" zz="0" />-->
+      <!--<controlpoint xx="0" yy="2" zz="0" />-->
+      <!--<controlpoint xx="0" yy="2" zz="4" />-->
+      <!--<controlpoint xx="0" yy="2" zz="0" />-->
+      <!--<controlpoint xx="-4" yy="2" zz="0" />-->
+      <!--<controlpoint xx="0" yy="2" zz="0" />-->
+      <!--<controlpoint xx="0" yy="2" zz="-4" />-->
+
+      <!--<controlpoint xx="0" yy="2" zz="0" />-->
+      <!--<controlpoint xx="4" yy="2" zz="0" />-->
+      <!--<controlpoint xx="4" yy="2" zz="-4" />-->
+      <!--<controlpoint xx="-4" yy="2" zz="-4" />-->
+      <!--<controlpoint xx="-4" yy="2" zz="4" />-->
+      <!--<controlpoint xx="4" yy="2" zz="4" />-->
+    </animation>
+    <animation id="linearAnimation2" span="1" type="linear">
+      <controlpoint xx="0" yy="2" zz="0" />
+      <controlpoint xx="4" yy="2" zz="0" />
+      <controlpoint xx="0" yy="2" zz="0" />
+      <controlpoint xx="0" yy="2" zz="4" />
+      <controlpoint xx="0" yy="2" zz="0" />
+      <controlpoint xx="-4" yy="2" zz="0" />
+      <controlpoint xx="0" yy="2" zz="0" />
+      <controlpoint xx="0" yy="2" zz="-4" />
     </animation>
     <!--<animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />-->
   </animations>
@@ -136,7 +162,8 @@
     <NODE id="cube">
       <MATERIAL id="red" />
       <TEXTURE id="cube" />
-      <!--<animationref id="circularAnimation1" />-->
+      <SCALE sx="1.5" sy="1.5" sz="1.5" />
+      <!--<animationref id="linearAnimation2" />-->
       <animationref id="linearAnimation1" />
       <DESCENDANTS>
         <DESCENDANT id="base_square" />
@@ -150,8 +177,7 @@
     <NODE id="front_square">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
-      <TRANSLATION x="3" y="0" z="3" />
-      <ROTATION axis="y" angle="90" />
+      <TRANSLATION x="0" y="0" z="0.5" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
       </DESCENDANTS>
@@ -159,7 +185,8 @@
     <NODE id="left_square">
       <MATERIAL id="green" />
       <TEXTURE id="null" />
-      <TRANSLATION x="2" y="0" z="3" />
+      <TRANSLATION x="-0.5" y="0" z="0" />
+      <ROTATION axis="y" angle="-90" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
       </DESCENDANTS>
@@ -167,8 +194,8 @@
     <NODE id="right_square">
       <MATERIAL id="green" />
       <TEXTURE id="null" />
-      <TRANSLATION x="3" y="0" z="2" />
-      <ROTATION axis="y" angle="180" />
+      <TRANSLATION x="0.5" y="0" z="0" />
+      <ROTATION axis="y" angle="90" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
       </DESCENDANTS>
@@ -176,8 +203,8 @@
     <NODE id="back_square">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
-      <TRANSLATION x="2" y="0" z="2" />
-      <ROTATION axis="y" angle="-90" />
+      <TRANSLATION x="0" y="0" z="-0.5" />
+      <ROTATION axis="y" angle="180" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
       </DESCENDANTS>
@@ -185,7 +212,7 @@
     <NODE id="top_square">
       <MATERIAL id="blue" />
       <TEXTURE id="null" />
-      <TRANSLATION x="2" y="1" z="3" />
+      <TRANSLATION x="0" y="0.5" z="0" />
       <ROTATION axis="x" angle="-90" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
@@ -194,7 +221,7 @@
     <NODE id="base_square">
       <MATERIAL id="blue" />
       <TEXTURE id="null" />
-      <TRANSLATION x="2" y="0" z="2" />
+      <TRANSLATION x="0" y="-0.5" z="0" />
       <ROTATION axis="x" angle="90" />
       <DESCENDANTS>
         <DESCENDANT id="square" />
