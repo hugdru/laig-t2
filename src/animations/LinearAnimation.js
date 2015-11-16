@@ -32,7 +32,7 @@ LinearAnimation.prototype.buildFunctions = function() {
 
   var velocity = distance / this.span;
 
-  this.rotations = {}
+  this.rotations = {};
   this.rotations[0] = 0;
   this.positionTimes = {};
   this.positionTimes[0] = 0;
@@ -71,11 +71,18 @@ LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
     }
   }
 
+  mat4.identity(animationNode.matrix);
+
   /** Translation **/
   var translateRatio = (animationNode.currentElapsedTime - this.positionTimes[currentStageIndex]) / this.positionTimesDelta[currentStageIndex];
-  animationNode.translate.x = this.controlPoints[currentStageIndex].x + this.positions[currentStageIndex].x * translateRatio;
-  animationNode.translate.y = this.controlPoints[currentStageIndex].y + this.positions[currentStageIndex].y * translateRatio,
-  animationNode.translate.z = this.controlPoints[currentStageIndex].z + this.positions[currentStageIndex].z * translateRatio;
+
+  mat4.translate(animationNode.matrix, animationNode.matrix,
+    vec3.fromValues(
+      this.controlPoints[currentStageIndex].x + this.positions[currentStageIndex].x * translateRatio,
+      this.controlPoints[currentStageIndex].y + this.positions[currentStageIndex].y * translateRatio,
+      this.controlPoints[currentStageIndex].z + this.positions[currentStageIndex].z * translateRatio
+    )
+  );
   /** End of Translation **/
 
   /** Rotation **/
@@ -85,12 +92,12 @@ LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
     if (rotateTimeDelta < intervalToRotate) {
       var rotationDelta = this.rotations[currentStageIndex + 1] - this.rotations[currentStageIndex];
       var rotateRatio = (intervalToRotate - rotateTimeDelta) / intervalToRotate;
-      animationNode.rotate.y = this.rotations[currentStageIndex] + rotationDelta * rotateRatio;
+      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex] + rotationDelta * rotateRatio);
     } else {
-      animationNode.rotate.y = this.rotations[currentStageIndex];
+      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex]);
     }
   } else {
-    animationNode.rotate.y = this.rotations[currentStageIndex];
+      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex]);
   }
   /** End of Rotation **/
 

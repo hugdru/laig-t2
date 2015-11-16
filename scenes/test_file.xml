@@ -90,7 +90,7 @@
     <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
   </LEAVES>
   <animations>
-    <animation id="linearAnimation1" span="10" type="linear">
+    <animation id="linearAnimation1" span="5" type="linear">
       <controlpoint xx="4" yy="0" zz="0" />
       <controlpoint xx="0" yy="0" zz="0" />
       <controlpoint xx="0" yy="0" zz="4" />
@@ -100,7 +100,7 @@
       <controlpoint xx="0" yy="0" zz="-4" />
       <controlpoint xx="0" yy="0" zz="0" />
     </animation>
-    <animation id="linearAnimation2" span="5" type="linear">
+    <animation id="linearAnimation2" span="10" type="linear">
       <controlpoint xx="0" yy="2" zz="0" />
       <controlpoint xx="4" yy="2" zz="0" />
       <controlpoint xx="0" yy="2" zz="0" />
@@ -112,7 +112,7 @@
       <controlpoint xx="0" yy="2" zz="0" />
       <controlpoint xx="0" yy="0" zz="0" />
     </animation>
-    <animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />
+    <animation id="circularAnimation1" span="5" type="circular" center="0 0 0" radius="2" startang="0" rotang="180" />
   </animations>
   <NODES>
     <ROOT id="scene" />
@@ -158,6 +158,7 @@
       <SCALE sx="1.5" sy="1.5" sz="1.5" />
       <animationref id="linearAnimation2" />
       <animationref id="linearAnimation1" />
+      <animationref id="circularAnimation1" />
       <DESCENDANTS>
         <DESCENDANT id="base_square" />
         <DESCENDANT id="top_square" />
