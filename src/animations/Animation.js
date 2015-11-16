@@ -157,10 +157,8 @@ Animation.prototype.angleBetweenVectors = function(vector1, vector2) {
 
 Animation.prototype.dotProduct = function(vector1, vector2) {
 
-  var length = vector1.length;
-
   var dotProduct = 0;
-  for (var coordinate in vector) {
+  for (var coordinate in vector1) {
     dotProduct += vector1[coordinate] * vector2[coordinate];
   }
 

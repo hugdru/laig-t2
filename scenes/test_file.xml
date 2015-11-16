@@ -68,6 +68,13 @@
       <ambient r="0" g="1" b="0" a="1" />
       <emission r="0" g="1" b="0" a="1" />
     </MATERIAL>
+    <MATERIAL id="yellow">
+      <shininess value="5" />
+      <specular r="1" g="1" b="0" a="1" />
+      <diffuse r="1" g="1" b="0" a="1" />
+      <ambient r="1" g="1" b="0" a="1" />
+      <emission r="1" g="1" b="0" a="1" />
+    </MATERIAL>
     <MATERIAL id="blue">
       <shininess value="5" />
       <specular r="0" g="0" b="1" a="1" />
@@ -92,24 +99,8 @@
       <controlpoint xx="0" yy="0" zz="0" />
       <controlpoint xx="0" yy="0" zz="-4" />
       <controlpoint xx="0" yy="0" zz="0" />
-
-      <!--<controlpoint xx="0" yy="2" zz="0" />-->
-      <!--<controlpoint xx="4" yy="2" zz="0" />-->
-      <!--<controlpoint xx="0" yy="2" zz="0" />-->
-      <!--<controlpoint xx="0" yy="2" zz="4" />-->
-      <!--<controlpoint xx="0" yy="2" zz="0" />-->
-      <!--<controlpoint xx="-4" yy="2" zz="0" />-->
-      <!--<controlpoint xx="0" yy="2" zz="0" />-->
-      <!--<controlpoint xx="0" yy="2" zz="-4" />-->
-
-      <!--<controlpoint xx="0" yy="2" zz="0" />-->
-      <!--<controlpoint xx="4" yy="2" zz="0" />-->
-      <!--<controlpoint xx="4" yy="2" zz="-4" />-->
-      <!--<controlpoint xx="-4" yy="2" zz="-4" />-->
-      <!--<controlpoint xx="-4" yy="2" zz="4" />-->
-      <!--<controlpoint xx="4" yy="2" zz="4" />-->
     </animation>
-    <animation id="linearAnimation2" span="1" type="linear">
+    <animation id="linearAnimation2" span="5" type="linear">
       <controlpoint xx="0" yy="2" zz="0" />
       <controlpoint xx="4" yy="2" zz="0" />
       <controlpoint xx="0" yy="2" zz="0" />
@@ -118,8 +109,10 @@
       <controlpoint xx="-4" yy="2" zz="0" />
       <controlpoint xx="0" yy="2" zz="0" />
       <controlpoint xx="0" yy="2" zz="-4" />
+      <controlpoint xx="0" yy="2" zz="0" />
+      <controlpoint xx="0" yy="0" zz="0" />
     </animation>
-    <!--<animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />-->
+    <animation id="circularAnimation1" span="1" type="circular" center="4 5 9" radius="1" startang="2" rotang="3" />
   </animations>
   <NODES>
     <ROOT id="scene" />
@@ -163,7 +156,7 @@
       <MATERIAL id="red" />
       <TEXTURE id="cube" />
       <SCALE sx="1.5" sy="1.5" sz="1.5" />
-      <!--<animationref id="linearAnimation2" />-->
+      <animationref id="linearAnimation2" />
       <animationref id="linearAnimation1" />
       <DESCENDANTS>
         <DESCENDANT id="base_square" />
@@ -192,7 +185,7 @@
       </DESCENDANTS>
     </NODE>
     <NODE id="right_square">
-      <MATERIAL id="green" />
+      <MATERIAL id="yellow" />
       <TEXTURE id="null" />
       <TRANSLATION x="0.5" y="0" z="0" />
       <ROTATION axis="y" angle="90" />
