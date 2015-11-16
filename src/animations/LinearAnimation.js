@@ -50,7 +50,7 @@ LinearAnimation.prototype.buildFunctions = function() {
     this.rotations[stageIndex] = this.rotations[stageIndex - 1] + rotationStage;
 
     if (isNaN(this.rotations[stageIndex])) {
-      this.rotations[stageIndex] = this.rotations[stageIndex] - 1;
+      this.rotations[stageIndex] = this.rotations[stageIndex - 1];
     }
   }
 
