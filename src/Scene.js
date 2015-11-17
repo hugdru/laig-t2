@@ -33,7 +33,6 @@ Scene.prototype.initLights = function() {
     this.lights[index].name = lightName;
     this.lights[index].enabled = light.enabled;
 
-
     this.lights[index].setPosition(light.position.x, light.position.y, light.position.z, light.position.w);
     this.lights[index].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
     this.lights[index].setDiffuse(light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a);
