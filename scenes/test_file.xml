@@ -90,26 +90,17 @@
     <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
   </LEAVES>
   <animations>
-    <animation id="linearAnimation3" span="10" type="linear">
+    <animation id="linearAnimation1" span="5" type="linear">
       <controlpoint xx="0" yy="2" zz="0" />
-      <controlpoint xx="4" yy="2" zz="0" />
-      <controlpoint xx="4" yy="2" zz="2" />
-      <controlpoint xx="0" yy="2" zz="2" />
+      <controlpoint xx="0" yy="2" zz="4" />
+      <controlpoint xx="4" yy="2" zz="4" />
+      <controlpoint xx="4" yy="2" zz="-4" />
+      <controlpoint xx="-4" yy="2" zz="-4" />
+      <controlpoint xx="-4" yy="2" zz="4" />
+      <controlpoint xx="0" yy="2" zz="4" />
       <controlpoint xx="0" yy="2" zz="0" />
-      <controlpoint xx="0" yy="2" zz="-2" />
-      <controlpoint xx="-4" yy="2" zz="-2" />
-      <controlpoint xx="-4" yy="2" zz="0" />
-      <controlpoint xx="0" yy="2" zz="0" />
-      <controlpoint xx="0" yy="0" zz="0" />
     </animation>
-    <animation id="linearAnimation2" span="1.5" type="linear">
-      <controlpoint xx="4" yy="0" zz="0" />
-    </animation>
-    <animation id="circularAnimation2" span="2.5" type="circular" center="-2 0 0" radius="2" startang="0" rotang="-180" />
-    <animation id="circularAnimation1" span="2.5" type="circular" center="-2 0 0" radius="2" startang="0" rotang="180" />
-    <animation id="linearAnimation1" span="1.5" type="linear">
-      <controlpoint xx="4" yy="0" zz="0" />
-    </animation>
+    <animation id="circularAnimation1" span="2.5" type="circular" center="0 0 2" radius="2" startang="90" rotang="180" />
   </animations>
   <NODES>
     <ROOT id="scene" />
@@ -153,9 +144,6 @@
       <MATERIAL id="red" />
       <TEXTURE id="cube" />
       <SCALE sx="1.5" sy="1.5" sz="1.5" />
-      <animationref id="linearAnimation3" />
-      <animationref id="linearAnimation2" />
-      <animationref id="circularAnimation2" />
       <animationref id="circularAnimation1" />
       <animationref id="linearAnimation1" />
       <DESCENDANTS>
