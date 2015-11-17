@@ -14,8 +14,8 @@ LinearAnimation.prototype.buildFunctions = function() {
   }
 
   this.stageLength = this.controlPoints.length - 1;
-  if (this.stageLength < 1) {
-    throw new Error('LinearAnimation, was expecting at least two controlPoints.');
+  if (this.stageLength < 0) {
+    throw new Error('LinearAnimation, was expecting at least one controlPoint.');
   }
 
   var distance = 0;
@@ -43,10 +43,15 @@ LinearAnimation.prototype.buildFunctions = function() {
     this.positionTimes[stageIndex] = this.positionTimes[stageIndex - 1] + timeStage;
     this.positionTimesDelta[stageIndex - 1] = this.positionTimes[stageIndex] - this.positionTimes[stageIndex - 1];
 
-    var rotationStage = this.angleBetweenVectors(
-      [this.positions[stageIndex - 1].x, this.positions[stageIndex - 1].z],
-      [this.positions[stageIndex].x, this.positions[stageIndex].z]
-    );
+    var rotationStage = Math.atan2(this.positions[stageIndex].x, this.positions[stageIndex].z) - Math.atan2(this.positions[stageIndex - 1].x, this.positions[stageIndex - 1].z);
+    if (Math.abs(rotationStage) > Math.PI) {
+      if (rotationStage > 0) {
+        rotationStage -= 2 * Math.PI;
+      } else {
+        rotationStage += 2 * Math.PI;
+      }
+    }
+
     this.rotations[stageIndex] = this.rotations[stageIndex - 1] + rotationStage;
 
     if (isNaN(this.rotations[stageIndex])) {
@@ -57,9 +62,9 @@ LinearAnimation.prototype.buildFunctions = function() {
   this.positionTimesDelta[stageIndex - 1] = this.span - this.positionTimes[stageIndex - 1];
 };
 
-LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
+LinearAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
   if (animationNode == null || deltaTime == null || deltaTime < 0) {
-      throw new Error('updateMatrix, was expecting a animationNode and a valid deltaTime.');
+      throw new Error('updateMatrixes, was expecting a animationNode and a valid deltaTime.');
   }
 
   animationNode.currentElapsedTime += deltaTime;
@@ -71,12 +76,13 @@ LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
     }
   }
 
-  mat4.identity(animationNode.matrix);
+  mat4.identity(animationNode.translateMatrix);
+  mat4.identity(animationNode.rotateScaleMatrix);
 
   /** Translation **/
   var translateRatio = (animationNode.currentElapsedTime - this.positionTimes[currentStageIndex]) / this.positionTimesDelta[currentStageIndex];
 
-  mat4.translate(animationNode.matrix, animationNode.matrix,
+  mat4.translate(animationNode.translateMatrix, animationNode.translateMatrix,
     vec3.fromValues(
       this.controlPoints[currentStageIndex].x + this.positions[currentStageIndex].x * translateRatio,
       this.controlPoints[currentStageIndex].y + this.positions[currentStageIndex].y * translateRatio,
@@ -92,12 +98,12 @@ LinearAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
     if (rotateTimeDelta < intervalToRotate) {
       var rotationDelta = this.rotations[currentStageIndex + 1] - this.rotations[currentStageIndex];
       var rotateRatio = (intervalToRotate - rotateTimeDelta) / intervalToRotate;
-      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex] + rotationDelta * rotateRatio);
+      mat4.rotateY(animationNode.rotateScaleMatrix, animationNode.rotateScaleMatrix, this.rotations[currentStageIndex] + rotationDelta * rotateRatio);
     } else {
-      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex]);
+      mat4.rotateY(animationNode.rotateScaleMatrix, animationNode.rotateScaleMatrix, this.rotations[currentStageIndex]);
     }
   } else {
-      mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotations[currentStageIndex]);
+      mat4.rotateY(animationNode.rotateScaleMatrix, animationNode.rotateScaleMatrix, this.rotations[currentStageIndex]);
   }
   /** End of Rotation **/
 

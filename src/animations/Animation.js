@@ -32,7 +32,7 @@ Animation.prototype.update = function(currentUpdateTime) {
       continue;
     }
 
-    var allDone = this.updateMatrix(animationNode, deltaTime);
+    var allDone = this.updateMatrixes(animationNode, deltaTime);
 
     if (allDone) {
       animationNode.done = true;
@@ -82,16 +82,19 @@ Animation.prototype.runOnce = function(node) {
   return this.animationNodes[node.id].done;
 };
 
-Animation.prototype.updateMatrix = function(animationNode, deltaTime) {
+Animation.prototype.updateMatrixes = function(animationNode, deltaTime) {
   return true;
 };
 
-Animation.prototype.getMatrix = function(node) {
+Animation.prototype.getMatrixes = function(node) {
 
   this.checkNode(node);
   var animationNode = this.animationNodes[node.id];
   if (animationNode !== null) {
-    return animationNode.matrix;
+    return {
+      translate: animationNode.translateMatrix,
+      rotateScale: animationNode.rotateScaleMatrix
+    };
   }
 };
 
@@ -99,8 +102,10 @@ Animation.prototype.setDefaults = function(node) {
 
   this.animationNodes[node.id] = {};
   var animationNode = this.animationNodes[node.id];
-  animationNode.matrix = mat4.create();
-  mat4.identity(animationNode.matrix);
+  animationNode.translateMatrix = mat4.create();
+  mat4.identity(animationNode.translateMatrix);
+  animationNode.rotateScaleMatrix = mat4.create();
+  mat4.identity(animationNode.rotateScaleMatrix);
   animationNode.done = false;
 
   animationNode.currentElapsedTime = 0;

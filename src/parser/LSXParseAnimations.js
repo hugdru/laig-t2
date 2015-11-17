@@ -151,8 +151,8 @@ LSXParser.prototype.parseLinearAnimation = function(animationObject, childrenOfA
   }
 
   childrenOfAnimationLength = childrenOfAnimation.length;
-  if (childrenOfAnimationLength < 2) {
-    return 'There must be at least 2 control points';
+  if (childrenOfAnimationLength < 1) {
+    return 'There must be at least 1 control point';
   }
 
   controlPoints = [];

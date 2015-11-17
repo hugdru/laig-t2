@@ -11,7 +11,7 @@ function CircularAnimation(scene, span, center, radius, startdegree, rotationDeg
     throw new Error('CircularAnimation expecting valid arguments');
   }
 
-  this.center = vec3.fromValues(center.x, center.y, center.z);
+  this.center = center;
   this.radius = radius;
   this.startAngle = degToRad * startdegree;
   this.rotationAngle = degToRad * rotationDegree;
@@ -27,21 +27,23 @@ CircularAnimation.prototype.buildFunctions = function() {
   mat4.translate(this.baseMatrix, this.baseMatrix, vec3.fromValues(this.radius, 0, 0));
 };
 
-CircularAnimation.prototype.updateMatrix = function(animationNode, deltaTime) {
+CircularAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
   if (animationNode == null || deltaTime == null || deltaTime < 0) {
-      throw new Error('updateMatrix, was expecting a animationNode and a valid deltaTime.');
+      throw new Error('updateMatrixes, was expecting a animationNode and a valid deltaTime.');
   }
 
   animationNode.currentElapsedTime += deltaTime;
   animationNode.currentElapsedTime = Math.min(animationNode.currentElapsedTime, this.span);
 
-  mat4.identity(animationNode.matrix);
+  var rotateAngle = this.startAngle + this.rotationAngle * (animationNode.currentElapsedTime / this.span);
 
-  mat4.translate(animationNode.matrix, animationNode.matrix, this.center);
+  mat4.identity(animationNode.translateMatrix);
+  mat4.translate(animationNode.translateMatrix, animationNode.translateMatrix,
+                 vec3.fromValues(this.radius * Math.cos(rotateAngle) + this.center.x, this.center.y, -this.radius * Math.sin(rotateAngle) + this.center.z)
+                );
 
-  mat4.rotateY(animationNode.matrix, animationNode.matrix, this.rotationAngle * (animationNode.currentElapsedTime / this.span));
-
-  mat4.multiply(animationNode.matrix, animationNode.matrix, this.baseMatrix);
+  mat4.identity(animationNode.rotateScaleMatrix);
+  mat4.rotateY(animationNode.rotateScaleMatrix, animationNode.rotateScaleMatrix, rotateAngle);
 
   if (animationNode.currentElapsedTime >= this.span) {
     return true;
