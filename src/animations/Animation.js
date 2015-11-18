@@ -14,7 +14,6 @@ Animation.prototype.update = function(currentUpdateTime) {
 
   var self = this;
 
-  var disableUpdate = true;
   if (this.previousUpdateTime == null) {
     this.previousUpdateTime = currentUpdateTime;
     this.requestId = requestAnimationFrame(function() {
@@ -25,6 +24,7 @@ Animation.prototype.update = function(currentUpdateTime) {
 
   var deltaTime = currentUpdateTime - this.previousUpdateTime;
 
+  var disableUpdate = true;
   for (var property in this.animationNodes) {
 
     animationNode = this.animationNodes[property];
@@ -40,9 +40,8 @@ Animation.prototype.update = function(currentUpdateTime) {
     }
 
     disableUpdate = disableUpdate && allDone;
-
-    this.previousUpdateTime = currentUpdateTime;
   }
+  this.previousUpdateTime = currentUpdateTime;
 
   if (disableUpdate) {
     this.requestId = null;
@@ -62,7 +61,9 @@ Animation.prototype.run = function(node) {
   this.checkNode(node);
   this.createNodeAnimationIfNotExists(node);
   this.animationNodes[node.id].done = false;
-  this.update();
+  if (this.requestId == null) {
+    this.update();
+  }
 };
 
 Animation.prototype.isDone = function(node) {
@@ -71,13 +72,15 @@ Animation.prototype.isDone = function(node) {
     return false;
   }
   return this.animationNodes[node.id].done;
-}
+};
 
 Animation.prototype.runOnce = function(node) {
   this.checkNode(node);
   var created = this.createNodeAnimationIfNotExists(node);
   if (created) {
-    this.update();
+    if (this.requestId == null) {
+      this.update();
+    }
   }
   return this.animationNodes[node.id].done;
 };
@@ -87,7 +90,6 @@ Animation.prototype.updateMatrixes = function(animationNode, deltaTime) {
 };
 
 Animation.prototype.getMatrixes = function(node) {
-
   this.checkNode(node);
   var animationNode = this.animationNodes[node.id];
   if (animationNode !== null) {
@@ -99,7 +101,6 @@ Animation.prototype.getMatrixes = function(node) {
 };
 
 Animation.prototype.setDefaults = function(node) {
-
   this.animationNodes[node.id] = {};
   var animationNode = this.animationNodes[node.id];
   animationNode.translateMatrix = mat4.create();

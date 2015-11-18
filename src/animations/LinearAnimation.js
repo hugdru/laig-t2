@@ -19,13 +19,13 @@ LinearAnimation.prototype.buildFunctions = function() {
   }
 
   var distance = 0;
-  this.positions = [];
+  this.translationVectors = [];
   for (var stageIndex = 0; stageIndex < this.stageLength; ++stageIndex) {
     var vector = {};
     vector.x = this.controlPoints[stageIndex + 1].x - this.controlPoints[stageIndex].x;
     vector.y = this.controlPoints[stageIndex + 1].y - this.controlPoints[stageIndex].y;
     vector.z = this.controlPoints[stageIndex + 1].z - this.controlPoints[stageIndex].z;
-    this.positions.push(vector);
+    this.translationVectors.push(vector);
 
     distance += this.norm(vector);
   }
@@ -34,16 +34,16 @@ LinearAnimation.prototype.buildFunctions = function() {
 
   this.rotations = {};
   this.rotations[0] = 0;
-  this.positionTimes = {};
-  this.positionTimes[0] = 0;
-  this.positionTimesDelta = {};
+  this.controlPointsTimes = {};
+  this.controlPointsTimes[0] = 0;
+  this.controlPointsTimesDelta = {};
 
-  for (stageIndex = 1; stageIndex < this.stageLength; ++stageIndex) {
-    var timeStage = this.norm(this.positions[stageIndex]) / velocity;
-    this.positionTimes[stageIndex] = this.positionTimes[stageIndex - 1] + timeStage;
-    this.positionTimesDelta[stageIndex - 1] = this.positionTimes[stageIndex] - this.positionTimes[stageIndex - 1];
+  for (var index = 1; index < this.stageLength; ++index) {
+    var timeStage = this.norm(this.translationVectors[index]) / velocity;
+    this.controlPointsTimes[index] = this.controlPointsTimes[index - 1] + timeStage;
+    this.controlPointsTimesDelta[index - 1] = this.controlPointsTimes[index] - this.controlPointsTimes[index - 1];
 
-    var rotationStage = Math.atan2(this.positions[stageIndex].x, this.positions[stageIndex].z) - Math.atan2(this.positions[stageIndex - 1].x, this.positions[stageIndex - 1].z);
+    var rotationStage = Math.atan2(this.translationVectors[index].x, this.translationVectors[index].z) - Math.atan2(this.translationVectors[index - 1].x, this.translationVectors[index - 1].z);
     if (Math.abs(rotationStage) > Math.PI) {
       if (rotationStage > 0) {
         rotationStage -= 2 * Math.PI;
@@ -52,14 +52,14 @@ LinearAnimation.prototype.buildFunctions = function() {
       }
     }
 
-    this.rotations[stageIndex] = this.rotations[stageIndex - 1] + rotationStage;
+    this.rotations[index] = this.rotations[index - 1] + rotationStage;
 
-    if (isNaN(this.rotations[stageIndex])) {
-      this.rotations[stageIndex] = this.rotations[stageIndex - 1];
+    if (isNaN(this.rotations[index])) {
+      this.rotations[index] = this.rotations[index - 1];
     }
   }
 
-  this.positionTimesDelta[stageIndex - 1] = this.span - this.positionTimes[stageIndex - 1];
+  this.controlPointsTimesDelta[index - 1] = this.span - this.controlPointsTimes[index - 1];
 };
 
 LinearAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
@@ -71,7 +71,7 @@ LinearAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
   animationNode.currentElapsedTime = Math.min(animationNode.currentElapsedTime, this.span);
 
   for (var currentStageIndex = (this.stageLength - 1); currentStageIndex > 0; --currentStageIndex) {
-    if (this.positionTimes[currentStageIndex] < animationNode.currentElapsedTime) {
+    if (this.controlPointsTimes[currentStageIndex] < animationNode.currentElapsedTime) {
       break;
     }
   }
@@ -80,21 +80,21 @@ LinearAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
   mat4.identity(animationNode.rotateScaleMatrix);
 
   /** Translation **/
-  var translateRatio = (animationNode.currentElapsedTime - this.positionTimes[currentStageIndex]) / this.positionTimesDelta[currentStageIndex];
+  var translateRatio = (animationNode.currentElapsedTime - this.controlPointsTimes[currentStageIndex]) / this.controlPointsTimesDelta[currentStageIndex];
 
   mat4.translate(animationNode.translateMatrix, animationNode.translateMatrix,
     vec3.fromValues(
-      this.controlPoints[currentStageIndex].x + this.positions[currentStageIndex].x * translateRatio,
-      this.controlPoints[currentStageIndex].y + this.positions[currentStageIndex].y * translateRatio,
-      this.controlPoints[currentStageIndex].z + this.positions[currentStageIndex].z * translateRatio
+      this.controlPoints[currentStageIndex].x + this.translationVectors[currentStageIndex].x * translateRatio,
+      this.controlPoints[currentStageIndex].y + this.translationVectors[currentStageIndex].y * translateRatio,
+      this.controlPoints[currentStageIndex].z + this.translationVectors[currentStageIndex].z * translateRatio
     )
   );
   /** End of Translation **/
 
   /** Rotation **/
   if (currentStageIndex !== (this.stageLength - 1)) {
-    var rotateTimeDelta = this.positionTimes[currentStageIndex + 1] - animationNode.currentElapsedTime;
-    var intervalToRotate = this.percentageStageTimeRotation * this.positionTimesDelta[currentStageIndex];
+    var rotateTimeDelta = this.controlPointsTimes[currentStageIndex + 1] - animationNode.currentElapsedTime;
+    var intervalToRotate = this.percentageStageTimeRotation * this.controlPointsTimesDelta[currentStageIndex];
     if (rotateTimeDelta < intervalToRotate) {
       var rotationDelta = this.rotations[currentStageIndex + 1] - this.rotations[currentStageIndex];
       var rotateRatio = (intervalToRotate - rotateTimeDelta) / intervalToRotate;

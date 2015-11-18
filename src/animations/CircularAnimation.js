@@ -21,10 +21,6 @@ CircularAnimation.prototype = Object.create(Animation.prototype);
 CircularAnimation.prototype.constructor = CircularAnimation;
 
 CircularAnimation.prototype.buildFunctions = function() {
-  this.baseMatrix = mat4.create();
-  mat4.identity(this.baseMatrix);
-  mat4.rotateY(this.baseMatrix, this.baseMatrix, this.startAngle);
-  mat4.translate(this.baseMatrix, this.baseMatrix, vec3.fromValues(this.radius, 0, 0));
 };
 
 CircularAnimation.prototype.updateMatrixes = function(animationNode, deltaTime) {
