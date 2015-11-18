@@ -39,7 +39,7 @@ LinearAnimation.prototype.buildFunctions = function() {
   this.controlPointsTimesDelta = {};
 
   for (var index = 1; index < this.stageLength; ++index) {
-    var timeStage = this.norm(this.translationVectors[index]) / velocity;
+    var timeStage = this.norm(this.translationVectors[index - 1]) / velocity;
     this.controlPointsTimes[index] = this.controlPointsTimes[index - 1] + timeStage;
     this.controlPointsTimesDelta[index - 1] = this.controlPointsTimes[index] - this.controlPointsTimes[index - 1];
 
