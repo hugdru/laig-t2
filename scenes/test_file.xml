@@ -87,7 +87,7 @@
     <LEAF id="walls" type="rectangle" args="0 5 10 0" />
     <LEAF id="floor1" type="rectangle" args="0 10 10 0" />
     <LEAF id="square" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
-    <LEAF id="sphere1" type="sphere" args="0.5 25 25" />
+    <LEAF id="sphere1" type="plane" parts="5" />
   </LEAVES>
   <animations>
     <animation id="linearAnimation1" span="5" type="linear">
@@ -112,7 +112,7 @@
         <!--<DESCENDANT id="right_wall" />-->
         <!--<DESCENDANT id="floor" />-->
         <DESCENDANT id="cube" />
-        <!--<DESCENDANT id="sphere" />-->
+        <DESCENDANT id="sphere" />
       </DESCENDANTS>
     </NODE>
     <NODE id="floor">

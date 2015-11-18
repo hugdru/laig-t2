@@ -52,12 +52,18 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
     }
 
     // Get the args
-    var stringOfNumbers = this.reader.getString(leafElement, 'args');
-    if (stringOfNumbers == null) {
+    var stringOfNumbers = null;
+    if (leafType !== 'plane' && leafType !== 'patch') {
+     stringOfNumbers = this.reader.getString(leafElement, 'args');
+    }
+    if (stringOfNumbers == null && leafType !== 'plane' && leafType !== 'patch') {
       return 'LEAF, ' + id + ', must have an args attribute.';
     }
 
-    var stringArray = stringOfNumbers.split(/\s+/);
+    var stringArray = [];
+    if (stringOfNumbers != null) {
+      stringArray = stringOfNumbers.split(/\s+/);
+    }
 
     var scene = this.graph.scene;
 
@@ -112,6 +118,50 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         v3 = [arrayOfNumbers[6], arrayOfNumbers[7], arrayOfNumbers[8]];
 
         nodes[id] = new Triangle(scene, v1, v2, v3);
+        break;
+      case 'plane':
+        var parts = this.reader.getInteger(leafElement, 'parts');
+
+        if (parts == null) {
+          return 'LEAF, ' + id + ', must have a parts attribute with a integer value.';
+        }
+
+        if (parts <= 0) {
+          return 'LEAF, ' + id + ', parts attribute must be greater or equal 1.';
+        }
+
+        nodes[id] = new NURBSPlane(scene, parts);
+        break;
+      case 'patch':
+        var order = this.reader.getInteger(leafElement, 'order');
+        var partsU = this.reader.getInteger(leafElement, 'partsU');
+        var partsV = this.reader.getInteger(leafElement, 'partsV');
+
+        if (order == null) {
+          return 'LEAF, ' + id + ', must have a order attribute with a integer value.';
+        }
+
+        if (order < 1 && order > 3) {
+          return 'LEAF, ' + id + ', order attribute must be between 1 and 3.';
+        }
+
+        if (partsU == null) {
+          return 'LEAF, ' + id + ', must have a partsU attribute with a integer value.';
+        }
+
+        if (partsU <= 0) {
+          return 'LEAF, ' + id + ', partsU attribute must be greater or equal 1.';
+        }
+
+        if (partsV == null) {
+          return 'LEAF, ' + id + ', must have a partsV attribute with a integer value.';
+        }
+
+        if (partsV <= 0) {
+          return 'LEAF, ' + id + ', partsV attribute must be greater or equal 1.';
+        }
+
+        //nodes[id] = new NURBSPlane(scene, parts);
         break;
       default:
         return 'LEAF, ' + id + ', type attribute only accepts 4 primities: rectangle, cylinder, sphere, triangle.';
