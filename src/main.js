@@ -51,7 +51,7 @@ serialInclude(['../lib/CGF.js', 'Scene.js', 'SceneGraph.js', 'Interface.js',
               // Primitives
               'primitives/Triangle.js', 'primitives/Rectangle.js',
               'primitives/Sphere.js', 'primitives/Cylinder.js',
-              'primitives/NURBSPlane.js',
+              'primitives/NURBSPlane.js', 'primitives/NURBSPatch.js',
               'primitives/others/Base.js', 'primitives/others/LateralFaces.js',
               'primitives/others/Plane.js',
               // Animations
