@@ -51,7 +51,7 @@ SceneGraph.prototype.onXMLError = function(message) {
 };
 
 SceneGraph.prototype.display = function(node, inheritedMaterial, inheritedTexture) {
-  if (node instanceof Rectangle || node instanceof Cylinder || node instanceof Sphere || node instanceof Triangle || node instanceof NURBSPlane || node instanceof NURBSPatch || node instanceof Terrain) {
+  if (node instanceof Rectangle || node instanceof Cylinder || node instanceof Sphere || node instanceof Triangle || node instanceof NURBSPlane || node instanceof NURBSPatch || node instanceof Terrain || node instanceof Vehicle) {
     if (inheritedMaterial.texture instanceof CGFtexture) {
       node.setTextureAmplification(inheritedMaterial.texture.amplifFactor.s, inheritedMaterial.texture.amplifFactor.t);
     }

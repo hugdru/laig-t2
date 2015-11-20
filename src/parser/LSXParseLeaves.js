@@ -49,10 +49,10 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
 
     // Get the args
     var stringOfNumbers = null;
-    if (leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain') {
+    if (leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain' && leafType !== 'vehicle') {
      stringOfNumbers = this.reader.getString(leafElement, 'args');
     }
-    if (stringOfNumbers == null && leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain') {
+    if (stringOfNumbers == null && leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain' && leafType !== 'vehicle') {
       return 'LEAF, ' + id + ', must have an args attribute.';
     }
 
@@ -192,6 +192,9 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         var heightMap = this.reader.getString(leafElement, 'heightmap');
 
         nodes[id] = new Terrain(scene, texture, heightMap);
+        break;
+      case 'vehicle':
+        nodes[id] = new Vehicle(scene);
         break;
       default:
         return 'LEAF, ' + id + ', type attribute only accepts 4 primities: rectangle, cylinder, sphere, triangle.';

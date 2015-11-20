@@ -87,7 +87,8 @@
     <LEAF id="walls" type="rectangle" args="0 5 10 0" />
     <LEAF id="floor1" type="rectangle" args="0 10 10 0" />
     <LEAF id="square" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
-    <LEAF id="sphere1" type="terrain" texture="../scenes/texture.jpg" heightmap="../scenes/terrainMap.jpg"/>
+    <LEAF id="sphere1" type="vehicle"/>
+    <!--<LEAF id="sphere1" type="terrain" texture="../scenes/texture.jpg" heightmap="../scenes/terrainMap.jpg"/>-->
     <!--<LEAF id="sphere1" type="patch" order="1" partsU="5" partsV="5">-->
       <!--<controlpoint x="-1" y="0" z ="-1" />-->
       <!--<controlpoint x="1" y="0" z ="-1" />-->
