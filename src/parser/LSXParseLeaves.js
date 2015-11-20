@@ -28,10 +28,6 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
       return 'LEAVES, ' + leafElement.nodeName + ' element is not valid.';
     }
 
-    if (leafElement.attributes.length != 3) {
-      return 'LEAF, there must be exactly 3 elements: id, type and args.';
-    }
-
     // Get LEAF id
     var id = this.reader.getString(leafElement, 'id');
     if (id == null) {
@@ -53,10 +49,10 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
 
     // Get the args
     var stringOfNumbers = null;
-    if (leafType !== 'plane' && leafType !== 'patch') {
+    if (leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain') {
      stringOfNumbers = this.reader.getString(leafElement, 'args');
     }
-    if (stringOfNumbers == null && leafType !== 'plane' && leafType !== 'patch') {
+    if (stringOfNumbers == null && leafType !== 'plane' && leafType !== 'patch' && leafType !== 'terrain') {
       return 'LEAF, ' + id + ', must have an args attribute.';
     }
 
@@ -136,9 +132,10 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
         var order = this.reader.getInteger(leafElement, 'order');
         var partsU = this.reader.getInteger(leafElement, 'partsU');
         var partsV = this.reader.getInteger(leafElement, 'partsV');
+        var controlPoints = [];
 
         if (order == null) {
-          return 'LEAF, ' + id + ', must have a order attribute with a integer value.';
+          return 'LEAF, ' + id + ', must have an order attribute with a integer value.';
         }
 
         if (order < 1 && order > 3) {
@@ -161,7 +158,40 @@ LSXParser.prototype.parseLeaves = function(rootElement) {
           return 'LEAF, ' + id + ', partsV attribute must be greater or equal 1.';
         }
 
-        //nodes[id] = new NURBSPlane(scene, parts);
+        var controlPointsElement = leafElement.getElementsByTagName('controlpoint');
+
+        if (controlPointsElement.length !== Math.pow(order+1,2)) {
+          return 'LEAF, ' + id + ', must have (order+1)^2 control points.';
+        }
+
+        for(var i = 0; i < controlPointsElement.length; i++) {
+          var controlPointElement = controlPointsElement[i];
+
+          if (controlPointElement.attributes.length != 3) {
+            return 'controlpoint, there must be exactly 3 elements: x, y and z.';
+          }
+
+          var controlPoint = [];
+
+          var x = this.reader.getFloat(controlPointElement, 'x');
+          var y = this.reader.getFloat(controlPointElement, 'y');
+          var z = this.reader.getFloat(controlPointElement, 'z');
+
+          controlPoint.push(x);
+          controlPoint.push(y);
+          controlPoint.push(z);
+          controlPoint.push(1);
+
+          controlPoints.push(controlPoint);
+        }
+
+        nodes[id] = new NURBSPatch(scene, order, partsU, partsV, controlPoints);
+        break;
+      case 'terrain':
+        var texture = this.reader.getString(leafElement, 'texture');
+        var heightMap = this.reader.getString(leafElement, 'heightmap');
+
+        nodes[id] = new Terrain(scene, texture, heightMap);
         break;
       default:
         return 'LEAF, ' + id + ', type attribute only accepts 4 primities: rectangle, cylinder, sphere, triangle.';
